@@ -25,11 +25,13 @@ export class AuthService {
     private supabase: SupabaseClient,
     private notificationService: NzNotificationService
   ) {
-    this.supabase.auth.onAuthStateChange((event, session) => {
-      this.authStateChange$.next(event);
-      this.user$.next(this.supabase.auth.user());
-      this.session$.next(session);
-    });
+    this.supabase.auth.onAuthStateChange(
+      (event: AuthChangeEvent, session: Session | null) => {
+        this.authStateChange$.next(event);
+        this.user$.next(this.supabase.auth.user());
+        this.session$.next(session);
+      }
+    );
   }
 
   async signInWithSpotify(): Promise<void> {
