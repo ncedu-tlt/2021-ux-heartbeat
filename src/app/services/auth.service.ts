@@ -9,17 +9,16 @@ import {
 import { BehaviorSubject, Subject } from "rxjs";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 
+const SCOPES =
+  "playlist-read-private playlist-read-collaborative user-top-read user-read-private user-read-email playlist-modify-public playlist-modify-private user-library-read user-library-modify";
+
 @Injectable({
   providedIn: "root"
 })
 export class AuthService {
   private authStateChange$ = new Subject<AuthChangeEvent>();
-
   private user$ = new BehaviorSubject<User | null>(null);
   private session$ = new BehaviorSubject<Session | null>(null);
-
-  private SCOPES =
-    "playlist-read-private playlist-read-collaborative user-top-read user-read-private user-read-email playlist-modify-public playlist-modify-private user-library-read user-library-modify";
 
   constructor(
     private supabase: SupabaseClient,
@@ -40,7 +39,7 @@ export class AuthService {
         provider: "spotify"
       },
       {
-        scopes: this.SCOPES
+        scopes: SCOPES
       }
     );
     if (error !== null) {
@@ -63,6 +62,6 @@ export class AuthService {
   }
 
   errorHandling(error: ApiError): void {
-    this.notificationService.blank("Error", `${error?.message}`);
+    this.notificationService.blank("Error", error?.message);
   }
 }

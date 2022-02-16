@@ -14,7 +14,7 @@ import { IconsProviderModule } from "./icons-provider.module";
 import { NzLayoutModule } from "ng-zorro-antd/layout";
 import { NzMenuModule } from "ng-zorro-antd/menu";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { supabaseCreateClient } from "./clients/supabase.client";
+import { createSupabaseClient } from "./clients/supabase.client";
 import { NzNotificationModule } from "ng-zorro-antd/notification";
 
 registerLocaleData(ru);
@@ -34,7 +34,7 @@ registerLocaleData(ru);
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },
-    { provide: SupabaseClient, useFactory: supabaseCreateClient }
+    { provide: SupabaseClient, useFactory: createSupabaseClient }
   ],
   bootstrap: [AppComponent]
 })
