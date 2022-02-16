@@ -34,7 +34,7 @@ registerLocaleData(ru);
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },
-    { provide: SupabaseClient, useFactory: supabaseCreateClient}
+    { provide: SupabaseClient, useFactory: supabaseCreateClient }
   ],
   bootstrap: [AppComponent]
 })
