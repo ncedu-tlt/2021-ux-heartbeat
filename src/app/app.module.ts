@@ -13,6 +13,9 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { IconsProviderModule } from "./icons-provider.module";
 import { NzLayoutModule } from "ng-zorro-antd/layout";
 import { NzMenuModule } from "ng-zorro-antd/menu";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { supabaseCreateClient } from "./clients/supabase.client";
+import { NzNotificationModule } from "ng-zorro-antd/notification";
 
 registerLocaleData(ru);
 
@@ -26,9 +29,13 @@ registerLocaleData(ru);
     BrowserAnimationsModule,
     IconsProviderModule,
     NzLayoutModule,
-    NzMenuModule
+    NzMenuModule,
+    NzNotificationModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: ru_RU }],
+  providers: [
+    { provide: NZ_I18N, useValue: ru_RU },
+    { provide: SupabaseClient, useFactory: supabaseCreateClient}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
