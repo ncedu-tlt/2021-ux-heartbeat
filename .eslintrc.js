@@ -1,7 +1,6 @@
 module.exports = {
     root: true,
     parser: '@typescript-eslint/parser',
-  ignorePatterns: [".eslintrc.js", "karma.conf.js"],
   parserOptions: {
         project: 'tsconfig.json'
     },
