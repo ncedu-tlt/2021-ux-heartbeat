@@ -16,11 +16,12 @@ import { NzMenuModule } from "ng-zorro-antd/menu";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseClient } from "./clients/supabase.client";
 import { NzNotificationModule } from "ng-zorro-antd/notification";
+import { SidebarComponent } from "./components/sidebar/sidebar.component";
 
 registerLocaleData(ru);
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, SidebarComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
