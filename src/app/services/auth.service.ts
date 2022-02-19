@@ -19,6 +19,7 @@ export class AuthService {
   private authStateChange$ = new Subject<AuthChangeEvent>();
   private user$ = new BehaviorSubject<User | null>(null);
   private session$ = new BehaviorSubject<Session | null>(null);
+  private token$ = new BehaviorSubject<string | null | undefined>(null);
 
   constructor(
     private supabase: SupabaseClient,
@@ -29,16 +30,19 @@ export class AuthService {
         this.authStateChange$.next(event);
         this.user$.next(this.supabase.auth.user());
         this.session$.next(session);
+        this.token$.next(session?.provider_token);
       }
     );
   }
 
   async signInWithSpotify(): Promise<void> {
-    const { user, session, error } = await this.supabase.auth.signIn(
+    const { error, user, session } = await this.supabase.auth.signIn(
       {
         provider: "spotify"
       },
       {
+        redirectTo: "http://localhost:4200/user",
+        // redirectTo: "http://localhost:4200/user",
         scopes: SCOPES
       }
     );
@@ -47,21 +51,28 @@ export class AuthService {
     } else {
       this.user$.next(user);
       this.session$.next(session);
+      this.token$.next(session?.provider_token);
     }
   }
 
   async signOutOfSpotify(): Promise<void> {
     const { error } = await this.supabase.auth.signOut();
+    this.token$.next(null);
     if (error !== null) {
       this.errorHandling(error);
     }
   }
 
-  getAuthToken(): string | undefined | null {
-    return this.session$.getValue()?.provider_token;
-  }
+  // getAuthToken(): string | undefined | null {
+  //   console.log("getAuthToken", this.token$.getValue());
+  //   return this.token$.getValue();
+  // }
 
   errorHandling(error: ApiError): void {
     this.notificationService.blank("Error", error?.message);
+  }
+
+  checkAuthToken(): BehaviorSubject<string | undefined | null> {
+    return this.token$;
   }
 }

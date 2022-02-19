@@ -16,6 +16,10 @@ import { NzMenuModule } from "ng-zorro-antd/menu";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseClient } from "./clients/supabase.client";
 import { NzNotificationModule } from "ng-zorro-antd/notification";
+import { NzButtonModule } from "ng-zorro-antd/button";
+import { LoginPageModule } from "./pages/loginPage/loginPage.module";
+import { UserProfileModule } from "./pages/userProfile/user-profile.module";
+import { AuthGuard } from "./guards/auth.guard";
 
 registerLocaleData(ru);
 
@@ -30,11 +34,17 @@ registerLocaleData(ru);
     IconsProviderModule,
     NzLayoutModule,
     NzMenuModule,
-    NzNotificationModule
+    NzMenuModule,
+    NzNotificationModule,
+    NzMenuModule,
+    NzButtonModule,
+    LoginPageModule,
+    UserProfileModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },
-    { provide: SupabaseClient, useFactory: createSupabaseClient }
+    { provide: SupabaseClient, useFactory: createSupabaseClient },
+    [AuthGuard]
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,32 @@
+<nz-layout>
+  <nz-header>
+    <button class="white" nz-button nzType="default">О проекте</button>
+  </nz-header>
+  <nz-content>
+      <ul>
+        <li><h1>HeartBeat</h1></li>
+        <li><h2>Музыка нашего сердцебиения</h2></li>
+        <li>
+          <button nz-button nzType="primary" (click)="authService.signInWithSpotify()">
+
+            <span>Авторизуйтесь через Spotify</span>
+            <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+          </button>
+<!--          <button nz-button nzType="primary" (click)="authService.getAuthToken()">-->
+
+<!--            <span>getAuthToken</span>-->
+<!--            <i nz-icon nzType="arrow-right" nzTheme="outline"></i>-->
+<!--          </button>-->
+          <button nz-button nzType="primary" (click)="authService.signOutOfSpotify()">
+
+            <span>sign out</span>
+            <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+          </button>
+        </li>
+      </ul>
+      <img src="../../../assets/image/logo.svg" alt="logo">
+  </nz-content>
+</nz-layout>
+
+
+
