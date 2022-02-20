@@ -15,13 +15,13 @@ import {
   styleUrls: ["./player.component.less"]
 })
 export class PlayerComponent {
-  player: HTMLAudioElement | undefined;
-  context: AudioContext | undefined;
+  private player: HTMLAudioElement | undefined;
+  private context: AudioContext | undefined;
 
-  musicCurrentTime$ = new BehaviorSubject<number>(0);
-  stop$: Subject<any> = new Subject();
-  musicFile$ = new BehaviorSubject<string>(" ");
-  musicFile =
+  public musicCurrentTime$ = new BehaviorSubject<number>(0);
+  private stop$: Subject<any> = new Subject();
+  // private musicFile$ = new BehaviorSubject<string>(" ");
+  private musicFile =
     "https://p.scdn.co/mp3-preview/4892940fb0fed9666392fad90945837fe769994f?cid=774b29d4f13844c495f206cafdad9c86";
 
   constructor(
@@ -29,17 +29,17 @@ export class PlayerComponent {
     public authService: AuthService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.createAudioElement();
     document.addEventListener("click", this.resumeContext);
   }
 
-  resumeContext = () => {
+  resumeContext = (): void => {
     void this.context?.resume();
     document.removeEventListener("click", this.resumeContext);
   };
 
-  createAudioElement() {
+  createAudioElement(): void {
     this.player = new Audio();
     this.context = new AudioContext();
     const analyser = this.context.createAnalyser();
@@ -56,7 +56,6 @@ export class PlayerComponent {
         const musicTimer: Observable<number> = interval(1000);
         void this.player.play();
         musicTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
-          // eslint-disable-next-line no-console
           this.musicCurrentTime$.next(
             Math.round(this.player?.currentTime as number)
           );
@@ -68,13 +67,7 @@ export class PlayerComponent {
     }
   }
 
-  putOnAutoplay() {
+  putOnAutoplay(): void {
     (this.player as HTMLAudioElement).loop = !this.player?.loop;
   }
-
-  // timeFormat(seconds: number) {
-  //   const convertedTime: string | number =
-  //     seconds < 10 ? "0" + String(seconds) : seconds;
-  //   return `00:${convertedTime}`;
-  // }
 }
