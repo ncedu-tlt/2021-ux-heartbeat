@@ -1,0 +1,98 @@
+.player {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+  background: #F7F9FE;
+  width: 100vw;
+
+  button {
+    background: rgba(0, 0, 0, 0);
+    border: none;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+
+  object {
+    pointer-events: none;
+  }
+
+  &__current-track {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    img {
+      width: 45px;
+      height: auto;
+    }
+  }
+
+  &__info-about-track {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+  }
+
+  &__control {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    align-items: center;
+    min-width: 420px;
+
+    @media screen and (max-width:575px) {
+      min-width: 100px;
+    }
+  }
+
+  &__control-items {
+    display: flex;
+    justify-content: space-around;
+    min-width: 100px;
+    padding-top: 8px;
+  }
+
+  &__play {
+    cursor: pointer;
+  }
+
+  &__progress {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__progress-bar {
+    width: 250px;
+    margin-right: 10px;
+
+    @media screen and (max-width:575px) {
+      display: none;
+      position: absolute;
+    }
+  }
+
+  &__time {
+    @media screen and (max-width:575px) {
+      display: none;
+      position: absolute;
+      padding-top: 7px;
+    }
+  }
+
+  &__extra-control {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-top: 5px;
+    min-width: 200px;
+
+    @media screen and (max-width:790px) {
+      display: none;
+      position: absolute;
+    }
+  }
+}
