@@ -34,12 +34,18 @@
       </button>
   </div>
     <div class="player__progress">
-      <nz-progress [nzPercent]=currentPositionOnProgressBar [nzShowInfo]="false" class="player__progress-bar"
-                   (click)="changeMusicProgress($event)"></nz-progress>
-      <span class="player__time" *ngIf="{
-         foo: musicCurrentTime$ | async
-         } as timer">
-          {{timer.foo | timeFormat}}
+      <nz-progress nzTooltipPlacement="topLeft"
+                   [nzTooltipOverlayStyle] = "currentPositionTooltip"
+                   nz-tooltip=""
+                   [nzTooltipTitle]="timeOnTooltip.getValue() | timeFormat"
+                   [nzPercent]=currentPositionOnProgressBar
+                   [nzShowInfo]="false"
+                   class="player__progress-bar"
+                   (click)="changeMusicProgress($event)"
+                   (mousemove)="changeTooltipPosition($event)">
+      </nz-progress>
+      <span class="player__time">
+          {{musicCurrentTime$.getValue() | timeFormat}}
       </span>
     </div>
   </div>

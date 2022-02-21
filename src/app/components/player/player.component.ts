@@ -8,6 +8,7 @@ import {
   Subject,
   takeUntil
 } from "rxjs";
+import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
 
 @Component({
   selector: "hb-player",
@@ -18,7 +19,10 @@ export class PlayerComponent {
   public player: HTMLAudioElement | undefined;
   private context: AudioContext | undefined;
 
-  public currentPositionOnProgressBar = 0;
+  public currentPositionOnProgressBar: number | undefined;
+  public currentPositionTooltip: NgStyleInterface = { left: "-18px" };
+
+  public timeOnTooltip = new BehaviorSubject<number | null>(0);
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<any> = new Subject();
   // private musicFile$ = new BehaviorSubject<string>(" ");
@@ -83,6 +87,16 @@ export class PlayerComponent {
     );
     this.musicCurrentTime$.next((this.player as HTMLAudioElement).currentTime);
     this.displayScaleProgress((this.player as HTMLAudioElement).currentTime);
+  }
+
+  changeTooltipPosition(event: MouseEvent) {
+    this.timeOnTooltip.next(
+      Math.round(
+        (event.offsetX / (event.target as HTMLElement).offsetWidth) *
+          (this.player as HTMLAudioElement).duration
+      )
+    );
+    this.currentPositionTooltip["left"] = String(event.offsetX - 18) + "px";
   }
 
   putOnAutoplay(): void {

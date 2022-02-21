@@ -19,6 +19,7 @@ import { NzNotificationModule } from "ng-zorro-antd/notification";
 import { PlayerComponent } from "./components/player/player.component";
 import { NzProgressModule } from "ng-zorro-antd/progress";
 import { FormatPipe } from "./pipes/time-format.pipe";
+import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 
 registerLocaleData(ru);
 
@@ -34,7 +35,8 @@ registerLocaleData(ru);
     NzLayoutModule,
     NzMenuModule,
     NzNotificationModule,
-    NzProgressModule
+    NzProgressModule,
+    NzToolTipModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },
