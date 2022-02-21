@@ -28,9 +28,6 @@ export class PlayerComponent {
   private stop$: Subject<any> = new Subject();
 
   playerToggle = false;
-  // private musicFile$ = new BehaviorSubject<string>(" ");
-  private musicFile =
-    "https://p.scdn.co/mp3-preview/4892940fb0fed9666392fad90945837fe769994f?cid=774b29d4f13844c495f206cafdad9c86";
 
   constructor(
     public playerService: PlayerService,
@@ -51,7 +48,7 @@ export class PlayerComponent {
     this.player = new Audio();
     this.context = new AudioContext();
     const analyser = this.context.createAnalyser();
-    this.player.src = this.musicFile;
+    this.player.src = this.playerService.currentTrackInfo.getValue().url;
     this.player.crossOrigin = "anonymous";
     const source = this.context.createMediaElementSource(this.player);
     source.connect(analyser);
