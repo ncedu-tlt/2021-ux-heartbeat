@@ -25,6 +25,8 @@ export class PlayerComponent {
   public timeOnTooltip = new BehaviorSubject<number | null>(0);
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<any> = new Subject();
+
+  playerToggle = false;
   // private musicFile$ = new BehaviorSubject<string>(" ");
   private musicFile =
     "https://p.scdn.co/mp3-preview/4892940fb0fed9666392fad90945837fe769994f?cid=774b29d4f13844c495f206cafdad9c86";
@@ -56,6 +58,7 @@ export class PlayerComponent {
     this.player.autoplay = false;
   }
   changePlayerState(): void {
+    this.playerToggle = !this.playerToggle;
     if (this.player != undefined) {
       if (this.player.paused) {
         const musicTimer: Observable<number> = interval(1000);
