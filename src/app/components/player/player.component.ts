@@ -68,6 +68,7 @@ export class PlayerComponent {
           this.displayScaleProgress(
             Math.round(this.player?.currentTime as number)
           );
+          this.checkMusicEnd();
         });
       } else {
         this.player.pause();
@@ -108,5 +109,16 @@ export class PlayerComponent {
 
   putOnAutoplay(): void {
     (this.player as HTMLAudioElement).loop = !this.player?.loop;
+  }
+
+  checkMusicEnd(): void {
+    if (
+      this.player?.currentTime === this.player?.duration &&
+      !this.player?.loop
+    ) {
+      this.player?.pause();
+      this.playerToggle = !this.playerToggle;
+      this.stop$.next(true);
+    }
   }
 }
