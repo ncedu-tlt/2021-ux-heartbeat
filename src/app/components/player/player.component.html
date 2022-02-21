@@ -48,6 +48,7 @@
                    [nzTooltipTitle]="timeOnTooltip.getValue() | timeFormat"
                    [nzPercent]=currentPositionOnProgressBar
                    [nzShowInfo]="false"
+                   nzStatus = 'active'
                    class="player__progress-bar"
                    (click)="changeMusicProgress($event)"
                    (mousemove)="changeTooltipPosition($event)">
@@ -66,6 +67,13 @@
         height="15px"
       ></object>
     </button>
+    <nz-progress [nzShowInfo]="false"
+                 [nzPercent]=musicVolume$.getValue()
+                 nzStatus = 'normal'
+                 class="player__volume-bar"
+                 (click)="changeMusicVolume($event)">
+
+    </nz-progress>
     <button class="player__mixing">
         <object
           type="image/svg+xml"

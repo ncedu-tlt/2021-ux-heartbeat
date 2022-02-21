@@ -23,6 +23,7 @@ export class PlayerComponent {
   public currentPositionTooltip: NgStyleInterface = { left: "-18px" };
 
   public timeOnTooltip = new BehaviorSubject<number | null>(0);
+  public musicVolume$ = new BehaviorSubject<number | null>(100);
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<any> = new Subject();
 
@@ -78,12 +79,12 @@ export class PlayerComponent {
     }
   }
 
-  displayScaleProgress(currentTime: number) {
+  displayScaleProgress(currentTime: number): void {
     this.currentPositionOnProgressBar =
       (currentTime / Math.round(this.player?.duration as number)) * 100;
   }
 
-  changeMusicProgress(event: MouseEvent) {
+  changeMusicProgress(event: MouseEvent): void {
     (this.player as HTMLAudioElement).currentTime = Math.round(
       (event.offsetX / (event.target as HTMLElement).offsetWidth) *
         (this.player as HTMLAudioElement).duration
@@ -92,7 +93,7 @@ export class PlayerComponent {
     this.displayScaleProgress((this.player as HTMLAudioElement).currentTime);
   }
 
-  changeTooltipPosition(event: MouseEvent) {
+  changeTooltipPosition(event: MouseEvent): void {
     this.timeOnTooltip.next(
       Math.round(
         (event.offsetX / (event.target as HTMLElement).offsetWidth) *
@@ -100,6 +101,12 @@ export class PlayerComponent {
       )
     );
     this.currentPositionTooltip["left"] = String(event.offsetX - 18) + "px";
+  }
+
+  changeMusicVolume(event: MouseEvent): void {
+    (this.player as HTMLAudioElement).volume =
+      event.offsetX / (event.target as HTMLElement).offsetWidth;
+    this.musicVolume$.next((this.player?.volume as number) * 100);
   }
 
   putOnAutoplay(): void {
