@@ -15,9 +15,10 @@ import {
   styleUrls: ["./player.component.less"]
 })
 export class PlayerComponent {
-  private player: HTMLAudioElement | undefined;
+  public player: HTMLAudioElement | undefined;
   private context: AudioContext | undefined;
 
+  public currentPositionOnProgressBar = 0;
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<any> = new Subject();
   // private musicFile$ = new BehaviorSubject<string>(" ");
@@ -59,12 +60,29 @@ export class PlayerComponent {
           this.musicCurrentTime$.next(
             Math.round(this.player?.currentTime as number)
           );
+          this.displayScaleProgress(
+            Math.round(this.player?.currentTime as number)
+          );
         });
       } else {
         this.player.pause();
         this.stop$.next(true);
       }
     }
+  }
+
+  displayScaleProgress(currentTime: number) {
+    this.currentPositionOnProgressBar =
+      (currentTime / Math.round(this.player?.duration as number)) * 100;
+  }
+
+  changeMusicProgress(event: MouseEvent) {
+    (this.player as HTMLAudioElement).currentTime = Math.round(
+      (event.offsetX / (event.target as HTMLElement).offsetWidth) *
+        (this.player as HTMLAudioElement).duration
+    );
+    this.musicCurrentTime$.next((this.player as HTMLAudioElement).currentTime);
+    this.displayScaleProgress((this.player as HTMLAudioElement).currentTime);
   }
 
   putOnAutoplay(): void {

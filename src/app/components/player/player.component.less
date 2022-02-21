@@ -67,13 +67,29 @@
 
   &__progress-bar {
     width: 250px;
+    border-radius: 30px;
     margin-right: 10px;
+    position: relative;
+    display: inline-block;
+
+    .ant-progress-outer {
+      .ant-progress-inner {
+        .ant-progress-bg {
+        pointer-events: none !important;
+        }
+      }
+    }
 
     @media screen and (max-width:575px) {
       display: none;
       position: absolute;
     }
   }
+
+  .ant-progress-bg {
+    pointer-events: none;
+  }
+
 
   &__time {
     @media screen and (max-width:575px) {
