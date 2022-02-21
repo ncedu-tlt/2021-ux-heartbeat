@@ -27,7 +27,8 @@ export class PlayerComponent {
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<any> = new Subject();
 
-  playerToggle = false;
+  isPlay = false;
+  isRepeat = false;
 
   constructor(
     public playerService: PlayerService,
@@ -54,9 +55,10 @@ export class PlayerComponent {
     source.connect(analyser);
     analyser.connect(this.context.destination);
     this.player.autoplay = false;
+    this.player.loop = false;
   }
   changePlayerState(): void {
-    this.playerToggle = !this.playerToggle;
+    this.isPlay = !this.isPlay;
     if (this.player != undefined) {
       if (this.player.paused) {
         const musicTimer: Observable<number> = interval(1000);
@@ -107,7 +109,8 @@ export class PlayerComponent {
     this.musicVolume$.next((this.player?.volume as number) * 100);
   }
 
-  putOnAutoplay(): void {
+  putOnRepeat(): void {
+    this.isRepeat = !this.isRepeat;
     (this.player as HTMLAudioElement).loop = !this.player?.loop;
   }
 
@@ -117,7 +120,7 @@ export class PlayerComponent {
       !this.player?.loop
     ) {
       this.player?.pause();
-      this.playerToggle = !this.playerToggle;
+      this.isPlay = !this.isPlay;
       this.stop$.next(true);
     }
   }

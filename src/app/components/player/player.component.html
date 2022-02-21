@@ -16,7 +16,7 @@
         height="20px"
       ></object>
     </button>
-      <button [ngStyle]="{display: playerToggle ? 'none' : 'block'}" class="player__play" (click)="changePlayerState()">
+      <button [ngStyle]="{display: isPlay ? 'none' : 'block'}" class="player__play" (click)="changePlayerState()">
       <object
         type="image/svg+xml"
         data = "../../../assets/svg/play.svg"
@@ -24,7 +24,7 @@
         height="20px"
       ></object>
       </button>
-      <button class="player__pause" [ngStyle]="{display: playerToggle ? 'block' : 'none'}" (click)="changePlayerState()">
+      <button class="player__pause" [ngStyle]="{display: isPlay ? 'block' : 'none'}" (click)="changePlayerState()">
         <object
           type="image/svg+xml"
           data = "../../../assets/svg/pause.svg"
@@ -82,13 +82,21 @@
           height="15px"
         ></object>
     </button>
-    <button class="player__repeat" (click)="putOnAutoplay()">
+    <button class="player__repeat" [ngStyle]="{display: isRepeat ? 'none' : 'block'}" (click)="putOnRepeat()">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/repeat.svg"
           width="15px"
           height="15px"
         ></object>
+    </button>
+    <button class="player__repeat-active" [ngStyle]="{display: isRepeat ? 'block' : 'none'}" (click)="putOnRepeat()">
+      <object
+        type="image/svg+xml"
+        data="../../../assets/svg/repeat-active.svg"
+        width="15px"
+        height="15px"
+      ></object>
     </button>
     <button class="player__add-track">
         <object
