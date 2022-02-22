@@ -20,7 +20,7 @@ export class LoginPageComponent implements OnDestroy {
           this.router.navigateByUrl("/user");
           return;
         }
-        // console.error("tram");
+
         if (event === "SIGNED_OUT") {
           this.router.navigateByUrl("/");
           return;

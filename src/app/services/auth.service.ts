@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   async signInWithSpotify(): Promise<void> {
-    await this.supabase.auth.signIn(
+    const { error } = await this.supabase.auth.signIn(
       {
         provider: "spotify"
       },
@@ -50,10 +50,16 @@ export class AuthService {
         scopes: SCOPES
       }
     );
+    if (error) {
+      this.errorHandling(error);
+    }
   }
 
   async signOutOfSpotify(): Promise<void> {
-    await this.supabase.auth.signOut();
+    const { error } = await this.supabase.auth.signOut();
+    if (error) {
+      this.errorHandling(error);
+    }
   }
 
   getAuthToken(): string | undefined | null {
