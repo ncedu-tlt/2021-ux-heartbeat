@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { AfterViewInit, Component, OnInit } from "@angular/core";
 import { PlayerService } from "../../services/player.service";
 import { AuthService } from "../../services/auth.service";
 import {
@@ -15,7 +15,7 @@ import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
   templateUrl: "./player.component.html",
   styleUrls: ["./player.component.less"]
 })
-export class PlayerComponent {
+export class PlayerComponent implements OnInit, AfterViewInit {
   public player!: HTMLAudioElement;
   private context!: AudioContext;
 
@@ -29,6 +29,8 @@ export class PlayerComponent {
 
   isPlay = false;
   isRepeat = false;
+  isMobile!: boolean;
+  drawerVisible = false;
 
   constructor(
     public playerService: PlayerService,
@@ -36,8 +38,15 @@ export class PlayerComponent {
   ) {}
 
   ngOnInit(): void {
+    this.isMobile = window.screen.width < 790;
     this.createAudioElement();
     document.addEventListener("click", this.resumeContext);
+  }
+
+  ngAfterViewInit() {
+    window.addEventListener("resize", () => {
+      this.isMobile = window.screen.width < 790;
+    });
   }
 
   resumeContext = (): void => {
@@ -117,6 +126,12 @@ export class PlayerComponent {
       this.player.pause();
       this.isPlay = !this.isPlay;
       this.stop$.next();
+    }
+  }
+
+  changeVisiblePlayerControlOnMobile(): void {
+    if (this.isMobile) {
+      this.drawerVisible = !this.drawerVisible;
     }
   }
 }
