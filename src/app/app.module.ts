@@ -18,13 +18,13 @@ import { createSupabaseClient } from "./clients/supabase.client";
 import { NzNotificationModule } from "ng-zorro-antd/notification";
 import { PlayerComponent } from "./components/player/player.component";
 import { NzProgressModule } from "ng-zorro-antd/progress";
-import { FormatPipe } from "./pipes/time-format.pipe";
+import { TimeFormatPipe } from "./pipes/time-format.pipe";
 import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 
 registerLocaleData(ru);
 
 @NgModule({
-  declarations: [AppComponent, PlayerComponent, FormatPipe],
+  declarations: [AppComponent, PlayerComponent, TimeFormatPipe],
   imports: [
     BrowserModule,
     AppRoutingModule,

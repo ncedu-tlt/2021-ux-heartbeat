@@ -13,7 +13,7 @@ export class PlayerService {
     img: "https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d"
   });
 
-  getTrack(trackInfo: PlayerTrackInfoModel) {
+  setTrack(trackInfo: PlayerTrackInfoModel) {
     this.currentTrackInfo.next(trackInfo);
   }
 }

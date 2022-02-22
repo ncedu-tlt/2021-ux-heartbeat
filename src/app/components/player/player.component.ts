@@ -16,16 +16,16 @@ import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
   styleUrls: ["./player.component.less"]
 })
 export class PlayerComponent {
-  public player: HTMLAudioElement | undefined;
-  private context: AudioContext | undefined;
+  public player!: HTMLAudioElement;
+  private context!: AudioContext;
 
   public currentPositionOnProgressBar: number | undefined;
-  public currentPositionTooltip: NgStyleInterface = { left: "-18px" };
+  public currentTooltipPosition: NgStyleInterface = { left: "-18px" };
 
-  public timeOnTooltip = new BehaviorSubject<number | null>(0);
-  public musicVolume$ = new BehaviorSubject<number | null>(100);
+  public timeOnTooltip = new BehaviorSubject<number>(0);
+  public musicVolume$ = new BehaviorSubject<number>(100);
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
-  private stop$: Subject<any> = new Subject();
+  private stop$: Subject<void> = new Subject();
 
   isPlay = false;
   isRepeat = false;
@@ -41,7 +41,7 @@ export class PlayerComponent {
   }
 
   resumeContext = (): void => {
-    void this.context?.resume();
+    void this.context.resume();
     document.removeEventListener("click", this.resumeContext);
   };
 
@@ -57,71 +57,66 @@ export class PlayerComponent {
     this.player.autoplay = false;
     this.player.loop = false;
   }
-  changePlayerState(): void {
+
+  switchPlayerAction(): void {
     this.isPlay = !this.isPlay;
-    if (this.player != undefined) {
-      if (this.player.paused) {
-        const musicTimer: Observable<number> = interval(1000);
-        void this.player.play();
-        musicTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
-          this.musicCurrentTime$.next(
-            Math.round(this.player?.currentTime as number)
-          );
-          this.displayScaleProgress(
-            Math.round(this.player?.currentTime as number)
-          );
-          this.checkMusicEnd();
-        });
-      } else {
-        this.player.pause();
-        this.stop$.next(true);
-      }
+    if (this.player.paused) {
+      const musicTimer: Observable<number> = interval(1000);
+      void this.player.play();
+      musicTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
+        this.musicCurrentTime$.next(Math.round(this.player.currentTime));
+        this.displayScaleProgress(Math.round(this.player.currentTime));
+        this.checkMusicEnd();
+      });
+    } else {
+      this.player.pause();
+      this.stop$.next();
     }
   }
 
   displayScaleProgress(currentTime: number): void {
     this.currentPositionOnProgressBar =
-      (currentTime / Math.round(this.player?.duration as number)) * 100;
+      (currentTime / Math.round(this.player.duration)) * 100;
   }
 
   changeMusicProgress(event: MouseEvent): void {
-    (this.player as HTMLAudioElement).currentTime = Math.round(
+    this.player.currentTime = Math.round(
       (event.offsetX / (event.target as HTMLElement).offsetWidth) *
-        (this.player as HTMLAudioElement).duration
+        this.player.duration
     );
-    this.musicCurrentTime$.next((this.player as HTMLAudioElement).currentTime);
-    this.displayScaleProgress((this.player as HTMLAudioElement).currentTime);
+    this.musicCurrentTime$.next(this.player.currentTime);
+    this.displayScaleProgress(this.player.currentTime);
   }
 
   changeTooltipPosition(event: MouseEvent): void {
     this.timeOnTooltip.next(
       Math.round(
         (event.offsetX / (event.target as HTMLElement).offsetWidth) *
-          (this.player as HTMLAudioElement).duration
+          this.player.duration
       )
     );
-    this.currentPositionTooltip["left"] = String(event.offsetX - 18) + "px";
+    this.currentTooltipPosition["left"] = String(event.offsetX - 18) + "px";
   }
 
   changeMusicVolume(event: MouseEvent): void {
-    (this.player as HTMLAudioElement).volume =
+    this.player.volume =
       event.offsetX / (event.target as HTMLElement).offsetWidth;
-    this.musicVolume$.next((this.player?.volume as number) * 100);
+    this.musicVolume$.next(this.player.volume * 100);
   }
 
   putOnRepeat(): void {
     this.isRepeat = !this.isRepeat;
-    (this.player as HTMLAudioElement).loop = !this.player?.loop;
+    this.player.loop = !this.player?.loop;
   }
 
   checkMusicEnd(): void {
     if (
-      this.player?.currentTime === this.player?.duration &&
-      !this.player?.loop
+      this.player.currentTime === this.player?.duration &&
+      !this.player.loop
     ) {
-      this.player?.pause();
+      this.player.pause();
       this.isPlay = !this.isPlay;
-      this.stop$.next(true);
+      this.stop$.next();
     }
   }
 }

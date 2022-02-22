@@ -16,7 +16,7 @@
         height="20px"
       ></object>
     </button>
-      <button *ngIf="!isPlay" class="player__play" (click)="changePlayerState()">
+      <button *ngIf="!isPlay" class="player__play" (click)="switchPlayerAction()">
       <object
         type="image/svg+xml"
         data = "../../../assets/svg/play.svg"
@@ -24,7 +24,7 @@
         height="20px"
       ></object>
       </button>
-      <button class="player__pause" *ngIf="isPlay" (click)="changePlayerState()">
+      <button class="player__pause" *ngIf="isPlay" (click)="switchPlayerAction()">
         <object
           type="image/svg+xml"
           data = "../../../assets/svg/pause.svg"
@@ -43,9 +43,9 @@
   </div>
     <div class="player__progress">
       <nz-progress nzTooltipPlacement="topLeft"
-                   [nzTooltipOverlayStyle] = "currentPositionTooltip"
+                   [nzTooltipOverlayStyle] = "currentTooltipPosition"
                    nz-tooltip=""
-                   [nzTooltipTitle]="timeOnTooltip.getValue() | timeFormat"
+                   [nzTooltipTitle]="timeOnTooltip | async | timeFormat"
                    [nzPercent]=currentPositionOnProgressBar
                    [nzShowInfo]="false"
                    nzStatus = 'active'
@@ -68,7 +68,7 @@
       ></object>
     </button>
     <nz-progress [nzShowInfo]="false"
-                 [nzPercent]=musicVolume$.getValue()
+                 [nzPercent]="musicVolume$ | async"
                  nzStatus = 'normal'
                  class="player__volume-bar"
                  (click)="changeMusicVolume($event)">
