@@ -1,0 +1,54 @@
+.navigation {
+  position: fixed;
+  width: 95px;
+  height: 100vh;
+  background-color: #F2F4F9;
+  transition: 0.5s all;
+  overflow: hidden;
+}
+.navigation:hover {
+  width: 310px;
+}
+.navigation:hover .logo__img {
+  width: 234px;
+  height: 87px;
+}
+.logo__img {
+  display: block;
+  margin: 0 auto;
+  margin-top: 59px;
+  width: 95px;
+  height: 95px;
+  transition: 0.03s;
+}
+.menu {
+  margin: 110px 0 0 25px;
+}
+.menu__list {
+  padding: 0;
+}
+.menu__list li {
+  width: 270px;
+  list-style: none;
+  margin-top: 36px;
+}
+.menu__list li:nth-child(1) {
+  margin-top: 0;
+}
+.menu__list li a {
+  display: flex;
+  align-items: center;
+}
+.menu__list-icon {
+  display: block;
+  text-align: center;
+  margin-right: 26px;
+}
+.menu__list-link {
+  display: block;
+  color: #000;
+  font-size: 20px;
+}
+.menu__list-link:hover {
+  color: #396EF4;
+}
