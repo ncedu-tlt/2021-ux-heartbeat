@@ -3,6 +3,8 @@ import { BrowserModule } from "@angular/platform-browser";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { LoginPageComponent } from "./pages/login-page/login-page.component";
+import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
 import { NZ_I18N } from "ng-zorro-antd/i18n";
 import { ru_RU } from "ng-zorro-antd/i18n";
 import { registerLocaleData } from "@angular/common";
@@ -17,14 +19,12 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseClient } from "./clients/supabase.client";
 import { NzNotificationModule } from "ng-zorro-antd/notification";
 import { NzButtonModule } from "ng-zorro-antd/button";
-import { LoginPageModule } from "./pages/login-page/login-page.module";
-import { UserProfileModule } from "./pages/user-profile/user-profile.module";
 import { AuthGuard } from "./guards/auth.guard";
 
 registerLocaleData(ru);
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, LoginPageComponent, UserProfileComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -37,9 +37,7 @@ registerLocaleData(ru);
     NzMenuModule,
     NzNotificationModule,
     NzMenuModule,
-    NzButtonModule,
-    LoginPageModule,
-    UserProfileModule
+    NzButtonModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },
