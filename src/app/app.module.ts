@@ -17,7 +17,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseClient } from "./clients/supabase.client";
 import { NzNotificationModule } from "ng-zorro-antd/notification";
 import { NzButtonModule } from "ng-zorro-antd/button";
-import { LoginPageModule } from "./pages/loginPage/loginPage.module";
+import { LoginPageModule } from "./pages/login-page/login-page.module";
 import { UserProfileModule } from "./pages/userProfile/user-profile.module";
 import { AuthGuard } from "./guards/auth.guard";
 

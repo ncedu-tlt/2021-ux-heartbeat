@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
-import { LoginPageComponent } from "./loginPage.component";
-import { LoginPageRoutingModule } from "./loginPage-routing.module";
+import { LoginPageComponent } from "./login-page.component";
+import { LoginPageRoutingModule } from "./login-page-routing.module";
 import { NzLayoutModule } from "ng-zorro-antd/layout";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { NzIconTestModule } from "ng-zorro-antd/icon/testing";

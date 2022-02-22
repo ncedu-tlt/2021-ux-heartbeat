@@ -6,7 +6,7 @@ import {
   SupabaseClient,
   User
 } from "@supabase/supabase-js";
-import { BehaviorSubject, Subject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 
 const SCOPES =
@@ -16,7 +16,7 @@ const SCOPES =
   providedIn: "root"
 })
 export class AuthService {
-  private authStateChange$ = new Subject<AuthChangeEvent>();
+  private authStateChange$ = new BehaviorSubject<AuthChangeEvent | null>(null);
   private user$ = new BehaviorSubject<User | null>(null);
   private session$ = new BehaviorSubject<Session | null>(null);
 
@@ -33,30 +33,27 @@ export class AuthService {
     );
   }
 
+  public getAuthStateChange(): Observable<AuthChangeEvent | null> {
+    return this.authStateChange$.asObservable();
+  }
+
+  public isLoggedIn(): boolean {
+    return !!this.supabase.auth.user();
+  }
+
   async signInWithSpotify(): Promise<void> {
-    const { user, session, error } = await this.supabase.auth.signIn(
+    await this.supabase.auth.signIn(
       {
         provider: "spotify"
       },
       {
-        redirectTo: "http://localhost:4200/user",
         scopes: SCOPES
       }
     );
-    if (error !== null) {
-      this.errorHandling(error);
-    } else {
-      this.user$.next(user);
-      this.session$.next(session);
-    }
   }
 
   async signOutOfSpotify(): Promise<void> {
-    localStorage.removeItem("access_token");
-    const { error } = await this.supabase.auth.signOut();
-    if (error !== null) {
-      this.errorHandling(error);
-    }
+    await this.supabase.auth.signOut();
   }
 
   getAuthToken(): string | undefined | null {
