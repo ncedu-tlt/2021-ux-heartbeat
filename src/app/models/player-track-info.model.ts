@@ -1,6 +1,8 @@
 export interface PlayerTrackInfoModel {
-  artist: string;
-  name: string;
-  img: string;
-  url: string;
+  artistName: string;
+  artistId: string;
+  albumId: string;
+  albumImg: string;
+  trackName: string;
+  trackUrl: string;
 }

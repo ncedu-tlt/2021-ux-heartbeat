@@ -25,10 +25,14 @@ export class PlayerService {
   private stop$: Subject<void> = new Subject();
 
   currentTrackInfo = new BehaviorSubject<PlayerTrackInfoModel>({
-    artist: "The Weeknd",
-    name: "Sacrifise",
-    url: "https://p.scdn.co/mp3-preview/4892940fb0fed9666392fad90945837fe769994f?cid=774b29d4f13844c495f206cafdad9c86",
-    img: "https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d"
+    artistName: "The Weeknd",
+    artistId: "1Xyo4u8uXC1ZmMpatF05PJ",
+    trackName: "Sacrifise",
+    trackUrl:
+      "https://p.scdn.co/mp3-preview/4892940fb0fed9666392fad90945837fe769994f?cid=774b29d4f13844c495f206cafdad9c86",
+    albumImg:
+      "https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d",
+    albumId: "2nLOHgzXzwFEpl62zAgCEC"
   });
 
   isPlay = false;
@@ -48,7 +52,7 @@ export class PlayerService {
     this.context = new AudioContext();
     const analyser = this.context.createAnalyser();
     this.currentTrackInfo.subscribe(() => {
-      this.player.src = this.currentTrackInfo.getValue().url;
+      this.player.src = this.currentTrackInfo.getValue().trackUrl;
     });
     this.player.crossOrigin = "anonymous";
     const source = this.context.createMediaElementSource(this.player);
