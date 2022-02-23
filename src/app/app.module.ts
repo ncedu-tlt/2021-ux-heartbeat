@@ -25,7 +25,12 @@ import { AuthGuard } from "./guards/auth.guard";
 registerLocaleData(ru);
 
 @NgModule({
-  declarations: [AppComponent, LoginPageComponent, UserProfileComponent, SidebarComponent],
+  declarations: [
+    AppComponent,
+    LoginPageComponent,
+    UserProfileComponent,
+    SidebarComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
