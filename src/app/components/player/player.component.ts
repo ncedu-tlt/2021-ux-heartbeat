@@ -23,7 +23,10 @@ export class PlayerComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     window.addEventListener("resize", () => {
-      if (window.screen.width < 790) {
+      if (
+        window.screen.width < 790 ||
+        document.documentElement.clientWidth < 790
+      ) {
         this.isMobile = true;
       } else {
         this.isMobile = false;
