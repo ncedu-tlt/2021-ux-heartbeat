@@ -3,6 +3,7 @@ import { BrowserModule } from "@angular/platform-browser";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { LoaderComponent } from "./loader/loader.component";
 import { NZ_I18N } from "ng-zorro-antd/i18n";
 import { ru_RU } from "ng-zorro-antd/i18n";
 import { registerLocaleData } from "@angular/common";
@@ -16,11 +17,12 @@ import { NzMenuModule } from "ng-zorro-antd/menu";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseClient } from "./clients/supabase.client";
 import { NzNotificationModule } from "ng-zorro-antd/notification";
+import { NzSpinModule } from "ng-zorro-antd/spin";
 
 registerLocaleData(ru);
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, LoaderComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -30,7 +32,8 @@ registerLocaleData(ru);
     IconsProviderModule,
     NzLayoutModule,
     NzMenuModule,
-    NzNotificationModule
+    NzNotificationModule,
+    NzSpinModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },
