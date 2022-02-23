@@ -47,7 +47,9 @@ export class PlayerService {
     this.player = new Audio();
     this.context = new AudioContext();
     const analyser = this.context.createAnalyser();
-    this.player.src = this.currentTrackInfo.getValue().url;
+    this.currentTrackInfo.subscribe(() => {
+      this.player.src = this.currentTrackInfo.getValue().url;
+    });
     this.player.crossOrigin = "anonymous";
     const source = this.context.createMediaElementSource(this.player);
     source.connect(analyser);
@@ -57,16 +59,17 @@ export class PlayerService {
   }
 
   switchPlayerAction(): void {
-    this.isPlay = !this.isPlay;
     if (this.player.paused) {
       const musicTimer: Observable<number> = interval(1000);
       void this.player.play();
+      this.isPlay = true;
       musicTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
         this.musicCurrentTime$.next(Math.round(this.player.currentTime));
         this.displayScaleProgress(Math.round(this.player.currentTime));
         this.checkMusicEnd();
       });
     } else {
+      this.isPlay = false;
       this.player.pause();
       this.stop$.next();
     }
