@@ -16,7 +16,7 @@
         height="20px"
       ></object>
     </button>
-      <button *ngIf="!isPlay" class="player__play" (click)="switchPlayerAction()">
+      <button *ngIf="!playerService.isPlay" class="player__play" (click)="playerService.switchPlayerAction()">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/play.svg"
@@ -24,7 +24,7 @@
           height="20px"
         ></object>
       </button>
-      <button class="player__pause" *ngIf="isPlay" (click)="switchPlayerAction()">
+      <button class="player__pause" *ngIf="playerService.isPlay" (click)="playerService.switchPlayerAction()">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/pause.svg"
@@ -43,18 +43,18 @@
   </div>
     <div class="player__progress" *ngIf="!isMobile">
       <nz-progress nzTooltipPlacement="topLeft"
-                   [nzTooltipOverlayStyle]="currentTooltipPosition"
+                   [nzTooltipOverlayStyle]="playerService.currentTooltipPosition"
                    nz-tooltip=""
-                   [nzTooltipTitle]="timeOnTooltip | async | timeFormat"
-                   [nzPercent]=currentPositionOnProgressBar
+                   [nzTooltipTitle]="playerService.timeOnTooltip | async | timeFormat"
+                   [nzPercent]=playerService.currentPositionOnProgressBar
                    [nzShowInfo]="false"
                    nzStatus="active"
                    class="player__progress-bar"
-                   (click)="changeMusicProgress($event)"
-                   (mousemove)="changeTooltipPosition($event)">
+                   (click)="playerService.changeMusicProgress($event)"
+                   (mousemove)="playerService.changeTooltipPosition($event)">
       </nz-progress>
       <span class="player__time">
-          {{musicCurrentTime$.getValue() | timeFormat}}
+          {{playerService.musicCurrentTime$.getValue() | timeFormat}}
       </span>
     </div>
   </div>
@@ -68,10 +68,10 @@
       ></object>
     </button>
     <nz-progress [nzShowInfo]="false"
-                 [nzPercent]="musicVolume$ | async"
+                 [nzPercent]="playerService.musicVolume$ | async"
                  nzStatus = 'normal'
                  class="player__volume-bar"
-                 (click)="changeMusicVolume($event)">
+                 (click)="playerService.changeMusicVolume($event)">
 
     </nz-progress>
     <button class="player__mixing">
@@ -82,7 +82,7 @@
           height="15px"
         ></object>
     </button>
-    <button class="player__no-repeat" *ngIf="!isRepeat" (click)="putOnRepeat()">
+    <button class="player__no-repeat" *ngIf="!playerService.isRepeat" (click)="playerService.putOnRepeat()">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/repeat.svg"
@@ -90,7 +90,7 @@
           height="15px"
         ></object>
     </button>
-    <button class="player__repeat" *ngIf="isRepeat" (click)="putOnRepeat()">
+    <button class="player__repeat" *ngIf="playerService.isRepeat" (click)="playerService.putOnRepeat()">
       <object
         type="image/svg+xml"
         data="../../../assets/svg/repeat-active.svg"
@@ -135,15 +135,15 @@
       </div>
       <div class="mobile-player-contain__progress">
         <nz-progress
-          [nzPercent]=currentPositionOnProgressBar
+          [nzPercent]=playerService.currentPositionOnProgressBar
           [nzShowInfo]="false"
           nzStatus="active"
           class="mobile-player-contain__progress-bar"
-          (click)="changeMusicProgress($event)"
-          (mousemove)="changeTooltipPosition($event)">
+          (click)="playerService.changeMusicProgress($event)"
+          (mousemove)="playerService.changeTooltipPosition($event)">
         </nz-progress>
         <span class="mobile-player-contain__time">
-          {{musicCurrentTime$.getValue() | timeFormat}}
+          {{playerService.musicCurrentTime$.getValue() | timeFormat}}
       </span>
       </div>
       <div class="mobile-player-contain__control">
@@ -156,7 +156,7 @@
               height="30px"
             ></object>
           </button>
-          <button *ngIf="!isPlay" class="mobile-player-contain__play" (click)="switchPlayerAction()">
+          <button *ngIf="!playerService.isPlay" class="mobile-player-contain__play" (click)="playerService.switchPlayerAction()">
             <object
               type="image/svg+xml"
               data="../../../assets/svg/play.svg"
@@ -164,7 +164,7 @@
               height="35px"
             ></object>
           </button>
-          <button class="mobile-player-contain__pause" *ngIf="isPlay" (click)="switchPlayerAction()">
+          <button class="mobile-player-contain__pause" *ngIf="playerService.isPlay" (click)="playerService.switchPlayerAction()">
             <object
               type="image/svg+xml"
               data="../../../assets/svg/pause.svg"
@@ -191,7 +191,7 @@
             height="25px"
           ></object>
         </button>
-        <button class="mobile-player-contain__no-repeat" *ngIf="!isRepeat" (click)="putOnRepeat()">
+        <button class="mobile-player-contain__no-repeat" *ngIf="!playerService.isRepeat" (click)="playerService.putOnRepeat()">
           <object
             type="image/svg+xml"
             data="../../../assets/svg/repeat.svg"
@@ -199,7 +199,7 @@
             height="25px"
           ></object>
         </button>
-        <button class="mobile-player-contain__repeat" *ngIf="isRepeat" (click)="putOnRepeat()">
+        <button class="mobile-player-contain__repeat" *ngIf="playerService.isRepeat" (click)="playerService.putOnRepeat()">
           <object
             type="image/svg+xml"
             data="../../../assets/svg/repeat-active.svg"
