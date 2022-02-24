@@ -3,6 +3,8 @@ import { BrowserModule } from "@angular/platform-browser";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { LoginPageComponent } from "./pages/login-page/login-page.component";
+import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
 import { NZ_I18N } from "ng-zorro-antd/i18n";
 import { ru_RU } from "ng-zorro-antd/i18n";
 import { registerLocaleData } from "@angular/common";
@@ -21,11 +23,19 @@ import { NzProgressModule } from "ng-zorro-antd/progress";
 import { TimeFormatPipe } from "./pipes/time-format.pipe";
 import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 import { NzDrawerModule } from "ng-zorro-antd/drawer";
+import { NzButtonModule } from "ng-zorro-antd/button";
+import { AuthGuard } from "./guards/auth.guard";
 
 registerLocaleData(ru);
 
 @NgModule({
-  declarations: [AppComponent, PlayerComponent, TimeFormatPipe],
+  declarations: [
+    AppComponent,
+    PlayerComponent,
+    TimeFormatPipe,
+    LoginPageComponent,
+    UserProfileComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -38,11 +48,13 @@ registerLocaleData(ru);
     NzNotificationModule,
     NzProgressModule,
     NzToolTipModule,
-    NzDrawerModule
+    NzDrawerModule,
+    NzButtonModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },
-    { provide: SupabaseClient, useFactory: createSupabaseClient }
+    { provide: SupabaseClient, useFactory: createSupabaseClient },
+    [AuthGuard]
   ],
   bootstrap: [AppComponent]
 })
