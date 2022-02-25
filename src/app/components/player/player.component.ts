@@ -21,11 +21,11 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.playerService.createAudioElement();
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     window.addEventListener("resize", this.resizeWindow);
   }
 
-  resizeWindow = () => {
+  resizeWindow = (): void => {
     if (
       window.screen.width < 850 ||
       document.documentElement.clientWidth < 850
