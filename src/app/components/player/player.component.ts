@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
 import { PlayerService } from "../../services/player.service";
 import { AuthService } from "../../services/auth.service";
 
@@ -7,7 +7,7 @@ import { AuthService } from "../../services/auth.service";
   templateUrl: "./player.component.html",
   styleUrls: ["./player.component.less"]
 })
-export class PlayerComponent implements OnInit, AfterViewInit {
+export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   isMobile!: boolean;
   drawerVisible = false;
 
@@ -17,27 +17,33 @@ export class PlayerComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.isMobile = window.screen.width < 790;
+    this.isMobile = window.screen.width < 850;
     this.playerService.createAudioElement();
   }
 
   ngAfterViewInit() {
-    window.addEventListener("resize", () => {
-      if (
-        window.screen.width < 850 ||
-        document.documentElement.clientWidth < 850
-      ) {
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-        this.drawerVisible = false;
-      }
-    });
+    window.addEventListener("resize", this.resizeWindow);
   }
+
+  resizeWindow = () => {
+    if (
+      window.screen.width < 850 ||
+      document.documentElement.clientWidth < 850
+    ) {
+      this.isMobile = true;
+    } else {
+      this.isMobile = false;
+      this.drawerVisible = false;
+    }
+  };
 
   changeVisiblePlayerControlOnMobile(): void {
     if (this.isMobile) {
       this.drawerVisible = !this.drawerVisible;
     }
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener("resize", this.resizeWindow);
   }
 }

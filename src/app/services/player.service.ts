@@ -49,40 +49,43 @@ export class PlayerService {
   };
 
   createAudioElement(): void {
-    this.player = new Audio();
-    this.context = new AudioContext();
-    const analyser = this.context.createAnalyser();
-    this.currentTrackInfo.subscribe(track => {
-      if (track !== null) {
-        this.player.src = track.trackUrl;
-      } else {
-        this.player.src = " ";
-      }
-    });
-    this.player.crossOrigin = "anonymous";
-    const source = this.context.createMediaElementSource(this.player);
-    source.connect(analyser);
-    analyser.connect(this.context.destination);
-    this.player.autoplay = false;
-    this.player.loop = false;
+    if (!this.player) {
+      this.player = new Audio();
+      this.context = new AudioContext();
+      const analyser = this.context.createAnalyser();
+      this.currentTrackInfo.subscribe(track => {
+        if (track !== null) {
+          this.player.src = track.trackUrl;
+        } else {
+          this.player.src = " ";
+        }
+      });
+      this.player.crossOrigin = "anonymous";
+      const source = this.context.createMediaElementSource(this.player);
+      source.connect(analyser);
+      analyser.connect(this.context.destination);
+      this.player.autoplay = false;
+      this.player.loop = false;
+    }
   }
 
   switchPlayerAction(): void {
-    if (this.currentTrackInfo.getValue()) {
-      if (this.player.paused) {
-        const musicTimer: Observable<number> = interval(1000);
-        void this.player.play();
-        this.isPlay = true;
-        musicTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
-          this.musicCurrentTime$.next(Math.round(this.player.currentTime));
-          this.displayScaleProgress(Math.round(this.player.currentTime));
-          this.checkMusicEnd();
-        });
-      } else {
-        this.isPlay = false;
-        this.player.pause();
-        this.stop$.next();
-      }
+    if (!this.currentTrackInfo.getValue()) {
+      return;
+    }
+    if (this.player.paused) {
+      const musicTimer: Observable<number> = interval(1000);
+      void this.player.play();
+      this.isPlay = true;
+      musicTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
+        this.musicCurrentTime$.next(Math.round(this.player.currentTime));
+        this.displayScaleProgress(Math.round(this.player.currentTime));
+        this.checkMusicEnd();
+      });
+    } else {
+      this.isPlay = false;
+      this.player.pause();
+      this.stop$.next();
     }
   }
 
@@ -92,14 +95,15 @@ export class PlayerService {
   }
 
   changeMusicProgress(event: MouseEvent): void {
-    if (this.currentTrackInfo.getValue()) {
-      this.player.currentTime = Math.round(
-        (event.offsetX / (event.target as HTMLElement).offsetWidth) *
-          this.player.duration
-      );
-      this.musicCurrentTime$.next(this.player.currentTime);
-      this.displayScaleProgress(this.player.currentTime);
+    if (!this.currentTrackInfo.getValue()) {
+      return;
     }
+    this.player.currentTime = Math.round(
+      (event.offsetX / (event.target as HTMLElement).offsetWidth) *
+        this.player.duration
+    );
+    this.musicCurrentTime$.next(this.player.currentTime);
+    this.displayScaleProgress(this.player.currentTime);
   }
 
   changeTooltipPosition(event: MouseEvent): void {
@@ -120,14 +124,11 @@ export class PlayerService {
 
   putOnRepeat(): void {
     this.isRepeat = !this.isRepeat;
-    this.player.loop = !this.player?.loop;
+    this.player.loop = !this.player.loop;
   }
 
   checkMusicEnd(): void {
-    if (
-      this.player.currentTime === this.player?.duration &&
-      !this.player.loop
-    ) {
+    if (this.player.currentTime === this.player.duration && !this.player.loop) {
       this.player.pause();
       this.isPlay = !this.isPlay;
       this.stop$.next();
