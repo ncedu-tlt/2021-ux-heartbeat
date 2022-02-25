@@ -1,12 +1,20 @@
 @import "../../../assets/styles/colors";
+.container {
+  width: 100vw;
+  background: @snowy;
+  display: flex;
+  justify-content: center;
+  //align-items: center;
+}
+
 .player {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
   padding: 20px 0 20px;
-  background: @snowy;
-  width: 100vw;
+  max-width: 1280px;
+  //min-width: 320px;
 
   button {
     background: @transparent;
@@ -35,6 +43,7 @@
     display: flex;
     flex-direction: column;
     margin-left: 10px;
+    margin-right: 35px;
   }
 
   &__artist-name {
@@ -48,7 +57,7 @@
     align-items: center;
     min-width: 420px;
 
-    @media screen and (max-width: 790px) {
+    @media screen and (max-width: 850px) {
       min-width: 100px;
     }
   }
@@ -89,6 +98,7 @@
     justify-content: space-around;
     padding-top: 5px;
     min-width: 200px;
+    margin-left: 35px;
   }
 }
 

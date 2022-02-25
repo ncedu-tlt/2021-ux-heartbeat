@@ -24,12 +24,13 @@ export class PlayerService {
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<void> = new Subject();
 
-  currentTrackInfo = new BehaviorSubject<PlayerTrackInfoModel>({
+  currentTrackInfo = new BehaviorSubject<PlayerTrackInfoModel | null>({
     artistName: "The Weeknd",
     artistId: "1Xyo4u8uXC1ZmMpatF05PJ",
     trackName: "Sacrifise",
     trackUrl:
       "https://p.scdn.co/mp3-preview/4892940fb0fed9666392fad90945837fe769994f?cid=774b29d4f13844c495f206cafdad9c86",
+    trackId: "1nH2PkJL1XoUq8oE6tBZoU",
     albumImg:
       "https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d",
     albumId: "2nLOHgzXzwFEpl62zAgCEC"
@@ -51,8 +52,12 @@ export class PlayerService {
     this.player = new Audio();
     this.context = new AudioContext();
     const analyser = this.context.createAnalyser();
-    this.currentTrackInfo.subscribe(() => {
-      this.player.src = this.currentTrackInfo.getValue().trackUrl;
+    this.currentTrackInfo.subscribe(track => {
+      if (track !== null) {
+        this.player.src = track.trackUrl;
+      } else {
+        this.player.src = " ";
+      }
     });
     this.player.crossOrigin = "anonymous";
     const source = this.context.createMediaElementSource(this.player);
@@ -63,19 +68,21 @@ export class PlayerService {
   }
 
   switchPlayerAction(): void {
-    if (this.player.paused) {
-      const musicTimer: Observable<number> = interval(1000);
-      void this.player.play();
-      this.isPlay = true;
-      musicTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
-        this.musicCurrentTime$.next(Math.round(this.player.currentTime));
-        this.displayScaleProgress(Math.round(this.player.currentTime));
-        this.checkMusicEnd();
-      });
-    } else {
-      this.isPlay = false;
-      this.player.pause();
-      this.stop$.next();
+    if (this.currentTrackInfo.getValue()) {
+      if (this.player.paused) {
+        const musicTimer: Observable<number> = interval(1000);
+        void this.player.play();
+        this.isPlay = true;
+        musicTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
+          this.musicCurrentTime$.next(Math.round(this.player.currentTime));
+          this.displayScaleProgress(Math.round(this.player.currentTime));
+          this.checkMusicEnd();
+        });
+      } else {
+        this.isPlay = false;
+        this.player.pause();
+        this.stop$.next();
+      }
     }
   }
 
@@ -85,12 +92,14 @@ export class PlayerService {
   }
 
   changeMusicProgress(event: MouseEvent): void {
-    this.player.currentTime = Math.round(
-      (event.offsetX / (event.target as HTMLElement).offsetWidth) *
-        this.player.duration
-    );
-    this.musicCurrentTime$.next(this.player.currentTime);
-    this.displayScaleProgress(this.player.currentTime);
+    if (this.currentTrackInfo.getValue()) {
+      this.player.currentTime = Math.round(
+        (event.offsetX / (event.target as HTMLElement).offsetWidth) *
+          this.player.duration
+      );
+      this.musicCurrentTime$.next(this.player.currentTime);
+      this.displayScaleProgress(this.player.currentTime);
+    }
   }
 
   changeTooltipPosition(event: MouseEvent): void {

@@ -3,6 +3,7 @@ export interface PlayerTrackInfoModel {
   artistId: string;
   albumId: string;
   albumImg: string;
+  trackId: string;
   trackName: string;
   trackUrl: string;
 }
