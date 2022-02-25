@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="player">
+  <div class="player" *ngIf="!drawerVisible">
     <div class="player__current-track" *ngIf="playerService.currentTrackInfo.getValue()"
          (click)="changeVisiblePlayerControlOnMobile()">
       <img src="{{playerService.currentTrackInfo.getValue()?.albumImg}}" alt="#">
