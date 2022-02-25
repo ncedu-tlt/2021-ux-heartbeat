@@ -1,0 +1,179 @@
+@import "../../../assets/styles/colors";
+.container {
+  width: 100vw;
+  background: @snowy;
+  display: flex;
+  justify-content: center;
+
+  .player {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px 0 20px;
+    max-width: 1280px;
+
+    button {
+      background: @transparent;
+      border: none;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+
+    object {
+      pointer-events: none;
+    }
+
+    &__current-track {
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+
+      img {
+        width: 45px;
+        height: auto;
+      }
+    }
+
+    &__info-about-track {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+      margin-right: 35px;
+    }
+
+    &__artist-name {
+      font-weight: bold;
+    }
+
+    &__control {
+      display: flex;
+      justify-content: space-around;
+      flex-direction: row;
+      align-items: center;
+      min-width: 420px;
+
+      @media screen and (max-width: 850px) {
+        min-width: 100px;
+      }
+    }
+
+    &__control-items {
+      display: flex;
+      justify-content: space-around;
+      min-width: 100px;
+      padding-top: 8px;
+    }
+
+    &__play {
+      cursor: pointer;
+    }
+
+    &__progress {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+    }
+
+    &__progress-bar {
+      width: 250px;
+      border-radius: 30px;
+      margin-right: 10px;
+      position: relative;
+      display: inline-block;
+    }
+
+    &__volume-bar {
+      width: 50px;
+    }
+
+    &__extra-control {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      padding-top: 5px;
+      min-width: 200px;
+      margin-left: 35px;
+    }
+  }
+
+}
+
+
+.mobile-player-contain {
+
+  &__current-track {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__info-about-track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 25px;
+    margin: 15px 0 10px;
+  }
+
+  &__artist-name {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+
+  &__progress {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__progress-bar {
+    min-width: 290px;
+  }
+
+  &__time {
+    font-size: 18px;
+  }
+
+  &__control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0 30px;
+  }
+
+  &__control-items {
+
+    button {
+      background: @transparent;
+      border: none;
+      cursor: pointer;
+
+      object {
+        pointer-events: none;
+      }
+    }
+  }
+
+  &__extra-control {
+    display: flex;
+    justify-content: space-around;
+    button {
+      background: @transparent;
+      border: none;
+      cursor: pointer;
+
+      object {
+        pointer-events: none;
+      }
+    }
+  }
+
+  &__img {
+    margin: auto;
+    width: 280px;
+    height: auto;
+  }
+}
