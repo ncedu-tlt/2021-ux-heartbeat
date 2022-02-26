@@ -32,7 +32,7 @@ registerLocaleData(ru);
 @NgModule({
   declarations: [
     AppComponent,
-    SidebarComponent
+    SidebarComponent,
     PlayerComponent,
     TimeFormatPipe,
     LoginPageComponent,
