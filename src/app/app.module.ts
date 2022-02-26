@@ -5,6 +5,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { LoginPageComponent } from "./pages/login-page/login-page.component";
 import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
+import { LoaderComponent } from "./components/loader/loader.component";
 import { NZ_I18N } from "ng-zorro-antd/i18n";
 import { ru_RU } from "ng-zorro-antd/i18n";
 import { registerLocaleData } from "@angular/common";
@@ -34,7 +35,8 @@ registerLocaleData(ru);
     PlayerComponent,
     TimeFormatPipe,
     LoginPageComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
