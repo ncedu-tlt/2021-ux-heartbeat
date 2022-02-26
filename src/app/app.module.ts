@@ -19,6 +19,11 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseClient } from "./clients/supabase.client";
 import { NzNotificationModule } from "ng-zorro-antd/notification";
 import { SidebarComponent } from "./components/sidebar/sidebar.component";
+import { PlayerComponent } from "./components/player/player.component";
+import { NzProgressModule } from "ng-zorro-antd/progress";
+import { TimeFormatPipe } from "./pipes/time-format.pipe";
+import { NzToolTipModule } from "ng-zorro-antd/tooltip";
+import { NzDrawerModule } from "ng-zorro-antd/drawer";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { AuthGuard } from "./guards/auth.guard";
 
@@ -27,9 +32,11 @@ registerLocaleData(ru);
 @NgModule({
   declarations: [
     AppComponent,
-    LoginPageComponent,
-    UserProfileComponent,
     SidebarComponent
+    PlayerComponent,
+    TimeFormatPipe,
+    LoginPageComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -40,9 +47,10 @@ registerLocaleData(ru);
     IconsProviderModule,
     NzLayoutModule,
     NzMenuModule,
-    NzMenuModule,
     NzNotificationModule,
-    NzMenuModule,
+    NzProgressModule,
+    NzToolTipModule,
+    NzDrawerModule,
     NzButtonModule
   ],
   providers: [
