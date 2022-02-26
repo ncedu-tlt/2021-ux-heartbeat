@@ -51,6 +51,17 @@ export class TrackListComponent {
       albumId: "4Gfnly5CzMJQqkUFfoHaP3",
       albumImg:
         "https://i.scdn.co/image/ab67616d0000b273b4ad7ebaf4575f120eb3f193"
+    },
+    {
+      artistName: "The Weeknd",
+      artistId: "1Xyo4u8uXC1ZmMpatF05PJ",
+      trackName: "Sacrifise",
+      trackUrl:
+        "https://p.scdn.co/mp3-preview/4892940fb0fed9666392fad90945837fe769994f?cid=774b29d4f13844c495f206cafdad9c86",
+      trackId: "1nH2PkJL1XoUq8oE6tBZoU",
+      albumImg:
+        "https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d",
+      albumId: "2nLOHgzXzwFEpl62zAgCEC"
     }
   ];
 }
