@@ -36,7 +36,7 @@ export class PlayerService {
     albumId: "2nLOHgzXzwFEpl62zAgCEC"
   });
 
-  isPlay = false;
+  isPlay = new BehaviorSubject<boolean>(false);
   isRepeat = false;
 
   constructor() {
@@ -76,14 +76,14 @@ export class PlayerService {
     if (this.player.paused) {
       const musicTimer: Observable<number> = interval(1000);
       void this.player.play();
-      this.isPlay = true;
+      this.isPlay.next(true);
       musicTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
         this.musicCurrentTime$.next(Math.round(this.player.currentTime));
         this.displayScaleProgress(Math.round(this.player.currentTime));
         this.checkMusicEnd();
       });
     } else {
-      this.isPlay = false;
+      this.isPlay.next(false);
       this.player.pause();
       this.stop$.next();
     }
@@ -130,7 +130,7 @@ export class PlayerService {
   checkMusicEnd(): void {
     if (this.player.currentTime === this.player.duration && !this.player.loop) {
       this.player.pause();
-      this.isPlay = !this.isPlay;
+      this.isPlay.next(false);
       this.stop$.next();
     }
   }

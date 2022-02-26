@@ -18,7 +18,7 @@
             height="20px"
           ></object>
         </button>
-        <button *ngIf="!playerService.isPlay" class="player__play" (click)="playerService.switchPlayerAction()">
+        <button *ngIf="!(playerService.isPlay | async)" class="player__play" (click)="playerService.switchPlayerAction()">
           <object
             type="image/svg+xml"
             data="../../../assets/svg/play.svg"
@@ -26,7 +26,7 @@
             height="20px"
           ></object>
         </button>
-        <button class="player__pause" *ngIf="playerService.isPlay" (click)="playerService.switchPlayerAction()">
+        <button class="player__pause" *ngIf="playerService.isPlay | async" (click)="playerService.switchPlayerAction()">
           <object
             type="image/svg+xml"
             data="../../../assets/svg/pause.svg"
@@ -162,7 +162,7 @@
                 height="30px"
               ></object>
             </button>
-            <button *ngIf="!playerService.isPlay" class="mobile-player-contain__play" (click)="playerService.switchPlayerAction()">
+            <button *ngIf="!(playerService.isPlay | async)" class="mobile-player-contain__play" (click)="playerService.switchPlayerAction()">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/play.svg"
@@ -170,7 +170,7 @@
                 height="35px"
               ></object>
             </button>
-            <button class="mobile-player-contain__pause" *ngIf="playerService.isPlay" (click)="playerService.switchPlayerAction()">
+            <button class="mobile-player-contain__pause" *ngIf="playerService.isPlay | async" (click)="playerService.switchPlayerAction()">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/pause.svg"
