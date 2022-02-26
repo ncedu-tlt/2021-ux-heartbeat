@@ -16,6 +16,7 @@ module.exports = {
     ],
     rules: {
         '@typescript-eslint/no-unused-vars': 'error',
+        '@typescript-eslint/no-floating-promises': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/generator-star-spacing': 'off',
         '@typescript-eslint/unbound-method': 'off',
