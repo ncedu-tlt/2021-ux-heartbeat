@@ -18,6 +18,7 @@ import { NzMenuModule } from "ng-zorro-antd/menu";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseClient } from "./clients/supabase.client";
 import { NzNotificationModule } from "ng-zorro-antd/notification";
+import { SidebarComponent } from "./components/sidebar/sidebar.component";
 import { PlayerComponent } from "./components/player/player.component";
 import { NzProgressModule } from "ng-zorro-antd/progress";
 import { TimeFormatPipe } from "./pipes/time-format.pipe";
@@ -31,6 +32,7 @@ registerLocaleData(ru);
 @NgModule({
   declarations: [
     AppComponent,
+    SidebarComponent,
     PlayerComponent,
     TimeFormatPipe,
     LoginPageComponent,

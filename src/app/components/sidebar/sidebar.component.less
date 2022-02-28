@@ -1,0 +1,54 @@
+@import '../../../assets/styles/colors.less';
+
+.navigation {
+   position: fixed;
+   width: 95px;
+   height: 100vh;
+   background-color: @background-color;
+   transition: 0.5s all;
+   overflow: hidden;
+   &:hover {
+       width: 310px;
+   }
+}
+
+.logo__img {
+    display: block;
+    margin: 0 auto;
+    margin-top: 59px;
+    width: 100%;
+    height: 95px;
+    transition: .03s;
+}
+
+.menu {
+    margin: 110px 0 0 25px;
+    &__list {
+        padding: 0;
+        li {
+            width: 270px;
+            list-style: none;
+            margin-top: 36px;
+            &:nth-child(1) {
+                margin-top: 0;
+            }
+            a {
+                display: flex;
+                align-items: center;
+            }
+        }
+        &-icon {
+            display: block;
+            text-align: center;
+            margin-right: 26px;
+        }
+        &-link {
+            display: block;
+            color: #000;
+            font-size: 20px;
+            &:hover {
+                color: #396EF4;
+            }
+        }
+    }
+}

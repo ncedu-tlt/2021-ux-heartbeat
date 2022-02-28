@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
 
 @Component({
-  selector: "hb-loginPage",
+  selector: "hb-login-page",
   templateUrl: "./login-page.component.html",
   styleUrls: ["./login-page.component.less"]
 })
