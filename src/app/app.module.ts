@@ -25,6 +25,7 @@ import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 import { NzDrawerModule } from "ng-zorro-antd/drawer";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { AuthGuard } from "./guards/auth.guard";
+import { ArtistCardComponent } from "./components/artist-card/artist-card.component";
 
 registerLocaleData(ru);
 
@@ -34,7 +35,8 @@ registerLocaleData(ru);
     PlayerComponent,
     TimeFormatPipe,
     LoginPageComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    ArtistCardComponent
   ],
   imports: [
     BrowserModule,
