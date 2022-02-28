@@ -36,10 +36,6 @@ export class TrackComponent implements OnInit {
       .subscribe();
   }
 
-  setTrack(trackInfo: PlayerTrackInfoModel) {
-    this.trackInfo = trackInfo;
-  }
-
   controlPlayerCurrentTrack() {
     if (this.playerService.currentTrackInfo.getValue() !== this.trackInfo) {
       this.playerService.currentTrackInfo.next(this.trackInfo);
