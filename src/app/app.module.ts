@@ -41,8 +41,8 @@ registerLocaleData(ru);
     LoginPageComponent,
     UserProfileComponent,
     LoaderComponent,
-    TrackComponent,
-    TrackListComponent
+    TrackListComponent,
+    TrackComponent
   ],
   imports: [
     BrowserModule,
