@@ -43,8 +43,7 @@ registerLocaleData(ru);
     LoaderComponent,
     TrackListComponent,
     TrackComponent,
-    UserProfileComponent,
-    LoaderComponent
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
