@@ -19,16 +19,16 @@ export class PlayerService {
   public currentPositionOnProgressBar: number | undefined;
   public currentTooltipPosition: NgStyleInterface = { left: "-18px" };
 
-  public timeOnTooltip = new BehaviorSubject<number>(0);
+  public timeOnTooltip$ = new BehaviorSubject<number>(0);
   public musicVolume$ = new BehaviorSubject<number>(100);
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<void> = new Subject();
 
-  public currentTrackInfo = new BehaviorSubject<PlayerTrackInfoModel | null>(
+  public currentTrackInfo$ = new BehaviorSubject<PlayerTrackInfoModel | null>(
     null
   );
 
-  public isPlay = new BehaviorSubject<boolean>(false);
+  public isPlay$ = new BehaviorSubject<boolean>(false);
   public isRepeat = false;
 
   constructor() {
@@ -45,7 +45,7 @@ export class PlayerService {
       this.player = new Audio();
       this.context = new AudioContext();
       const analyser = this.context.createAnalyser();
-      this.currentTrackInfo.subscribe(track => {
+      this.currentTrackInfo$.subscribe(track => {
         if (track !== null) {
           this.player.src = track.trackUrl;
         } else {
@@ -62,20 +62,20 @@ export class PlayerService {
   }
 
   switchPlayerAction(): void {
-    if (!this.currentTrackInfo.getValue()) {
+    if (!this.currentTrackInfo$.getValue()) {
       return;
     }
     if (this.player.paused) {
       const musicTimer: Observable<number> = interval(1000);
       this.player.play();
-      this.isPlay.next(true);
+      this.isPlay$.next(true);
       musicTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
         this.musicCurrentTime$.next(Math.round(this.player.currentTime));
         this.displayScaleProgress(Math.round(this.player.currentTime));
         this.checkMusicEnd();
       });
     } else {
-      this.isPlay.next(false);
+      this.isPlay$.next(false);
       this.player.pause();
       this.stop$.next();
     }
@@ -87,7 +87,7 @@ export class PlayerService {
   }
 
   changeMusicProgress(event: MouseEvent): void {
-    if (!this.currentTrackInfo.getValue()) {
+    if (!this.currentTrackInfo$.getValue()) {
       return;
     }
     this.player.currentTime = Math.round(
@@ -99,7 +99,7 @@ export class PlayerService {
   }
 
   changeTooltipPosition(event: MouseEvent): void {
-    this.timeOnTooltip.next(
+    this.timeOnTooltip$.next(
       Math.round(
         (event.offsetX / (event.target as HTMLElement).offsetWidth) *
           this.player.duration
@@ -122,7 +122,7 @@ export class PlayerService {
   checkMusicEnd(): void {
     if (this.player.currentTime === this.player.duration && !this.player.loop) {
       this.player.pause();
-      this.isPlay.next(false);
+      this.isPlay$.next(false);
       this.stop$.next();
     }
   }
