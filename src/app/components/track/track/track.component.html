@@ -1,6 +1,6 @@
 <div class="track">
   <div class="track-contain">
-    <div [ngStyle]="{'background-image': 'url(' + trackInfo.albumImg + ')'}"
+    <div [ngStyle]="{'background-image': 'url(' + track.albumImg + ')'}"
          class="track-contain__img"
          (click)="controlPlayerCurrentTrack()">
       <img src="{{isPlay ? 'assets/svg/pause-track.svg' : 'assets/svg/play-track.svg'}}" alt="album">

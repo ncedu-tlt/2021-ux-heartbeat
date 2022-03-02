@@ -23,7 +23,7 @@ export class TrackListComponent {
       artistName: "Imagine Dragons",
       artistId: "53XhwfbYqKCa1cC15pYq2q",
       trackName: "Thunder",
-      trackId: "1zB4vmk8tFRmM9UULNzbLB",
+      trackId: "1zB4vmk8tFRmM9UULNzbLBrrY",
       trackUrl:
         "https://p.scdn.co/mp3-preview/07e14c4e821174295fe50f03b33d98387570d1db?cid=774b29d4f13844c495f206cafdad9c86",
       albumId: "33pt9HBdGlAbRGBHQgsZsU",

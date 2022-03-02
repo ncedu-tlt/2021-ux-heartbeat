@@ -10,7 +10,6 @@ import { combineLatest, Subscription } from "rxjs";
 })
 export class TrackComponent implements OnInit, OnDestroy {
   public trackTime = 30;
-  public trackInfo!: PlayerTrackInfoModel;
   private controlActiveTrack: Subscription = new Subscription();
   public isPlay = false;
 
@@ -19,17 +18,21 @@ export class TrackComponent implements OnInit, OnDestroy {
   constructor(public playerService: PlayerService) {}
 
   ngOnInit() {
-    this.trackInfo = this.track;
-    this.controlActiveTrack = combineLatest(
+    this.controlActiveTrack = combineLatest([
       this.playerService.currentTrackInfo,
       this.playerService.isPlay
-    ).subscribe(([currentTrack, isPlay]) => {
-      if (currentTrack?.trackName === this.trackInfo.trackName) {
-        this.isPlay = isPlay;
-      } else {
-        this.isPlay = false;
+    ]).subscribe(
+      ([currentTrack, isPlay]: [
+        currentTrack: PlayerTrackInfoModel | null,
+        isPlay: boolean
+      ]) => {
+        if (currentTrack?.trackId === this.track.trackId) {
+          this.isPlay = isPlay;
+        } else {
+          this.isPlay = false;
+        }
       }
-    });
+    );
   }
 
   ngOnDestroy() {
@@ -37,8 +40,8 @@ export class TrackComponent implements OnInit, OnDestroy {
   }
 
   controlPlayerCurrentTrack() {
-    if (this.playerService.currentTrackInfo.getValue() !== this.trackInfo) {
-      this.playerService.currentTrackInfo.next(this.trackInfo);
+    if (this.playerService.currentTrackInfo.getValue() !== this.track) {
+      this.playerService.currentTrackInfo.next(this.track);
     }
     this.playerService.switchPlayerAction();
   }

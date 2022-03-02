@@ -24,10 +24,12 @@ export class PlayerService {
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<void> = new Subject();
 
-  currentTrackInfo = new BehaviorSubject<PlayerTrackInfoModel | null>(null);
+  public currentTrackInfo = new BehaviorSubject<PlayerTrackInfoModel | null>(
+    null
+  );
 
-  isPlay = new BehaviorSubject<boolean>(false);
-  isRepeat = false;
+  public isPlay = new BehaviorSubject<boolean>(false);
+  public isRepeat = false;
 
   constructor() {
     document.addEventListener("click", this.resumeContext);
@@ -123,9 +125,5 @@ export class PlayerService {
       this.isPlay.next(false);
       this.stop$.next();
     }
-  }
-
-  setTrack(trackInfo: PlayerTrackInfoModel) {
-    this.currentTrackInfo.next(trackInfo);
   }
 }
