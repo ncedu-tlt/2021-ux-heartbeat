@@ -19,32 +19,24 @@ export class PlayerService {
   public currentPositionOnProgressBar: number | undefined;
   public currentTooltipPosition: NgStyleInterface = { left: "-18px" };
 
-  public timeOnTooltip = new BehaviorSubject<number>(0);
+  public timeOnTooltip$ = new BehaviorSubject<number>(0);
   public musicVolume$ = new BehaviorSubject<number>(100);
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<void> = new Subject();
 
-  currentTrackInfo = new BehaviorSubject<PlayerTrackInfoModel | null>({
-    artistName: "The Weeknd",
-    artistId: "1Xyo4u8uXC1ZmMpatF05PJ",
-    trackName: "Sacrifise",
-    trackUrl:
-      "https://p.scdn.co/mp3-preview/4892940fb0fed9666392fad90945837fe769994f?cid=774b29d4f13844c495f206cafdad9c86",
-    trackId: "1nH2PkJL1XoUq8oE6tBZoU",
-    albumImg:
-      "https://i.scdn.co/image/ab67616d0000b2734ab2520c2c77a1d66b9ee21d",
-    albumId: "2nLOHgzXzwFEpl62zAgCEC"
-  });
+  public currentTrackInfo$ = new BehaviorSubject<PlayerTrackInfoModel | null>(
+    null
+  );
 
-  isPlay = false;
-  isRepeat = false;
+  public isPlay$ = new BehaviorSubject<boolean>(false);
+  public isRepeat = false;
 
   constructor() {
     document.addEventListener("click", this.resumeContext);
   }
 
   resumeContext = (): void => {
-    void this.context.resume();
+    this.context.resume();
     document.removeEventListener("click", this.resumeContext);
   };
 
@@ -53,7 +45,7 @@ export class PlayerService {
       this.player = new Audio();
       this.context = new AudioContext();
       const analyser = this.context.createAnalyser();
-      this.currentTrackInfo.subscribe(track => {
+      this.currentTrackInfo$.subscribe(track => {
         if (track !== null) {
           this.player.src = track.trackUrl;
         } else {
@@ -70,20 +62,20 @@ export class PlayerService {
   }
 
   switchPlayerAction(): void {
-    if (!this.currentTrackInfo.getValue()) {
+    if (!this.currentTrackInfo$.getValue()) {
       return;
     }
     if (this.player.paused) {
       const musicTimer: Observable<number> = interval(1000);
-      void this.player.play();
-      this.isPlay = true;
+      this.player.play();
+      this.isPlay$.next(true);
       musicTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
         this.musicCurrentTime$.next(Math.round(this.player.currentTime));
         this.displayScaleProgress(Math.round(this.player.currentTime));
         this.checkMusicEnd();
       });
     } else {
-      this.isPlay = false;
+      this.isPlay$.next(false);
       this.player.pause();
       this.stop$.next();
     }
@@ -95,7 +87,7 @@ export class PlayerService {
   }
 
   changeMusicProgress(event: MouseEvent): void {
-    if (!this.currentTrackInfo.getValue()) {
+    if (!this.currentTrackInfo$.getValue()) {
       return;
     }
     this.player.currentTime = Math.round(
@@ -107,7 +99,7 @@ export class PlayerService {
   }
 
   changeTooltipPosition(event: MouseEvent): void {
-    this.timeOnTooltip.next(
+    this.timeOnTooltip$.next(
       Math.round(
         (event.offsetX / (event.target as HTMLElement).offsetWidth) *
           this.player.duration
@@ -130,12 +122,8 @@ export class PlayerService {
   checkMusicEnd(): void {
     if (this.player.currentTime === this.player.duration && !this.player.loop) {
       this.player.pause();
-      this.isPlay = !this.isPlay;
+      this.isPlay$.next(false);
       this.stop$.next();
     }
-  }
-
-  setTrack(trackInfo: PlayerTrackInfoModel) {
-    this.currentTrackInfo.next(trackInfo);
   }
 }
