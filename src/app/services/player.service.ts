@@ -36,7 +36,7 @@ export class PlayerService {
   }
 
   resumeContext = (): void => {
-    void this.context.resume();
+    this.context.resume();
     document.removeEventListener("click", this.resumeContext);
   };
 
@@ -67,7 +67,7 @@ export class PlayerService {
     }
     if (this.player.paused) {
       const musicTimer: Observable<number> = interval(1000);
-      void this.player.play();
+      this.player.play();
       this.isPlay.next(true);
       musicTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
         this.musicCurrentTime$.next(Math.round(this.player.currentTime));
