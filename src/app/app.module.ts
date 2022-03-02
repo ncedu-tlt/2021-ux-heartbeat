@@ -5,6 +5,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { LoginPageComponent } from "./pages/login-page/login-page.component";
 import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
+import { LoaderComponent } from "./components/loader/loader.component";
 import { NZ_I18N } from "ng-zorro-antd/i18n";
 import { ru_RU } from "ng-zorro-antd/i18n";
 import { registerLocaleData } from "@angular/common";
@@ -18,6 +19,7 @@ import { NzMenuModule } from "ng-zorro-antd/menu";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createSupabaseClient } from "./clients/supabase.client";
 import { NzNotificationModule } from "ng-zorro-antd/notification";
+import { SidebarComponent } from "./components/sidebar/sidebar.component";
 import { PlayerComponent } from "./components/player/player.component";
 import { NzProgressModule } from "ng-zorro-antd/progress";
 import { TimeFormatPipe } from "./pipes/time-format.pipe";
@@ -25,6 +27,8 @@ import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 import { NzDrawerModule } from "ng-zorro-antd/drawer";
 import { NzButtonModule } from "ng-zorro-antd/button";
 import { AuthGuard } from "./guards/auth.guard";
+import { TrackComponent } from "./components/track/track/track.component";
+import { TrackListComponent } from "./components/track-list/track-list/track-list.component";
 import { ArtistCardComponent } from "./components/artist-card/artist-card.component";
 
 registerLocaleData(ru);
@@ -32,9 +36,13 @@ registerLocaleData(ru);
 @NgModule({
   declarations: [
     AppComponent,
+    SidebarComponent,
     PlayerComponent,
     TimeFormatPipe,
     LoginPageComponent,
+    LoaderComponent,
+    TrackListComponent,
+    TrackComponent,
     UserProfileComponent,
     ArtistCardComponent
   ],

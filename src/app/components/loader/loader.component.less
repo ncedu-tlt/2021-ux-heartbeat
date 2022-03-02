@@ -1,0 +1,30 @@
+
+.loader {
+  height: 100%;
+  position: relative;
+  z-index: 1001;
+}
+
+img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 60%;
+  margin: auto;
+  animation: heartbeat 1.5s infinite;
+  max-width: 70px;
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1)
+  }
+  20% {
+    transform: scale(1.25)
+  }
+  40% {
+    transform: scale(1.5)
+  }
+}
