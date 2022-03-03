@@ -22,7 +22,7 @@ export class LoginPageComponent implements OnDestroy {
         }
 
         if (event === "SIGNED_OUT") {
-          this.router.navigateByUrl("/");
+          this.router.navigateByUrl("/auth");
           return;
         }
       });

@@ -48,6 +48,7 @@ export class AuthService {
       },
       {
         scopes: SCOPES
+        // redirectTo: "http://localhost:4200/"
       }
     );
     if (error) {

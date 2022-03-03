@@ -29,6 +29,7 @@ import { NzButtonModule } from "ng-zorro-antd/button";
 import { AuthGuard } from "./guards/auth.guard";
 import { TrackComponent } from "./components/track/track/track.component";
 import { TrackListComponent } from "./components/track-list/track-list/track-list.component";
+import { MainPageComponent } from "./pages/main-page/main-page.component";
 
 registerLocaleData(ru);
 
@@ -43,7 +44,8 @@ registerLocaleData(ru);
     LoaderComponent,
     TrackListComponent,
     TrackComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    MainPageComponent
   ],
   imports: [
     BrowserModule,
