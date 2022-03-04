@@ -30,6 +30,16 @@ import { AuthGuard } from "./guards/auth.guard";
 import { TrackComponent } from "./components/track/track/track.component";
 import { TrackListComponent } from "./components/track-list/track-list/track-list.component";
 import { MainPageComponent } from "./pages/main-page/main-page.component";
+import { SearchPageComponent } from "./pages/search-page/search-page.component";
+import { PlaylistsPageComponent } from "./pages/playlists-page/playlists-page.component";
+import { RecommendationPageComponent } from "./pages/recommendation-page/recommendation-page.component";
+import { ArtistPageComponent } from "./pages/artist-page/artist-page.component";
+import { AlbumsPageComponent } from "./pages/albums-page/albums-page.component";
+import { FollowedArtistPageComponent } from "./pages/followed-artist-page/followed-artist-page.component";
+import { GenrePageComponent } from "./pages/genre-page/genre-page.component";
+import { HomePageComponent } from "./pages/home-page/home-page.component";
+import { GenresCollectionPageComponent } from "./pages/genres-collection-page/genres-collection-page.component";
+import { AlbumPageComponent } from "./pages/album-page/album-page.component";
 
 registerLocaleData(ru);
 
@@ -45,7 +55,17 @@ registerLocaleData(ru);
     TrackListComponent,
     TrackComponent,
     UserProfileComponent,
-    MainPageComponent
+    MainPageComponent,
+    SearchPageComponent,
+    PlaylistsPageComponent,
+    RecommendationPageComponent,
+    ArtistPageComponent,
+    AlbumsPageComponent,
+    FollowedArtistPageComponent,
+    GenrePageComponent,
+    HomePageComponent,
+    GenresCollectionPageComponent,
+    AlbumPageComponent
   ],
   imports: [
     BrowserModule,
