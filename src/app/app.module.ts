@@ -40,6 +40,7 @@ import { GenrePageComponent } from "./pages/genre-page/genre-page.component";
 import { HomePageComponent } from "./pages/home-page/home-page.component";
 import { GenresCollectionPageComponent } from "./pages/genres-collection-page/genres-collection-page.component";
 import { AlbumPageComponent } from "./pages/album-page/album-page.component";
+import { FavoriteTracksPageComponent } from "./pages/favorite-tracks-page/favorite-tracks-page.component";
 
 registerLocaleData(ru);
 
@@ -65,7 +66,8 @@ registerLocaleData(ru);
     GenrePageComponent,
     HomePageComponent,
     GenresCollectionPageComponent,
-    AlbumPageComponent
+    AlbumPageComponent,
+    FavoriteTracksPageComponent
   ],
   imports: [
     BrowserModule,

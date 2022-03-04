@@ -3,7 +3,6 @@ import { RouterModule, Routes } from "@angular/router";
 import { LoginPageComponent } from "./pages/login-page/login-page.component";
 import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
 import { AuthGuard } from "./guards/auth.guard";
-import { TrackListComponent } from "./components/track-list/track-list/track-list.component";
 import { MainPageComponent } from "./pages/main-page/main-page.component";
 import { AlbumsPageComponent } from "./pages/albums-page/albums-page.component";
 import { FollowedArtistPageComponent } from "./pages/followed-artist-page/followed-artist-page.component";
@@ -13,26 +12,34 @@ import { RecommendationPageComponent } from "./pages/recommendation-page/recomme
 import { SearchPageComponent } from "./pages/search-page/search-page.component";
 import { AlbumPageComponent } from "./pages/album-page/album-page.component";
 import { ArtistPageComponent } from "./pages/artist-page/artist-page.component";
+import { PlaylistsPageComponent } from "./pages/playlists-page/playlists-page.component";
+import { FavoriteTracksPageComponent } from "./pages/favorite-tracks-page/favorite-tracks-page.component";
+import { GenrePageComponent } from "./pages/genre-page/genre-page.component";
 
 const routes: Routes = [
   { path: "auth", component: LoginPageComponent },
-  { path: "", redirectTo: "playlist", pathMatch: "full" },
+  { path: "", redirectTo: "user", pathMatch: "full" },
+  { path: "home", redirectTo: "home/recommendations", pathMatch: "full" },
   {
     path: "",
     component: MainPageComponent,
     canActivate: [AuthGuard],
     children: [
       {
-        path: "playlists",
-        component: TrackListComponent
-      },
-      {
         path: "user",
         component: UserProfileComponent
       },
       {
+        path: "playlists",
+        component: PlaylistsPageComponent
+      },
+      {
         path: "albums",
         component: AlbumsPageComponent
+      },
+      {
+        path: "favorite",
+        component: FavoriteTracksPageComponent
       },
       {
         path: "album/:id",
@@ -60,7 +67,7 @@ const routes: Routes = [
           },
           {
             path: "genres-collection/:genre",
-            component: HomePageComponent
+            component: GenrePageComponent
           },
           {
             path: "recommendations",
