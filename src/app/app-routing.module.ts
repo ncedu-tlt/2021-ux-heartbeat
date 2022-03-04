@@ -18,7 +18,7 @@ import { GenrePageComponent } from "./pages/genre-page/genre-page.component";
 
 const routes: Routes = [
   { path: "auth", component: LoginPageComponent },
-  { path: "", redirectTo: "user", pathMatch: "full" },
+  { path: "", redirectTo: "home/recommendations", pathMatch: "full" },
   { path: "home", redirectTo: "home/recommendations", pathMatch: "full" },
   {
     path: "",

@@ -17,7 +17,7 @@ export class LoginPageComponent implements OnDestroy {
       .getAuthStateChange()
       .subscribe((event: AuthChangeEvent | null) => {
         if (event === "SIGNED_IN") {
-          this.router.navigateByUrl("/user");
+          this.router.navigateByUrl("/home/recommendations");
           return;
         }
 
