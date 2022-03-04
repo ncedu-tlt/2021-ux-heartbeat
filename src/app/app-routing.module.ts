@@ -38,12 +38,12 @@ const routes: Routes = [
         component: AlbumsPageComponent
       },
       {
-        path: "favorite",
-        component: FavoriteTracksPageComponent
-      },
-      {
         path: "album/:id",
         component: AlbumPageComponent
+      },
+      {
+        path: "favorite",
+        component: FavoriteTracksPageComponent
       },
       {
         path: "artists",
