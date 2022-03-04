@@ -15,15 +15,18 @@ import { ArtistPageComponent } from "./pages/artist-page/artist-page.component";
 import { PlaylistsPageComponent } from "./pages/playlists-page/playlists-page.component";
 import { FavoriteTracksPageComponent } from "./pages/favorite-tracks-page/favorite-tracks-page.component";
 import { GenrePageComponent } from "./pages/genre-page/genre-page.component";
+import { AuthChildrenGuard } from "./guards/auth-children.guard";
+import { NotFoundPageComponent } from "./pages/not-found-page/not-found-page.component";
 
 const routes: Routes = [
   { path: "auth", component: LoginPageComponent },
-  { path: "", redirectTo: "home/recommendations", pathMatch: "full" },
   { path: "home", redirectTo: "home/recommendations", pathMatch: "full" },
+  { path: "", redirectTo: "home/recommendations", pathMatch: "full" },
   {
     path: "",
     component: MainPageComponent,
     canActivate: [AuthGuard],
+    canActivateChild: [AuthChildrenGuard],
     children: [
       {
         path: "user",
@@ -76,7 +79,8 @@ const routes: Routes = [
         ]
       }
     ]
-  }
+  },
+  { path: "**", component: NotFoundPageComponent }
 ];
 
 @NgModule({
