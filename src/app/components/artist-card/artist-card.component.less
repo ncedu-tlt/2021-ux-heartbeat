@@ -1,0 +1,54 @@
+.artist-card {
+  display: flex;
+  margin: 10px 15px;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 15px;
+  padding: 20px;
+  max-width: 300px;
+
+  &__follow {
+    margin-left: auto;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  &__img {
+    margin: auto;
+    width: 250px;
+    height: 185px;
+    border-radius: 10px;
+    background-size: cover;
+  }
+
+  &__name {
+    font-weight: bold;
+    font-size: 22px;
+  }
+
+  &__followers {
+    font-size: 16px;
+  }
+
+  &__genres {
+    font-size: 14px;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  &__top-tracks {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    max-width: 260px;
+  }
+
+  &__more-information {
+    margin: auto;
+  }
+}

@@ -42,6 +42,7 @@ import { GenresCollectionPageComponent } from "./pages/genres-collection-page/ge
 import { AlbumPageComponent } from "./pages/album-page/album-page.component";
 import { FavoriteTracksPageComponent } from "./pages/favorite-tracks-page/favorite-tracks-page.component";
 import { NotFoundPageComponent } from "./pages/not-found-page/not-found-page.component";
+import { ArtistCardComponent } from "./components/artist-card/artist-card.component";
 
 registerLocaleData(ru);
 
@@ -52,7 +53,6 @@ registerLocaleData(ru);
     PlayerComponent,
     TimeFormatPipe,
     LoginPageComponent,
-    UserProfileComponent,
     LoaderComponent,
     TrackListComponent,
     TrackComponent,
@@ -69,7 +69,8 @@ registerLocaleData(ru);
     GenresCollectionPageComponent,
     AlbumPageComponent,
     FavoriteTracksPageComponent,
-    NotFoundPageComponent
+    NotFoundPageComponent,
+    ArtistCardComponent
   ],
   imports: [
     BrowserModule,
