@@ -20,7 +20,8 @@
   <button nz-button nzType="default"
           nzSize="default"
           nzShape="round"
-          class="artist-card__more-information">
+          class="artist-card__more-information"
+          [routerLink]="['/artist', artistInfo.artistId]">
     Подробнее
   </button>
 </div>
