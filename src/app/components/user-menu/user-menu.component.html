@@ -1,0 +1,12 @@
+<p class="user-menu__profile-name">{{userName}}</p>
+<img class="user-menu__profile-image" *ngIf="imageUrl" src="{{imageUrl}}" alt="Image of profile"/>
+<i class="user-menu__profile-null-image" *ngIf="!imageUrl" nz-icon nzType="user" nzTheme="outline"></i>
+<a class="user-menu__dropdown" nzTrigger="click" nz-dropdown [nzDropdownMenu]="menu">
+  <i nz-icon nzType="down"></i>
+</a>
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item routerLink="/user">Мой профиль</li>
+    <li nz-menu-item routerLink="/" (click)="authService.signOutOfSpotify()">Выйти</li>
+  </ul>
+</nz-dropdown-menu>

@@ -29,6 +29,11 @@ import { NzButtonModule } from "ng-zorro-antd/button";
 import { AuthGuard } from "./guards/auth.guard";
 import { TrackComponent } from "./components/track/track/track.component";
 import { TrackListComponent } from "./components/track-list/track-list/track-list.component";
+import { UserMenuComponent } from "./components/user-menu/user-menu.component";
+import { NzDropDownModule } from "ng-zorro-antd/dropdown";
+import { HeaderComponent } from "./components/header/header.component";
+import { SearchComponent } from "./components/search/search.component";
+import { SearchPageComponent } from "./pages/search-page/search-page.component";
 
 registerLocaleData(ru);
 
@@ -43,7 +48,10 @@ registerLocaleData(ru);
     LoaderComponent,
     TrackListComponent,
     TrackComponent,
-    UserProfileComponent
+    UserMenuComponent,
+    HeaderComponent,
+    SearchComponent,
+    SearchPageComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +66,8 @@ registerLocaleData(ru);
     NzProgressModule,
     NzToolTipModule,
     NzDrawerModule,
-    NzButtonModule
+    NzButtonModule,
+    NzDropDownModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },
