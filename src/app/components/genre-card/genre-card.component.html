@@ -1,0 +1,5 @@
+<div class="container">
+    <div class="card" *ngFor="let item of genres" [routerLink]="['/genre', this.item]">
+        <a class="card__name">{{item}}</a>
+    </div>
+</div>
