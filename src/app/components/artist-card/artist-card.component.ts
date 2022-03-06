@@ -7,8 +7,8 @@ import { ArtistCardModel } from "../../models/artist-card.model";
   styleUrls: ["./artist-card.component.less"]
 })
 export class ArtistCardComponent {
-  isCard = true;
-  artistInfo: ArtistCardModel = {
+  public isCard = true;
+  public artistInfo: ArtistCardModel = {
     artistId: "6XyY86QOPPrYVGvF9ch6wz",
     artistName: "Linkin Park",
     artistImg:
