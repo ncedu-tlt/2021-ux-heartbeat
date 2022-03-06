@@ -14,6 +14,7 @@ export class TrackComponent implements OnInit, OnDestroy {
   public isPlay = false;
 
   @Input() public track!: PlayerTrackInfoModel;
+  @Input() public isCard = false;
 
   constructor(public playerService: PlayerService) {}
 
