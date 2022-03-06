@@ -4,7 +4,8 @@
          (click)="changeVisiblePlayerControlOnMobile()">
       <img src="{{playerService.currentTrackInfo$.getValue()?.albumImg}}" alt="#">
       <div class="player__info-about-track">
-        <span class="player__artist-name">{{playerService.currentTrackInfo$.getValue()?.artistName}}</span>
+        <span [routerLink]="['/artist', playerService.currentTrackInfo$.getValue()?.artistId]"
+              class="player__artist-name">{{playerService.currentTrackInfo$.getValue()?.artistName}}</span>
         <span class="player__track-name">{{playerService.currentTrackInfo$.getValue()?.trackName}}</span>
       </div>
     </div>

@@ -3,11 +3,15 @@
     <div [ngStyle]="{'background-image': 'url(' + track.albumImg + ')',
                       'margin': isCard ? '10px 8px' : '10px 20px'}"
          class="track-contain__img"
-         (click)="controlPlayerCurrentTrack()">
+         (click)="controlPlayerCurrentTrack()"
+         [routerLink]="['/artist', this.track.albumId]">
       <img src="{{isPlay ? 'assets/svg/pause-track.svg' : 'assets/svg/play-track.svg'}}" alt="album">
     </div>
     <div class="track-contain-info" *ngIf="!isCard">
-      <div class="track-contain-info__artist">{{this.track.artistName}}</div>
+      <div [routerLink]="['/artist', this.track.artistId]"
+           class="track-contain-info__artist">
+        {{this.track.artistName}}
+      </div>
       <div class="track-contain-info__name">{{this.track .trackName}}</div>
     </div>
   </div>
