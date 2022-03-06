@@ -126,4 +126,8 @@ export class PlayerService {
       this.stop$.next();
     }
   }
+
+  closeAudioContext() {
+    this.context.close();
+  }
 }
