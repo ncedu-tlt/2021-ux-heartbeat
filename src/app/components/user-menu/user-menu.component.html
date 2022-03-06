@@ -1,5 +1,5 @@
 <p class="user-menu__profile-name">{{userName}}</p>
-<img class="user-menu__profile-image" *ngIf="imageUrl" src="{{imageUrl}}" alt="Image of profile"/>
+<div [ngStyle]="{'background-image': 'url(' + imageUrl + ')','background-position': 'center', 'background-size': 'cover', 'background-repeat' :'no-repeat'}" class="user-menu__profile-image" *ngIf="imageUrl"></div>
 <i class="user-menu__profile-null-image" *ngIf="!imageUrl" nz-icon nzType="user" nzTheme="outline"></i>
 <a class="user-menu__dropdown" nzTrigger="click" nz-dropdown [nzDropdownMenu]="menu">
   <i nz-icon nzType="down"></i>
