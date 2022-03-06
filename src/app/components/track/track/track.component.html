@@ -7,7 +7,10 @@
       <img src="{{isPlay ? 'assets/svg/pause-track.svg' : 'assets/svg/play-track.svg'}}" alt="album">
     </div>
     <div class="track-contain-info" *ngIf="!isCard">
-      <div class="track-contain-info__artist">{{this.track.artistName}}</div>
+      <div [routerLink]="['/artist', this.track.artistId]"
+           class="track-contain-info__artist">
+        {{this.track.artistName}}
+      </div>
       <div class="track-contain-info__name">{{this.track .trackName}}</div>
     </div>
   </div>
