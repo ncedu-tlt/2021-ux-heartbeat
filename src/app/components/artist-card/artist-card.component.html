@@ -1,0 +1,27 @@
+<div class="artist-card">
+  <button nz-button nzType="default"
+          nzSize="default"
+          nzShape="round"
+          class="artist-card__follow">
+    Подписаться
+  </button>
+  <div class="artist-card__img"
+       [ngStyle]="
+       {'background-image': 'url(' + artistInfo.artistImg + ')'}">
+  </div>
+  <p class="artist-card__name">{{artistInfo.artistName}}</p>
+  <p class="artist-card__followers">{{artistInfo.followers}} подписчиков</p>
+  <p class="artist-card__genres">{{artistInfo.genres}}</p>
+  <div class="artist-card__top-tracks">
+    <div *ngFor="let track of artistInfo.topTracks">
+      <hb-track  [track]="track" [isCard]="isCard"></hb-track>
+    </div>
+  </div>
+  <button nz-button nzType="default"
+          nzSize="default"
+          nzShape="round"
+          class="artist-card__more-information"
+          [routerLink]="['/artist', artistInfo.artistId]">
+    Подробнее
+  </button>
+</div>

@@ -34,6 +34,19 @@ import { NzDropDownModule } from "ng-zorro-antd/dropdown";
 import { HeaderComponent } from "./components/header/header.component";
 import { SearchComponent } from "./components/search/search.component";
 import { SearchPageComponent } from "./pages/search-page/search-page.component";
+import { MainPageComponent } from "./pages/main-page/main-page.component";
+import { PlaylistsPageComponent } from "./pages/playlists-page/playlists-page.component";
+import { RecommendationPageComponent } from "./pages/recommendation-page/recommendation-page.component";
+import { ArtistPageComponent } from "./pages/artist-page/artist-page.component";
+import { AlbumsPageComponent } from "./pages/albums-page/albums-page.component";
+import { FollowedArtistPageComponent } from "./pages/followed-artist-page/followed-artist-page.component";
+import { GenrePageComponent } from "./pages/genre-page/genre-page.component";
+import { HomePageComponent } from "./pages/home-page/home-page.component";
+import { GenresCollectionPageComponent } from "./pages/genres-collection-page/genres-collection-page.component";
+import { AlbumPageComponent } from "./pages/album-page/album-page.component";
+import { FavoriteTracksPageComponent } from "./pages/favorite-tracks-page/favorite-tracks-page.component";
+import { NotFoundPageComponent } from "./pages/not-found-page/not-found-page.component";
+import { ArtistCardComponent } from "./components/artist-card/artist-card.component";
 
 registerLocaleData(ru);
 
@@ -44,14 +57,27 @@ registerLocaleData(ru);
     PlayerComponent,
     TimeFormatPipe,
     LoginPageComponent,
-    UserProfileComponent,
     LoaderComponent,
     TrackListComponent,
     TrackComponent,
     UserMenuComponent,
     HeaderComponent,
     SearchComponent,
-    SearchPageComponent
+    SearchPageComponent,
+    UserProfileComponent,
+    MainPageComponent,
+    PlaylistsPageComponent,
+    RecommendationPageComponent,
+    ArtistPageComponent,
+    AlbumsPageComponent,
+    FollowedArtistPageComponent,
+    GenrePageComponent,
+    HomePageComponent,
+    GenresCollectionPageComponent,
+    AlbumPageComponent,
+    FavoriteTracksPageComponent,
+    NotFoundPageComponent,
+    ArtistCardComponent
   ],
   imports: [
     BrowserModule,
