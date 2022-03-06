@@ -3,8 +3,7 @@
     <div [ngStyle]="{'background-image': 'url(' + track.albumImg + ')',
                       'margin': isCard ? '10px 8px' : '10px 20px'}"
          class="track-contain__img"
-         (click)="controlPlayerCurrentTrack()"
-         [routerLink]="['/artist', this.track.albumId]">
+         (click)="controlPlayerCurrentTrack()">
       <img src="{{isPlay ? 'assets/svg/pause-track.svg' : 'assets/svg/play-track.svg'}}" alt="album">
     </div>
     <div class="track-contain-info" *ngIf="!isCard">
