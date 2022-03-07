@@ -1,8 +1,14 @@
 .container {
-    margin-left: 60px;
     margin-top: 24px;
+    padding-bottom: 100px;
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+    .wrapperCard {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }
 
 .card {
@@ -11,16 +17,15 @@
     width: 250px;
     height: 220px;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     border-radius: 10px;
-    background: #C4C4C4;
     border: 1px solid #000000;
     &__name {
         text-decoration: none;
-        color: #000;
+        color: #FFFF;
         margin: 0;
         text-transform: uppercase;
-        font-size: 45px;
+        font-size: 35px;
     }
 }

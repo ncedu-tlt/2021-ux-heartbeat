@@ -1,3 +1,20 @@
 <div class="container">
-    <h1 *ngFor="let item of genres">{{item}}</h1>
+    <div class="title">
+        <h2>Плейлисты</h2>
+        <img src="./../../../assets/svg/line.svg" alt="line">
+    </div>
+    <div class="playlist">
+        <div class="card" *ngFor="let item of newPlaylist">
+            <div class="card__bg" [ngStyle]="
+                {'background-image' : 'url(' + item.images.url + ')'}">
+                <div class="card__bg-playCard">
+                    <img class="card__bg-img" src="./../../../assets/svg/playCard.svg" alt="playCard">
+                </div>
+            </div>
+            <div class="card__descr">
+                <div class="card__descr-title">{{item.name}}</div>
+            </div>
+        </div>
+    </div>
+    <button (click)="showMore()" class="addItem">Показать все</button>    
 </div>
