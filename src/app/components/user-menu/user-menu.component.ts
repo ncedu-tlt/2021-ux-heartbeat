@@ -13,6 +13,7 @@ export class UserMenuComponent implements OnDestroy {
   public userName!: string;
   public imageUrl: string | undefined;
   private subscription$: Subscription;
+
   constructor(public authService: AuthService, private http: HttpClient) {
     const httpOptions: object = {
       headers: new HttpHeaders({
