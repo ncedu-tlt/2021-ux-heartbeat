@@ -7,7 +7,7 @@ import { Playlist } from "src/app/models/playlist-card.model";
   styleUrls: ["./playlist-card.component.less"]
 })
 export class PlaylistCardComponent {
-  playlist: Playlist[] = [
+  public playlist: Playlist[] = [
     {
       id: "37i9dQZF1DX4uWsCu3SlsH",
       images: {
@@ -86,12 +86,14 @@ export class PlaylistCardComponent {
       name: "Новинки русского рока"
     }
   ];
-  newPlaylist: any[] = [];
-  isShowMore = false;
+  public newPlaylist: any[] = [];
+  public isShowMore = false;
+
   ngOnInit() {
     this.newPlaylist = this.playlist.slice(0, 8);
   }
-  showMore() {
+
+  showMore(): void {
     if (!this.isShowMore) {
       this.newPlaylist = this.playlist.slice();
     } else {

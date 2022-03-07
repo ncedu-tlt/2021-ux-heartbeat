@@ -7,7 +7,7 @@ import { GenreCard } from "src/app/models/genre-card.model";
   styleUrls: ["./genre-card.component.less"]
 })
 export class GenreCardComponent {
-  genres: GenreCard[] = [
+  public genres: GenreCard[] = [
     {
       icons: {
         url: "https://t.scdn.co/media/derived/pop-274x274_447148649685019f5e2a03a39e78ba52_0_0_274_274.jpg"

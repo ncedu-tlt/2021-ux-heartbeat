@@ -1,14 +1,14 @@
 <div class="container">
     <div class="title">
         <h2>Плейлисты</h2>
-        <img src="./../../../assets/svg/line.svg" alt="line">
+        <div class="title__line"></div>
     </div>
     <div class="playlist">
         <div class="card" *ngFor="let item of newPlaylist">
             <div class="card__bg" [ngStyle]="
                 {'background-image' : 'url(' + item.images.url + ')'}">
                 <div class="card__bg-playCard">
-                    <img class="card__bg-img" src="./../../../assets/svg/playCard.svg" alt="playCard">
+                    <div class="card__bg-img"></div>
                 </div>
             </div>
             <div class="card__descr">
