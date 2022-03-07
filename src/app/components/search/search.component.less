@@ -1,0 +1,35 @@
+:host {
+  width: inherit;
+
+  .search__form {
+    width: inherit;
+    height: inherit;
+
+    .search__input {
+      width: inherit;
+      height: inherit;
+      border-radius: 20px;
+      border: 1px solid #000000;
+      padding-left: 15px;
+    }
+
+    .search__button {
+      position: relative;
+      top: -38px;
+      left: 369px;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      outline: none;
+      -webkit-appearance: none;
+
+      @media screen and ( max-width: 850px ) {
+        left: 215px;
+      }
+
+      i {
+        font-size: 21px;
+      }
+    }
+  }
+}

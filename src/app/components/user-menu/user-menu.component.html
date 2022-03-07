@@ -1,0 +1,12 @@
+<p class="user-menu__profile-name">{{userName}}</p>
+<div *ngIf="imageUrl" [ngStyle]="{'background-image': 'url(' + imageUrl + ')','background-position': 'center', 'background-size': 'cover'}" class="user-menu__profile-image"></div>
+<i *ngIf="!imageUrl" class="user-menu__profile-null-image" nz-icon nzType="user" nzTheme="outline"></i>
+<a class="user-menu__dropdown" nzTrigger="click" nz-dropdown [nzDropdownMenu]="menu">
+  <i nz-icon nzType="down"></i>
+</a>
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item routerLink="/user">Мой профиль</li>
+    <li nz-menu-item routerLink="/" (click)="authService.signOutOfSpotify()">Выйти</li>
+  </ul>
+</nz-dropdown-menu>

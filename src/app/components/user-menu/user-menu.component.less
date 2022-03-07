@@ -1,0 +1,36 @@
+:host {
+  display:flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .user-menu__profile-name {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .user-menu__profile-image {
+    width: 45px;
+    height: 45px;
+    border-radius: 21px;
+  }
+
+  .user-menu__profile-null-image {
+    font-size: 34px;
+    min-width: 45px;
+    height: 45px;
+    background-color: #C4C4C4;
+    border-radius: 21px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media screen and ( max-width: 850px ) {
+      font-size: 24px;
+    }
+  }
+
+  .user-menu__dropdown {
+    color: black;
+  }
+}
