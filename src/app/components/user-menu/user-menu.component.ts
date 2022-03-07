@@ -27,6 +27,7 @@ export class UserMenuComponent implements OnDestroy {
       this.imageUrl = response.images[0].url;
     });
   }
+
   ngOnDestroy(): void {
     this.subscription$.unsubscribe();
   }

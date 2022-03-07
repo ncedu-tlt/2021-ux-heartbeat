@@ -7,12 +7,12 @@ import { Router } from "@angular/router";
   styleUrls: ["./search.component.less"]
 })
 export class SearchComponent {
-  search = "";
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  public search = "";
+
   constructor(private router: Router) {}
 
-  searchBtnClicked(val: string) {
-    val = val.trim();
-    this.router.navigateByUrl(`/search?keyword=${val}`);
+  searchBtnClicked() {
+    this.search = this.search.trim();
+    this.router.navigateByUrl(`/search?keyword=${this.search}`);
   }
 }

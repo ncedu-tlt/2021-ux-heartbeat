@@ -7,7 +7,8 @@ import { ActivatedRoute } from "@angular/router";
   styleUrls: ["./search-page.component.less"]
 })
 export class SearchPageComponent {
-  key: string;
+  public key: string;
+
   constructor(private activatedRoute: ActivatedRoute) {
     this.key = <string>this.activatedRoute.snapshot.queryParams["keyword"];
   }
