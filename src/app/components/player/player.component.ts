@@ -45,5 +45,6 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     window.removeEventListener("resize", this.resizeWindow);
+    this.playerService.closeAudioContext();
   }
 }
