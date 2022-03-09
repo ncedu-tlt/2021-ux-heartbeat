@@ -47,6 +47,7 @@ import { AlbumPageComponent } from "./pages/album-page/album-page.component";
 import { FavoriteTracksPageComponent } from "./pages/favorite-tracks-page/favorite-tracks-page.component";
 import { NotFoundPageComponent } from "./pages/not-found-page/not-found-page.component";
 import { ArtistCardComponent } from "./components/artist-card/artist-card.component";
+import { RoundArtistCardComponent } from "./components/round-artist-card/round-artist-card.component";
 
 registerLocaleData(ru);
 
@@ -77,7 +78,8 @@ registerLocaleData(ru);
     AlbumPageComponent,
     FavoriteTracksPageComponent,
     NotFoundPageComponent,
-    ArtistCardComponent
+    ArtistCardComponent,
+    RoundArtistCardComponent
   ],
   imports: [
     BrowserModule,
