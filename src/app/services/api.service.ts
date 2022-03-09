@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { AuthService } from "./auth.service";
 import { Observable } from "rxjs";
 import {
@@ -42,12 +42,11 @@ import { SearchModel } from "../models/new-api-models/search.model";
 })
 export class ApiService {
   private readonly headers: HttpHeaders;
-  private readonly params: HttpParams;
+
   constructor(private http: HttpClient, private auth: AuthService) {
     this.headers = new HttpHeaders({
       Authorization: "Bearer " + String(this.auth?.getAuthToken())
     });
-    this.params = new HttpParams();
   }
 
   getAlbumByID(albumId: string): Observable<AlbumByIdModel> {
@@ -64,7 +63,7 @@ export class ApiService {
       "https://api.spotify.com/v1/albums",
       {
         headers: this.headers,
-        params: this.params.set("ids", albumsIds)
+        params: { ids: albumsIds }
       }
     );
   }
@@ -83,7 +82,7 @@ export class ApiService {
       "https://api.spotify.com/v1/me/albums/contains",
       {
         headers: this.headers,
-        params: this.params.set("ids", albumIds)
+        params: { ids: albumIds }
       }
     );
   }
@@ -97,21 +96,21 @@ export class ApiService {
     );
   }
 
-  putSaveAlbums(ids: string): Observable<null> {
-    return this.http.put<null>(
+  putSaveAlbums(ids: string): Observable<void> {
+    return this.http.put<void>(
       "https://api.spotify.com/v1/me/albums",
       {},
       {
         headers: this.headers,
-        params: this.params.set("ids", ids)
+        params: { ids: ids }
       }
     );
   }
 
-  deleteAlbums(ids: string): Observable<null> {
-    return this.http.delete<null>("https://api.spotify.com/v1/me/albums", {
+  deleteAlbums(ids: string): Observable<void> {
+    return this.http.delete<void>("https://api.spotify.com/v1/me/albums", {
       headers: this.headers,
-      params: new HttpParams().set("ids", ids)
+      params: { ids: ids }
     });
   }
 
@@ -147,7 +146,7 @@ export class ApiService {
       "https://api.spotify.com/v1/artists",
       {
         headers: this.headers,
-        params: this.params.set("ids", artistsIds)
+        params: { ids: artistsIds }
       }
     );
   }
@@ -157,7 +156,7 @@ export class ApiService {
       "https://api.spotify.com/v1/artists/" + artistId + "/top-tracks",
       {
         headers: this.headers,
-        params: this.params.set("market", "RU")
+        params: { market: "RU" }
       }
     );
   }
@@ -174,7 +173,7 @@ export class ApiService {
   getSeveralTracksByIds(ids: string): Observable<TracksByIds> {
     return this.http.get<TracksByIds>("https://api.spotify.com/v1/tracks", {
       headers: this.headers,
-      params: new HttpParams().set("ids", ids)
+      params: { ids: ids }
     });
   }
 
@@ -183,7 +182,7 @@ export class ApiService {
       "https://api.spotify.com/v1/me/tracks/contains",
       {
         headers: this.headers,
-        params: this.params.set("ids", ids)
+        params: { ids: ids }
       }
     );
   }
@@ -203,7 +202,7 @@ export class ApiService {
       {},
       {
         headers: this.headers,
-        params: this.params.set("ids", ids)
+        params: { ids: ids }
       }
     );
   }
@@ -211,7 +210,7 @@ export class ApiService {
   deleteTracksForCurrentUser(trackIds: string): Observable<null> {
     return this.http.delete<null>("https://api.spotify.com/v1/me/tracks", {
       headers: this.headers,
-      params: this.params.set("ids", trackIds)
+      params: { ids: trackIds }
     });
   }
 
@@ -244,16 +243,16 @@ export class ApiService {
 
   createPlaylist(
     userId: string,
-    playlistName: string,
-    playlistDescription: string,
-    playlistPublic: boolean
+    name: string,
+    description: string,
+    isPublic: boolean
   ): Observable<ItemUserPlaylistModel> {
     return this.http.post<ItemUserPlaylistModel>(
       "https://api.spotify.com/v1/users/" + userId + "/playlists",
       {
-        name: playlistName,
-        description: playlistDescription,
-        public: playlistPublic
+        name: name,
+        description: description,
+        public: isPublic
       },
       { headers: this.headers }
     );
@@ -261,28 +260,28 @@ export class ApiService {
 
   changePlaylistDetails(
     playlistId: string,
-    playlistName: string,
-    playlistDescription: string,
-    playlistPublic: boolean
+    name: string,
+    description: string,
+    isPublic: boolean
   ): Observable<null> {
     return this.http.put<null>(
       "https://api.spotify.com/v1/playlists" + playlistId,
       {
-        name: playlistName,
-        description: playlistDescription,
-        public: playlistPublic
+        name: name,
+        description: description,
+        public: isPublic
       },
       { headers: this.headers }
     );
   }
 
-  addItemsToPlaylist(playlistId: string, trackId: string): Observable<object> {
-    return this.http.post<object>(
+  addItemsToPlaylist(playlistId: string, trackId: string): Observable<void> {
+    return this.http.post<void>(
       "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks",
       {},
       {
         headers: this.headers,
-        params: this.params.set("uris", "spotify:track:" + trackId)
+        params: { uris: "spotify:track:" + trackId }
       }
     );
   }
@@ -301,10 +300,7 @@ export class ApiService {
       "https://api.spotify.com/v1/browse/categories",
       {
         headers: this.headers,
-        params: this.params
-          .set("country", "RU")
-          .set("locale", "ru_RU")
-          .set("limit", 50)
+        params: { country: "RU", locale: "ru_RU", limit: 50 }
       }
     );
   }
@@ -349,29 +345,30 @@ export class ApiService {
       "https://api.spotify.com/v1/recommendations",
       {
         headers: this.headers,
-        params: this.params
-          .set("seed_artists", seedArtists)
-          .set("seed_genres", seedGenres)
-          .set("seed_tracks", seedTracks)
+        params: {
+          seed_artists: seedArtists,
+          seed_genres: seedGenres,
+          seed_tracks: seedTracks
+        }
       }
     );
   }
 
-  putFollowPlaylist(playlistId: string): Observable<null> {
-    return this.http.put<null>(
+  putFollowPlaylist(playlistId: string): Observable<void> {
+    return this.http.put<void>(
       "https://api.spotify.com/v1/playlists/" + playlistId + "/followers",
       { public: true },
       { headers: this.headers }
     );
   }
 
-  putFollowArtists(artistsIds: string): Observable<null> {
-    return this.http.put<null>(
+  putFollowArtists(artistsIds: string): Observable<void> {
+    return this.http.put<void>(
       "https://api.spotify.com/v1/me/following",
       {},
       {
         headers: this.headers,
-        params: this.params.set("type", "artist").set("ids", artistsIds)
+        params: { type: "artist", ids: artistsIds }
       }
     );
   }
@@ -381,7 +378,7 @@ export class ApiService {
       "https://api.spotify.com/v1/me/following",
       {
         headers: this.headers,
-        params: this.params.set("type", "artist")
+        params: { type: "artist" }
       }
     );
   }
@@ -391,13 +388,13 @@ export class ApiService {
       "https://api.spotify.com/v1/me/following/contains",
       {
         headers: this.headers,
-        params: this.params.set("type", "artist").set("ids", artistsIds)
+        params: { type: "artist", ids: artistsIds }
       }
     );
   }
 
-  unfollowPlaylist(playlistId: string): Observable<null> {
-    return this.http.delete<null>(
+  unfollowPlaylist(playlistId: string): Observable<void> {
+    return this.http.delete<void>(
       "https://api.spotify.com/v1/playlists/" + playlistId + "/followers",
       {
         headers: this.headers
@@ -408,7 +405,7 @@ export class ApiService {
   unfollowArtists(artistsIds: string): Observable<null> {
     return this.http.delete<null>("https://api.spotify.com/v1/me/following", {
       headers: this.headers,
-      params: this.params.set("type", "artist").set("ids", artistsIds)
+      params: { type: "artist", ids: artistsIds }
     });
   }
 
