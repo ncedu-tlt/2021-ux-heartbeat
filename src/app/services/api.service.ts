@@ -102,7 +102,7 @@ export class ApiService {
       {},
       {
         headers: this.headers,
-        params: { ids: ids }
+        params: { ids }
       }
     );
   }
@@ -110,7 +110,7 @@ export class ApiService {
   deleteAlbums(ids: string): Observable<void> {
     return this.http.delete<void>("https://api.spotify.com/v1/me/albums", {
       headers: this.headers,
-      params: { ids: ids }
+      params: { ids }
     });
   }
 
@@ -173,7 +173,7 @@ export class ApiService {
   getSeveralTracksByIds(ids: string): Observable<TracksByIds> {
     return this.http.get<TracksByIds>("https://api.spotify.com/v1/tracks", {
       headers: this.headers,
-      params: { ids: ids }
+      params: { ids }
     });
   }
 
@@ -182,7 +182,7 @@ export class ApiService {
       "https://api.spotify.com/v1/me/tracks/contains",
       {
         headers: this.headers,
-        params: { ids: ids }
+        params: { ids }
       }
     );
   }
@@ -196,19 +196,19 @@ export class ApiService {
     );
   }
 
-  putSaveTracksForCurrentUser(ids: string): Observable<null> {
-    return this.http.put<null>(
+  putSaveTracksForCurrentUser(ids: string): Observable<void> {
+    return this.http.put<void>(
       "https://api.spotify.com/v1/me/tracks",
       {},
       {
         headers: this.headers,
-        params: { ids: ids }
+        params: { ids }
       }
     );
   }
 
-  deleteTracksForCurrentUser(trackIds: string): Observable<null> {
-    return this.http.delete<null>("https://api.spotify.com/v1/me/tracks", {
+  deleteTracksForCurrentUser(trackIds: string): Observable<void> {
+    return this.http.delete<void>("https://api.spotify.com/v1/me/tracks", {
       headers: this.headers,
       params: { ids: trackIds }
     });
@@ -250,8 +250,8 @@ export class ApiService {
     return this.http.post<ItemUserPlaylistModel>(
       "https://api.spotify.com/v1/users/" + userId + "/playlists",
       {
-        name: name,
-        description: description,
+        name,
+        description,
         public: isPublic
       },
       { headers: this.headers }
@@ -263,12 +263,12 @@ export class ApiService {
     name: string,
     description: string,
     isPublic: boolean
-  ): Observable<null> {
-    return this.http.put<null>(
+  ): Observable<void> {
+    return this.http.put<void>(
       "https://api.spotify.com/v1/playlists" + playlistId,
       {
-        name: name,
-        description: description,
+        name,
+        description,
         public: isPublic
       },
       { headers: this.headers }
@@ -402,8 +402,8 @@ export class ApiService {
     );
   }
 
-  unfollowArtists(artistsIds: string): Observable<null> {
-    return this.http.delete<null>("https://api.spotify.com/v1/me/following", {
+  unfollowArtists(artistsIds: string): Observable<void> {
+    return this.http.delete<void>("https://api.spotify.com/v1/me/following", {
       headers: this.headers,
       params: { type: "artist", ids: artistsIds }
     });
