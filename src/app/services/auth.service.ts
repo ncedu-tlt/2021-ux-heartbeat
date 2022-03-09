@@ -10,7 +10,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 
 const SCOPES =
-  "playlist-read-private playlist-read-collaborative user-top-read user-read-private user-read-email playlist-modify-public playlist-modify-private user-library-read user-library-modify";
+  "playlist-read-private playlist-read-collaborative user-top-read user-read-private user-read-email playlist-modify-public playlist-modify-private user-library-read user-library-modify user-follow-read user-follow-modify user-read-recently-played user-read-playback-state user-modify-playback-state";
 
 @Injectable({
   providedIn: "root"

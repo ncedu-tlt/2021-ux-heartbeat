@@ -1,0 +1,427 @@
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { AuthService } from "./auth.service";
+import { Observable } from "rxjs";
+import {
+  AlbumByIdModel,
+  AlbumsByIdsModel,
+  ItemsAlbumModel,
+  NewAlbumsReleasesModel,
+  TracksModel
+} from "../models/new-api-models/album-by-id.model";
+import {
+  ArtistByIdModel,
+  ArtistsByIdsModel,
+  ArtistsModel
+} from "../models/new-api-models/artist-by-id.model";
+import { GenresModel } from "../models/new-api-models/genres.model";
+import { FollowedArtistModel } from "../models/new-api-models/followed-artist.model";
+import {
+  ItemsTrackModel,
+  TopTracksArtistByIdModel
+} from "../models/new-api-models/top-tracks-artist-by-id.model";
+import { PlaylistByIdModel } from "../models/new-api-models/playlist-by-id.model";
+import {
+  TrackById,
+  TracksByIds
+} from "../models/new-api-models/track-by-id.model";
+import {
+  CurrentUsersPlaylistModel,
+  ItemUserPlaylistModel
+} from "../models/new-api-models/current-users-playlist.model";
+import {
+  CategoriesModel,
+  CategoryModel
+} from "../models/new-api-models/category.model";
+import { CategoriesPlaylistsModel } from "../models/new-api-models/categories-playlists.model";
+import { UserProfileModel } from "../models/new-api-models/user-profile.model";
+import { SearchModel } from "../models/new-api-models/search.model";
+
+@Injectable({
+  providedIn: "root"
+})
+export class ApiService {
+  private readonly headers: HttpHeaders;
+  private readonly params: HttpParams;
+  constructor(private http: HttpClient, private auth: AuthService) {
+    this.headers = new HttpHeaders({
+      Authorization: "Bearer " + String(this.auth?.getAuthToken())
+    });
+    this.params = new HttpParams();
+  }
+
+  getAlbumByID(albumId: string): Observable<AlbumByIdModel> {
+    return this.http.get<AlbumByIdModel>(
+      "https://api.spotify.com/v1/albums/" + albumId,
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  getSeveralAlbumsByIds(albumsIds: string): Observable<AlbumsByIdsModel> {
+    return this.http.get<AlbumsByIdsModel>(
+      "https://api.spotify.com/v1/albums",
+      {
+        headers: this.headers,
+        params: this.params.set("ids", albumsIds)
+      }
+    );
+  }
+
+  getAlbumsTracksById(trackId: string): Observable<TracksModel> {
+    return this.http.get<TracksModel>(
+      "https://api.spotify.com/v1/albums/" + trackId + "/tracks",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  checkSavedAlbums(albumIds: string): Observable<boolean[]> {
+    return this.http.get<boolean[]>(
+      "https://api.spotify.com/v1/me/albums/contains",
+      {
+        headers: this.headers,
+        params: this.params.set("ids", albumIds)
+      }
+    );
+  }
+
+  getSavedAlbums(): Observable<ItemsAlbumModel> {
+    return this.http.get<ItemsAlbumModel>(
+      "https://api.spotify.com/v1/me/albums",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  putSaveAlbums(ids: string): Observable<null> {
+    return this.http.put<null>(
+      "https://api.spotify.com/v1/me/albums",
+      {},
+      {
+        headers: this.headers,
+        params: this.params.set("ids", ids)
+      }
+    );
+  }
+
+  deleteAlbums(ids: string): Observable<null> {
+    return this.http.delete<null>("https://api.spotify.com/v1/me/albums", {
+      headers: this.headers,
+      params: new HttpParams().set("ids", ids)
+    });
+  }
+
+  getNewAlbumReleases(): Observable<NewAlbumsReleasesModel> {
+    return this.http.get<NewAlbumsReleasesModel>(
+      "https://api.spotify.com/v1/browse/new-releases",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  getArtistByID(artistId: string): Observable<ArtistByIdModel> {
+    return this.http.get<ArtistByIdModel>(
+      "https://api.spotify.com/v1/artists/" + artistId,
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  getArtistsAlbums(artistId: string): Observable<ArtistsModel> {
+    return this.http.get<ArtistsModel>(
+      "https://api.spotify.com/v1/artists/" + artistId + "/albums",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  getSeveralArtistsByIds(artistsIds: string): Observable<ArtistsByIdsModel> {
+    return this.http.get<ArtistsByIdsModel>(
+      "https://api.spotify.com/v1/artists",
+      {
+        headers: this.headers,
+        params: this.params.set("ids", artistsIds)
+      }
+    );
+  }
+
+  getArtistsTopTracks(artistId: string): Observable<TopTracksArtistByIdModel> {
+    return this.http.get<TopTracksArtistByIdModel>(
+      "https://api.spotify.com/v1/artists/" + artistId + "/top-tracks",
+      {
+        headers: this.headers,
+        params: this.params.set("market", "RU")
+      }
+    );
+  }
+
+  getTrackById(trackId: string): Observable<TrackById> {
+    return this.http.get<TrackById>(
+      "https://api.spotify.com/v1/tracks/" + trackId,
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  getSeveralTracksByIds(ids: string): Observable<TracksByIds> {
+    return this.http.get<TracksByIds>("https://api.spotify.com/v1/tracks", {
+      headers: this.headers,
+      params: new HttpParams().set("ids", ids)
+    });
+  }
+
+  checkUsersSavedTracks(ids: string): Observable<boolean[]> {
+    return this.http.get<boolean[]>(
+      "https://api.spotify.com/v1/me/tracks/contains",
+      {
+        headers: this.headers,
+        params: this.params.set("ids", ids)
+      }
+    );
+  }
+
+  getUsersSavedTracks(): Observable<ItemsTrackModel> {
+    return this.http.get<ItemsTrackModel>(
+      "https://api.spotify.com/v1/me/tracks",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  putSaveTracksForCurrentUser(ids: string): Observable<null> {
+    return this.http.put<null>(
+      "https://api.spotify.com/v1/me/tracks",
+      {},
+      {
+        headers: this.headers,
+        params: this.params.set("ids", ids)
+      }
+    );
+  }
+
+  deleteTracksForCurrentUser(trackIds: string): Observable<null> {
+    return this.http.delete<null>("https://api.spotify.com/v1/me/tracks", {
+      headers: this.headers,
+      params: this.params.set("ids", trackIds)
+    });
+  }
+
+  getPlaylistById(playlistId: string): Observable<PlaylistByIdModel> {
+    return this.http.get<PlaylistByIdModel>(
+      "https://api.spotify.com/v1/playlists/" + playlistId,
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  getPlaylistTracks(playlistId: string): Observable<ItemsTrackModel> {
+    return this.http.get<ItemsTrackModel>(
+      "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  getCurrentUsersPlaylists(): Observable<CurrentUsersPlaylistModel> {
+    return this.http.get<CurrentUsersPlaylistModel>(
+      "https://api.spotify.com/v1/me/playlists",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  createPlaylist(
+    userId: string,
+    playlistName: string,
+    playlistDescription: string,
+    playlistPublic: boolean
+  ): Observable<ItemUserPlaylistModel> {
+    return this.http.post<ItemUserPlaylistModel>(
+      "https://api.spotify.com/v1/users/" + userId + "/playlists",
+      {
+        name: playlistName,
+        description: playlistDescription,
+        public: playlistPublic
+      },
+      { headers: this.headers }
+    );
+  }
+
+  changePlaylistDetails(
+    playlistId: string,
+    playlistName: string,
+    playlistDescription: string,
+    playlistPublic: boolean
+  ): Observable<null> {
+    return this.http.put<null>(
+      "https://api.spotify.com/v1/playlists" + playlistId,
+      {
+        name: playlistName,
+        description: playlistDescription,
+        public: playlistPublic
+      },
+      { headers: this.headers }
+    );
+  }
+
+  addItemsToPlaylist(playlistId: string, trackId: string): Observable<object> {
+    return this.http.post<object>(
+      "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks",
+      {},
+      {
+        headers: this.headers,
+        params: this.params.set("uris", "spotify:track:" + trackId)
+      }
+    );
+  }
+
+  getAvailableGenreSeeds(): Observable<GenresModel> {
+    return this.http.get<GenresModel>(
+      "https://api.spotify.com/v1/recommendations/available-genre-seeds",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  getListCategories(): Observable<CategoriesModel> {
+    return this.http.get<CategoriesModel>(
+      "https://api.spotify.com/v1/browse/categories",
+      {
+        headers: this.headers,
+        params: this.params
+          .set("country", "RU")
+          .set("locale", "ru_RU")
+          .set("limit", 50)
+      }
+    );
+  }
+
+  getCategory(categoryId: string): Observable<CategoryModel> {
+    return this.http.get<CategoryModel>(
+      "https://api.spotify.com/v1/browse/categories/" + categoryId,
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  getCategoriesPlaylists(
+    categoryId: string
+  ): Observable<CategoriesPlaylistsModel> {
+    return this.http.get<CategoriesPlaylistsModel>(
+      "https://api.spotify.com/v1/browse/categories/" +
+        categoryId +
+        "/playlists",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  getFeaturedPlaylists(): Observable<CategoriesPlaylistsModel> {
+    return this.http.get<CategoriesPlaylistsModel>(
+      "https://api.spotify.com/v1/browse/featured-playlists",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  getRecommendations(
+    seedArtists: string,
+    seedGenres: string,
+    seedTracks: string
+  ): Observable<TopTracksArtistByIdModel> {
+    return this.http.get<TopTracksArtistByIdModel>(
+      "https://api.spotify.com/v1/recommendations",
+      {
+        headers: this.headers,
+        params: new HttpParams()
+          .set("seed_artists", seedArtists)
+          .set("seed_genres", seedGenres)
+          .set("seed_tracks", seedTracks)
+      }
+    );
+  }
+
+  putFollowPlaylist(playlistId: string): Observable<null> {
+    return this.http.put<null>(
+      "https://api.spotify.com/v1/playlists/" + playlistId + "/followers",
+      { public: true },
+      { headers: this.headers }
+    );
+  }
+
+  putFollowArtists(artistsIds: string): Observable<null> {
+    return this.http.put<null>(
+      "https://api.spotify.com/v1/me/following",
+      {},
+      {
+        headers: this.headers,
+        params: new HttpParams().set("type", "artist").set("ids", artistsIds)
+      }
+    );
+  }
+
+  getFollowedArtists(): Observable<FollowedArtistModel> {
+    return this.http.get<FollowedArtistModel>(
+      "https://api.spotify.com/v1/me/following",
+      {
+        headers: this.headers,
+        params: new HttpParams().set("type", "artist")
+      }
+    );
+  }
+
+  checkIfUserFollowsArtists(artistsIds: string): Observable<boolean[]> {
+    return this.http.get<boolean[]>(
+      "https://api.spotify.com/v1/me/following/contains",
+      {
+        headers: this.headers,
+        params: new HttpParams().set("type", "artist").set("ids", artistsIds)
+      }
+    );
+  }
+
+  unfollowPlaylist(playlistId: string): Observable<null> {
+    return this.http.delete<null>(
+      "https://api.spotify.com/v1/playlists/" + playlistId + "/followers",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  unfollowArtists(artistsIds: string): Observable<null> {
+    return this.http.delete<null>("https://api.spotify.com/v1/me/following", {
+      headers: this.headers,
+      params: new HttpParams().set("type", "artist").set("ids", artistsIds)
+    });
+  }
+
+  getCurrentUsersProfile(): Observable<UserProfileModel> {
+    return this.http.get<UserProfileModel>("https://api.spotify.com/v1/me", {
+      headers: this.headers
+    });
+  }
+
+  searchForItem(keyword: string): Observable<SearchModel> {
+    return this.http.get<SearchModel>("https://api.spotify.com/v1/search", {
+      headers: this.headers,
+      params: { q: keyword, type: "artist,track" }
+    });
+  }
+}
