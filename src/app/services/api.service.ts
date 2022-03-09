@@ -349,7 +349,7 @@ export class ApiService {
       "https://api.spotify.com/v1/recommendations",
       {
         headers: this.headers,
-        params: new HttpParams()
+        params: this.params
           .set("seed_artists", seedArtists)
           .set("seed_genres", seedGenres)
           .set("seed_tracks", seedTracks)
@@ -371,7 +371,7 @@ export class ApiService {
       {},
       {
         headers: this.headers,
-        params: new HttpParams().set("type", "artist").set("ids", artistsIds)
+        params: this.params.set("type", "artist").set("ids", artistsIds)
       }
     );
   }
@@ -381,7 +381,7 @@ export class ApiService {
       "https://api.spotify.com/v1/me/following",
       {
         headers: this.headers,
-        params: new HttpParams().set("type", "artist")
+        params: this.params.set("type", "artist")
       }
     );
   }
@@ -391,7 +391,7 @@ export class ApiService {
       "https://api.spotify.com/v1/me/following/contains",
       {
         headers: this.headers,
-        params: new HttpParams().set("type", "artist").set("ids", artistsIds)
+        params: this.params.set("type", "artist").set("ids", artistsIds)
       }
     );
   }
@@ -408,7 +408,7 @@ export class ApiService {
   unfollowArtists(artistsIds: string): Observable<null> {
     return this.http.delete<null>("https://api.spotify.com/v1/me/following", {
       headers: this.headers,
-      params: new HttpParams().set("type", "artist").set("ids", artistsIds)
+      params: this.params.set("type", "artist").set("ids", artistsIds)
     });
   }
 
