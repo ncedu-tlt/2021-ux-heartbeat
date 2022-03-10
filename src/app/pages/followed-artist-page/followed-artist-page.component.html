@@ -1,18 +1,14 @@
 <div class="container">
   <h1>Исполнители</h1>
-  <ng-container *ngIf="isLoading">
-    <hb-loader class="loader"></hb-loader>
-  </ng-container>
-  <ng-container *ngIf="!isLoading">
-    <div class="artist-list" *ngIf="artistInfo$.getValue()">
-      <div class="artist-item" *ngFor="let artist of artistInfo$.getValue()">
+  <hb-loader class="loader" *ngIf="isLoading"></hb-loader>
+    <div class="artist-list" *ngIf="artists.length && !isLoading">
+      <div class="artist-item" *ngFor="let artist of artists">
         <hb-round-artist-card [artist]="artist">
         </hb-round-artist-card>
       </div>
     </div>
-    <div class="empty" *ngIf="!artistInfo$.getValue()">
+    <div class="empty" *ngIf="!artists.length && !isLoading">
       <nz-empty nzNotFoundImage="simple" nzNotFoundContent="Список подписок пуст"></nz-empty>
     </div>
-  </ng-container>
 
 </div>
