@@ -6,5 +6,5 @@ export interface ArtistCardModel {
   artistImg: string;
   followers: number;
   genres: string[];
-  topTracks: PlayerTrackInfoModel[];
+  topTracks?: PlayerTrackInfoModel[];
 }

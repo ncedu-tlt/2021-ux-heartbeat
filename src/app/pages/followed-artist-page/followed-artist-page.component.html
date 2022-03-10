@@ -1,2 +1,12 @@
-<h1>Followed-artist-page works!</h1>
-<h1>Click to <a [routerLink]="['/artist', '1Xyo4u8uXC1ZmMpatF05PJ']">The Weeknd</a> to go to his page</h1>
+<div class="container">
+  <h1>Исполнители</h1>
+  <hb-loader class="loader" *ngIf="isLoading"></hb-loader>
+  <div class="artist-list" *ngIf="artists.length && !isLoading">
+    <div class="artist-item" *ngFor="let artist of artists">
+      <hb-round-artist-card [artist]="artist"></hb-round-artist-card>
+    </div>
+  </div>
+  <div class="empty" *ngIf="!artists.length && !isLoading">
+    <nz-empty nzNotFoundImage="simple" nzNotFoundContent="Список подписок пуст"></nz-empty>
+  </div>
+</div>

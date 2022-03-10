@@ -1,0 +1,33 @@
+@import "../../../assets/styles/colors";
+
+.container {
+  margin: auto;
+
+  h1 {
+    padding: 20px;
+    margin-bottom: 5px;
+  }
+
+  .artist-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px,250px));
+    justify-content: center;
+    align-items: stretch;
+    column-gap: 5px;
+    row-gap: 15px;
+    padding-bottom: 100px;
+
+    .artist-item {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      width: 220px;
+    }
+
+    .artist-item:hover {
+      background-color: @snowy;
+      cursor: pointer;
+    }
+  }
+}
