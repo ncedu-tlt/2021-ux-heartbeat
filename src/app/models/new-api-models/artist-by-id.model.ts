@@ -3,7 +3,6 @@ import {
   Followers,
   ImagesFromSpoty
 } from "./album-by-id.model";
-import { GenresModel } from "./genres.model";
 
 export interface ArtistsByIdsModel {
   artists: ArtistByIdModel[];
@@ -11,7 +10,7 @@ export interface ArtistsByIdsModel {
 
 export interface ArtistByIdModel extends CommonInfoAboutArtist {
   followers: Followers;
-  genres: GenresModel;
+  genres: string[];
   images: ImagesFromSpoty[];
 }
 

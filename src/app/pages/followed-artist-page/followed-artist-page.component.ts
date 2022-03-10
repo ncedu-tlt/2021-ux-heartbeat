@@ -1,92 +1,29 @@
-import { Component } from "@angular/core";
-import { ArtistCardModel } from "../../models/artist-card.model";
+import { Component, OnInit } from "@angular/core";
+import { ApiService } from "../../services/api.service";
+import { FollowedArtistModel } from "../../models/new-api-models/followed-artist.model";
+import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model";
+import { BehaviorSubject } from "rxjs";
 
 @Component({
   selector: "hb-followed-artist-page",
   templateUrl: "./followed-artist-page.component.html",
   styleUrls: ["./followed-artist-page.component.less"]
 })
-export class FollowedArtistPageComponent {
-  public artistInfo: ArtistCardModel[] = [
-    {
-      artistId: "6XyY86QOPPrYVGvF9ch6wz",
-      artistName: "Linkin Park",
-      artistImg:
-        "https://i.scdn.co/image/ab6761610000e5eb34e5aa6afc1ba147bfbb0677",
-      followers: 2670890,
-      genres: ["Rock", "Alternative Metal"]
-    },
-    {
-      artistId: "53XhwfbYqKCa1cC15pYq2q",
-      artistName: "Imagine Dragons",
-      artistImg:
-        "https://i.scdn.co/image/ab6761610000e5eb920dc1f617550de8388f368e",
-      followers: 2670890,
-      genres: ["Indie Rock"]
-    },
-    {
-      artistId: "6XyY86QOPPrYVGvF9ch6wz",
-      artistName: "Linkin Park",
-      artistImg:
-        "https://i.scdn.co/image/ab6761610000e5eb34e5aa6afc1ba147bfbb0677",
-      followers: 2670890,
-      genres: ["Rock", "Alternative Metal"]
-    },
-    {
-      artistId: "53XhwfbYqKCa1cC15pYq2q",
-      artistName: "Imagine Dragons",
-      artistImg:
-        "https://i.scdn.co/image/ab6761610000e5eb920dc1f617550de8388f368e",
-      followers: 2670890,
-      genres: ["Indie Rock"]
-    },
-    {
-      artistId: "6XyY86QOPPrYVGvF9ch6wz",
-      artistName: "Linkin Park",
-      artistImg:
-        "https://i.scdn.co/image/ab6761610000e5eb34e5aa6afc1ba147bfbb0677",
-      followers: 2670890,
-      genres: ["Rock", "Alternative Metal"]
-    },
-    {
-      artistId: "53XhwfbYqKCa1cC15pYq2q",
-      artistName: "Imagine Dragons",
-      artistImg:
-        "https://i.scdn.co/image/ab6761610000e5eb920dc1f617550de8388f368e",
-      followers: 2670890,
-      genres: ["Indie Rock"]
-    },
-    {
-      artistId: "6XyY86QOPPrYVGvF9ch6wz",
-      artistName: "Linkin Park",
-      artistImg:
-        "https://i.scdn.co/image/ab6761610000e5eb34e5aa6afc1ba147bfbb0677",
-      followers: 2670890,
-      genres: ["Rock", "Alternative Metal"]
-    },
-    {
-      artistId: "53XhwfbYqKCa1cC15pYq2q",
-      artistName: "Imagine Dragons",
-      artistImg:
-        "https://i.scdn.co/image/ab6761610000e5eb920dc1f617550de8388f368e",
-      followers: 2670890,
-      genres: ["Indie Rock"]
-    },
-    {
-      artistId: "6XyY86QOPPrYVGvF9ch6wz",
-      artistName: "Linkin Park",
-      artistImg:
-        "https://i.scdn.co/image/ab6761610000e5eb34e5aa6afc1ba147bfbb0677",
-      followers: 2670890,
-      genres: ["Rock", "Alternative Metal"]
-    },
-    {
-      artistId: "53XhwfbYqKCa1cC15pYq2q",
-      artistName: "Imagine Dragons",
-      artistImg:
-        "https://i.scdn.co/image/ab6761610000e5eb920dc1f617550de8388f368e",
-      followers: 2670890,
-      genres: ["Indie Rock"]
-    }
-  ];
+export class FollowedArtistPageComponent implements OnInit {
+  public artistInfo$ = new BehaviorSubject<ArtistByIdModel[] | null>(null);
+  public isLoading = true;
+  constructor(private apiService: ApiService) {}
+
+  ngOnInit() {
+    this.apiService
+      .getFollowedArtists()
+      .subscribe((artistList: FollowedArtistModel) => {
+        if (artistList.artists.items.length) {
+          this.artistInfo$.next(artistList.artists.items);
+        } else {
+          this.artistInfo$.next(null);
+        }
+        this.isLoading = false;
+      });
+  }
 }

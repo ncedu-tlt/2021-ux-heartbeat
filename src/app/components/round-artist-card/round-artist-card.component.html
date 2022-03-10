@@ -1,5 +1,5 @@
-<div class="round-card" [routerLink]="['/artist', artist.artistId]">
-  <div class="round-card__img" [ngStyle]="{'background-image' : 'url('+ artist.artistImg + ')'}"></div>
-  <p class="round-card__name">{{artist.artistName}}</p>
+<div class="round-card" [routerLink]="['/artist', artist.id]">
+  <div class="round-card__img" [ngStyle]="{'background-image' : 'url('+ artist.images[0].url + ')'}"></div>
+  <p class="round-card__name">{{artist.name}}</p>
   <span class="round-card__genre">{{artist.genres[0]}}</span>
 </div>
