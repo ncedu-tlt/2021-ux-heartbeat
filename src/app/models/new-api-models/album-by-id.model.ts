@@ -1,5 +1,3 @@
-import { GenresModel } from "./genres.model";
-
 export interface AlbumsByIdsModel {
   albums: AlbumByIdModel[];
 }
@@ -9,7 +7,7 @@ export interface ItemsAlbumModel {
     {
       album: {
         artists: CommonInfoAboutArtist[];
-        genres: GenresModel;
+        genres: string[];
         id: string;
         images: ImagesFromSpoty[];
         name: string;
@@ -45,7 +43,7 @@ export interface ItemsAlbumsModel {
 
 export interface AlbumByIdModel {
   artists: CommonInfoAboutArtist[];
-  genres: GenresModel;
+  genres: string[];
   id: string;
   images: ImagesFromSpoty[];
   name: string;
