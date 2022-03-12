@@ -1,17 +1,17 @@
 <div class="track" [ngStyle]="{'min-width': isCard ? '60px' : '280px'}">
   <div class="track-contain">
-    <div [ngStyle]="{'background-image': 'url(' + track.albumImg + ')',
+    <div [ngStyle]="{'background-image': 'url(' + track.album.images[0].url + ')',
                       'margin': isCard ? '10px 8px' : '10px 20px'}"
          class="track-contain__img"
          (click)="controlPlayerCurrentTrack()">
       <img src="{{isPlay ? 'assets/svg/pause-track.svg' : 'assets/svg/play-track.svg'}}" alt="album">
     </div>
     <div class="track-contain-info" *ngIf="!isCard">
-      <div [routerLink]="['/artist', this.track.artistId]"
+      <div [routerLink]="['/artist', this.track.id]"
            class="track-contain-info__artist">
-        {{this.track.artistName}}
+        {{this.track.artists[0].name}}
       </div>
-      <div class="track-contain-info__name">{{this.track .trackName}}</div>
+      <div class="track-contain-info__name">{{this.track.name}}</div>
     </div>
   </div>
   <div *ngIf="!isCard" class="track-time">{{trackTime | timeFormat}}</div>
