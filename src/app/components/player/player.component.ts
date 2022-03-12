@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
 import { PlayerService } from "../../services/player.service";
 import { AuthService } from "../../services/auth.service";
+import { SwitchPlayerActionEnum } from "../../models/switch-player-action.enum";
 
 @Component({
   selector: "hb-player",
@@ -10,6 +11,7 @@ import { AuthService } from "../../services/auth.service";
 export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   isMobile!: boolean;
   drawerVisible = false;
+  actions = SwitchPlayerActionEnum;
 
   constructor(
     public playerService: PlayerService,

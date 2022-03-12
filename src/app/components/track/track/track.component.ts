@@ -1,7 +1,14 @@
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  EventEmitter
+} from "@angular/core";
 import { PlayerService } from "../../../services/player.service";
-import { PlayerTrackInfoModel } from "../../../models/player-track-info.model";
 import { combineLatest, Subscription } from "rxjs";
+import { TopTracksModel } from "../../../models/new-api-models/top-tracks-artist-by-id.model";
 
 @Component({
   selector: "hb-track",
@@ -13,8 +20,10 @@ export class TrackComponent implements OnInit, OnDestroy {
   private controlActiveTrack$: Subscription = new Subscription();
   public isPlay = false;
 
-  @Input() public track!: PlayerTrackInfoModel;
+  @Input() public track!: TopTracksModel;
   @Input() public isCard = false;
+
+  @Output() playTrack = new EventEmitter<void>();
 
   constructor(public playerService: PlayerService) {}
 
@@ -24,10 +33,10 @@ export class TrackComponent implements OnInit, OnDestroy {
       this.playerService.isPlay$
     ]).subscribe(
       ([currentTrack, isPlay]: [
-        currentTrack: PlayerTrackInfoModel | null,
+        currentTrack: TopTracksModel | null,
         isPlay: boolean
       ]) => {
-        if (currentTrack?.trackId === this.track.trackId) {
+        if (currentTrack?.id === this.track.id) {
           this.isPlay = isPlay;
         } else {
           this.isPlay = false;
@@ -45,5 +54,6 @@ export class TrackComponent implements OnInit, OnDestroy {
       this.playerService.currentTrackInfo$.next(this.track);
     }
     this.playerService.switchPlayerAction();
+    this.playTrack.emit();
   }
 }

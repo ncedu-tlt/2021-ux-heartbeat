@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { PlayerTrackInfoModel } from "../models/player-track-info.model";
 import {
   BehaviorSubject,
   interval,
@@ -8,6 +7,11 @@ import {
   takeUntil
 } from "rxjs";
 import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
+import {
+  ItemsTrackModel,
+  TopTracksModel
+} from "../models/new-api-models/top-tracks-artist-by-id.model";
+import { SwitchPlayerActionEnum } from "../models/switch-player-action.enum";
 
 @Injectable({
   providedIn: "root"
@@ -24,9 +28,9 @@ export class PlayerService {
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<void> = new Subject();
 
-  public currentTrackInfo$ = new BehaviorSubject<PlayerTrackInfoModel | null>(
-    null
-  );
+  public currentTrackInfo$ = new BehaviorSubject<TopTracksModel | null>(null);
+  public currentTrackNumber!: number;
+  public trackList$ = new BehaviorSubject<ItemsTrackModel | null>(null);
 
   public isPlay$ = new BehaviorSubject<boolean>(false);
   public isRepeat = false;
@@ -47,9 +51,16 @@ export class PlayerService {
       const analyser = this.context.createAnalyser();
       this.currentTrackInfo$.subscribe(track => {
         if (track !== null) {
-          this.player.src = track.trackUrl;
+          this.player.src = track.preview_url;
         } else {
           this.player.src = " ";
+        }
+      });
+      this.trackList$.subscribe((trackList: ItemsTrackModel | null) => {
+        if (trackList) {
+          this.currentTrackNumber = trackList.items.findIndex(el => {
+            return el.track.id === this.currentTrackInfo$.getValue()?.id;
+          });
         }
       });
       this.player.crossOrigin = "anonymous";
@@ -129,5 +140,19 @@ export class PlayerService {
 
   closeAudioContext() {
     this.context.close();
+  }
+
+  switchTrack(action: SwitchPlayerActionEnum) {
+    const trackNumber: number =
+      action === SwitchPlayerActionEnum.SWITCH_NEXT
+        ? this.currentTrackNumber + 1
+        : this.currentTrackNumber - 1;
+
+    const newTrack = this.trackList$.getValue()?.items[trackNumber];
+    if (newTrack) {
+      this.currentTrackInfo$.next(newTrack?.track);
+      this.switchPlayerAction();
+      this.currentTrackNumber = trackNumber;
+    }
   }
 }
