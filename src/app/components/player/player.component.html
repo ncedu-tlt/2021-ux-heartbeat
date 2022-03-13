@@ -76,7 +76,6 @@
                    nzStatus="normal"
                    class="player__volume-bar"
                    (click)="playerService.changeMusicVolume($event)">
-
       </nz-progress>
       <button class="player__mixing">
         <object
@@ -102,7 +101,10 @@
           height="15px"
         ></object>
       </button>
-      <button nz-dropdown [nzDropdownMenu]="menu" class="player__add-track">
+      <button nz-dropdown [nzDropdownMenu]="menu"
+              (click)="getUserPlaylists()" nzTrigger="click"
+              nzPlacement = "topCenter"
+              class="player__add-track">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/add.svg"
@@ -124,8 +126,11 @@
         <li nz-menu-item>Добавить в избранное</li>
         <li nz-submenu nzTitle="Добавить в плейлист">
           <ul>
-            <li nz-menu-item>3rd menu item</li>
-            <li nz-menu-item>4th menu item</li>
+            <li nz-menu-item
+                *ngFor="let playlist of userPlaylists">
+<!--                (click)="addTrackIntoPlaylist(playlist.id, playerService.currentTrackInfo$.getValue()?.id)">-->
+              {{playlist.name}}
+            </li>
           </ul>
         </li>
       </ul>
