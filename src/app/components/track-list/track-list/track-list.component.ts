@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { ItemsTrackModel } from "../../../models/new-api-models/top-tracks-artist-by-id.model";
 import { PlayerService } from "../../../services/player.service";
 
@@ -8,7 +8,7 @@ import { PlayerService } from "../../../services/player.service";
   styleUrls: ["./track-list.component.less"]
 })
 export class TrackListComponent {
-  trackList: ItemsTrackModel = {
+  @Input() public trackList: ItemsTrackModel = {
     items: [
       {
         track: {
