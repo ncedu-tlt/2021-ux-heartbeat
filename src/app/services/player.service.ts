@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { PlayerTrackInfoModel } from "../models/player-track-info.model";
 import {
   BehaviorSubject,
   interval,
@@ -8,6 +7,7 @@ import {
   takeUntil
 } from "rxjs";
 import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
+import { TopTracksModel } from "../models/new-api-models/top-tracks-artist-by-id.model";
 
 @Injectable({
   providedIn: "root"
@@ -24,9 +24,7 @@ export class PlayerService {
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<void> = new Subject();
 
-  public currentTrackInfo$ = new BehaviorSubject<PlayerTrackInfoModel | null>(
-    null
-  );
+  public currentTrackInfo$ = new BehaviorSubject<TopTracksModel | null>(null);
 
   public isPlay$ = new BehaviorSubject<boolean>(false);
   public isRepeat = false;
@@ -47,7 +45,7 @@ export class PlayerService {
       const analyser = this.context.createAnalyser();
       this.currentTrackInfo$.subscribe(track => {
         if (track !== null) {
-          this.player.src = track.trackUrl;
+          this.player.src = track.preview_url;
         } else {
           this.player.src = " ";
         }

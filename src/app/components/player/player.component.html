@@ -2,12 +2,16 @@
   <div class="player" *ngIf="!drawerVisible">
     <div class="player__current-track" *ngIf="playerService.currentTrackInfo$.getValue()"
          (click)="changeVisiblePlayerControlOnMobile()">
-      <img [routerLink]="['/album', playerService.currentTrackInfo$.getValue()?.albumId]"
-           src="{{playerService.currentTrackInfo$.getValue()?.albumImg}}" alt="#">
+      <img [routerLink]="['/album', playerService.currentTrackInfo$.getValue()!.album.id]"
+           src="{{playerService.currentTrackInfo$.getValue()!.album.images[0].url}}" alt="#">
       <div class="player__info-about-track">
-        <span [routerLink]="['/artist', playerService.currentTrackInfo$.getValue()?.artistId]"
-              class="player__artist-name">{{playerService.currentTrackInfo$.getValue()?.artistName}}</span>
-        <span class="player__track-name">{{playerService.currentTrackInfo$.getValue()?.trackName}}</span>
+        <div  class="player__artist-name">
+              <p [routerLink]="['/artist', artist.id]"
+                    *ngFor="let artist of playerService.currentTrackInfo$.getValue()!.artists">
+                {{artist.name}}
+              </p>
+        </div>
+        <span class="player__track-name">{{playerService.currentTrackInfo$.getValue()!.name}}</span>
       </div>
     </div>
     <div class="player__control">
@@ -133,12 +137,13 @@
     >
       <ng-container class="mobile-player-contain" *nzDrawerContent>
         <div class="mobile-player-contain__current-track">
-          <img src="{{playerService.currentTrackInfo$.getValue()?.albumImg}}" alt="#" class="mobile-player-contain__img">
+          <img src="{{playerService.currentTrackInfo$.getValue()!.album.images[0].url}}" alt="#" class="mobile-player-contain__img">
           <div class="mobile-player-contain__info-about-track">
-          <span
-            class="mobile-player-contain__artist-name">{{playerService.currentTrackInfo$.getValue()?.artistName}}</span>
-            <span
-              class="mobile-player-contain__track-name">{{playerService.currentTrackInfo$.getValue()?.trackName}}</span>
+          <div
+            class="mobile-player-contain__artist-name">
+            <p *ngFor="let artist of playerService.currentTrackInfo$.getValue()!.artists">{{artist.name}}</p>
+          </div>
+            <span class="mobile-player-contain__track-name">{{playerService.currentTrackInfo$.getValue()!.name}}</span>
           </div>
         </div>
         <div class="mobile-player-contain__progress">
