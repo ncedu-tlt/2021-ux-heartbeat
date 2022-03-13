@@ -19,6 +19,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   public drawerVisible = false;
   public actions = SwitchPlayerActionEnum;
   public userPlaylists: ItemUserPlaylistModel[] = [];
+  public isFavorite = false;
 
   constructor(
     public playerService: PlayerService,
@@ -54,7 +55,8 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getUserPlaylists() {
+  getUserPlaylists(id: string) {
+    this.checkTrackIntoUserFavoriteList(id);
     this.apiService
       .getCurrentUsersPlaylists()
       .subscribe((playlists: CurrentUsersPlaylistModel) => {
@@ -70,6 +72,30 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
         "Добавление трека",
         "Трек успешно добавлен"
       );
+    });
+  }
+
+  removeTrackFromFavoriteList(id: string) {
+    this.apiService.deleteTracksForCurrentUser(id).subscribe(() => {
+      this.notificationService.blank(
+        "Трек успешно удаление",
+        "Трек успешно удален"
+      );
+    });
+  }
+
+  addTrackIntoFavoriteList(id: string) {
+    this.apiService.putSaveTracksForCurrentUser(id).subscribe(() => {
+      this.notificationService.blank(
+        "Добавление трека",
+        "Трек успешно добавлен"
+      );
+    });
+  }
+
+  checkTrackIntoUserFavoriteList(id: string) {
+    this.apiService.checkUsersSavedTracks(id).subscribe(existence => {
+      this.isFavorite = existence[0];
     });
   }
 

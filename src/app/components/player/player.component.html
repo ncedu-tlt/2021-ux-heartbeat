@@ -106,7 +106,9 @@
         ></object>
       </button>
       <button nz-dropdown [nzDropdownMenu]="menu"
-              (click)="getUserPlaylists()" nzTrigger="click"
+              [disabled]="!playerService.currentTrackInfo$.getValue()"
+              (click)="getUserPlaylists(playerService.currentTrackInfo$.getValue()!.id)"
+              nzTrigger="click"
               nzPlacement = "topCenter"
               class="player__add-track">
         <object
@@ -126,10 +128,18 @@
       </button>
     </div>
     <nz-dropdown-menu #menu="nzDropdownMenu">
-      <ul nz-menu>
-        <li nz-menu-item>Добавить в избранное</li>
+      <ul nz-menu *ngIf="playerService.currentTrackInfo$.getValue() && authService.getUserData()">
+        <li nz-menu-item *ngIf="!isFavorite"
+            (click)="addTrackIntoFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
+          Добавить в избранное
+        </li>
+        <li nz-menu-item
+            *ngIf="isFavorite"
+            (click)="removeTrackFromFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
+          Убрать из избранного
+        </li>
         <li nz-submenu nzTitle="Добавить в плейлист">
-          <ul *ngIf="playerService.currentTrackInfo$.getValue()">
+          <ul>
             <li nz-menu-item
                 *ngFor="let playlist of userPlaylists"
                 (click)="addTrackIntoPlaylist(playlist.id, playerService.currentTrackInfo$.getValue()!.id)">
