@@ -131,7 +131,16 @@ export class PlayerService {
   }
 
   checkMusicEnd(): void {
-    if (this.player.currentTime === this.player.duration && !this.player.loop) {
+    if (
+      this.player.currentTime === this.player.duration &&
+      !this.player.loop &&
+      this.checkTrackExistence(this.currentTrackNumber + 1)
+    ) {
+      this.switchTrack(SwitchPlayerActionEnum.SWITCH_NEXT);
+    } else if (
+      this.player.currentTime === this.player.duration &&
+      !this.player.loop
+    ) {
       this.player.pause();
       this.isPlay$.next(false);
       this.stop$.next();
@@ -142,13 +151,17 @@ export class PlayerService {
     this.context.close();
   }
 
+  checkTrackExistence(index: number) {
+    return this.trackList$.getValue()?.items[index];
+  }
+
   switchTrack(action: SwitchPlayerActionEnum) {
     const trackNumber: number =
       action === SwitchPlayerActionEnum.SWITCH_NEXT
         ? this.currentTrackNumber + 1
         : this.currentTrackNumber - 1;
 
-    const newTrack = this.trackList$.getValue()?.items[trackNumber];
+    const newTrack = this.checkTrackExistence(trackNumber);
     if (newTrack) {
       this.currentTrackInfo$.next(newTrack?.track);
       this.switchPlayerAction();
