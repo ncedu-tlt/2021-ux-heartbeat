@@ -315,16 +315,14 @@ export class ApiService {
   }
 
   getCategoriesPlaylists(
-    categoryId: string
+    categoryId: string,
+    offset = 0,
+    limit = 10
   ): Observable<CategoriesPlaylistsModel> {
-    return this.http.get<CategoriesPlaylistsModel>(
-      "https://api.spotify.com/v1/browse/categories/" +
-        categoryId +
-        "/playlists",
-      {
-        headers: this.headers
-      }
-    );
+    const url = `https://api.spotify.com/v1/browse/categories/${categoryId}/playlists?offset=${offset}&limit=${limit}`;
+    return this.http.get<CategoriesPlaylistsModel>(url, {
+      headers: this.headers
+    });
   }
 
   getFeaturedPlaylists(): Observable<CategoriesPlaylistsModel> {

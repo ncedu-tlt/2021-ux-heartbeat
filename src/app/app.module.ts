@@ -49,6 +49,8 @@ import { NotFoundPageComponent } from "./pages/not-found-page/not-found-page.com
 import { ArtistCardComponent } from "./components/artist-card/artist-card.component";
 import { GenreCardComponent } from "./components/genre-card/genre-card.component";
 import { PlaylistCardComponent } from "./components/playlist-card/playlist-card.component";
+import { NzEmptyModule } from "ng-zorro-antd/empty";
+import { RecomendationCardComponent } from "src/app/components/recomendation-card/recomendation-card.component";
 
 registerLocaleData(ru);
 
@@ -81,7 +83,8 @@ registerLocaleData(ru);
     NotFoundPageComponent,
     ArtistCardComponent,
     GenreCardComponent,
-    PlaylistCardComponent
+    PlaylistCardComponent,
+    RecomendationCardComponent
   ],
   imports: [
     BrowserModule,
@@ -97,7 +100,8 @@ registerLocaleData(ru);
     NzToolTipModule,
     NzDrawerModule,
     NzButtonModule,
-    NzDropDownModule
+    NzDropDownModule,
+    NzEmptyModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },

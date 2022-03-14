@@ -1,3 +1,19 @@
 <div class="container">
-    <h1>{{track.name}}</h1>
+    <div class="recomendation">
+        <h2 class="title">{{recomendation.name}}</h2>
+        <div class="img" [ngStyle]="
+        {'background-image' : 'url(' + recomendation.images[0].url + ')'}"></div>
+        <div class="tracks">
+            <div class="tracks__img">
+                <div class="tracks__img-play"></div>
+            </div>
+            <div class="tracks__descr">
+                <!-- <div *ngFor="let track of trackInfo">
+                    <hb-track  [track]="track" [isCard]="isCard"></hb-track>
+                </div> -->
+            </div>
+            <div class="tracks__time">{{trackTime | timeFormat}}</div>
+        </div>
+        <button class="btn" [routerLink]="['/playlists', recomendation.id]">Весь плейлист</button>
+    </div>
 </div>

@@ -1,1 +1,12 @@
-<hb-playlist-card></hb-playlist-card>
+<div class="container">
+    <div class="title">
+        <h2>Плейлисты</h2>
+        <div class="title__line"></div>
+    </div>
+    <div class="wrapper">
+        <div class="playlist" *ngFor="let playlist of playlists">
+            <hb-playlist-card [playlist]="playlist"></hb-playlist-card>
+        </div>
+    </div>
+    <button (click)="showMore()" *ngIf="!isdisabled" class="addItem">ЕЩЕ</button> 
+</div>

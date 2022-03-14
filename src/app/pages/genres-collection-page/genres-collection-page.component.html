@@ -1,1 +1,5 @@
-<hb-genre-card></hb-genre-card>
+<div class="wrapper">
+    <div class="genres" *ngFor = "let genre of genres">
+        <hb-genre-card [genre]="genre"></hb-genre-card>
+    </div>
+</div>
