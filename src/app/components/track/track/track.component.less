@@ -5,6 +5,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  max-height: 70px;
 
   &-contain {
     display: flex;
@@ -38,6 +39,16 @@
       &__artist {
         font-weight: bold;
         cursor: pointer;
+        text-overflow: ellipsis;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+
+        p {
+          margin: 0 3px 0 0;
+          text-overflow: ellipsis;
+        }
       }
 
       &__name {
