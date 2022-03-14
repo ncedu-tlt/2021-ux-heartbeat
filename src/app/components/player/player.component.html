@@ -1,7 +1,7 @@
 <div class="container">
   <div class="player" *ngIf="!drawerVisible">
     <div class="player__current-track" *ngIf="playerService.currentTrackInfo$.getValue()"
-         (click)="changeVisiblePlayerControlOnMobile()">
+         (click)="openPlayerControlOnMobile(playerService.currentTrackInfo$.getValue()!.id)">
       <img [routerLink]="['/album', playerService.currentTrackInfo$.getValue()!.album.id]"
            src="{{playerService.currentTrackInfo$.getValue()!.album.images[0].url}}" alt="#">
       <div class="player__info-about-track">
@@ -159,7 +159,7 @@
       nzPlacement="bottom"
       nzHeight="615px"
       [nzVisible]="drawerVisible"
-      (nzOnClose)="changeVisiblePlayerControlOnMobile()"
+      (nzOnClose)="closePlayerControlOnMobile()"
     >
       <ng-container class="mobile-player-contain" *nzDrawerContent>
         <div class="mobile-player-contain__current-track">
@@ -246,10 +246,24 @@
               height="25px"
             ></object>
           </button>
-          <button class="mobile-player-contain__add-track">
+          <button class="mobile-player-contain__add-track"
+                  *ngIf="!isFavorite"
+                  [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getUserData()"
+                  (click)="addTrackIntoFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
             <object
               type="image/svg+xml"
               data="../../../assets/svg/favorite.svg"
+              width="25px"
+              height="25px"
+            ></object>
+          </button>
+          <button class="mobile-player-contain__delete-track"
+                  *ngIf="isFavorite"
+                  [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getUserData()"
+                  (click)="removeTrackFromFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
+            <object
+              type="image/svg+xml"
+              data="../../../assets/svg/fill-heart.svg"
               width="25px"
               height="25px"
             ></object>

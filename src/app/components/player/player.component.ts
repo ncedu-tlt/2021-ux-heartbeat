@@ -49,10 +49,15 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   };
 
-  changeVisiblePlayerControlOnMobile(): void {
+  openPlayerControlOnMobile(id: string): void {
     if (this.isMobile) {
-      this.drawerVisible = !this.drawerVisible;
+      this.drawerVisible = true;
+      this.checkTrackIntoUserFavoriteList(id);
     }
+  }
+
+  closePlayerControlOnMobile() {
+    this.drawerVisible = false;
   }
 
   getUserPlaylists(id: string) {
@@ -77,15 +82,14 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   removeTrackFromFavoriteList(id: string) {
     this.apiService.deleteTracksForCurrentUser(id).subscribe(() => {
-      this.notificationService.blank(
-        "Трек успешно удаление",
-        "Трек успешно удален"
-      );
+      this.isFavorite = false;
+      this.notificationService.blank("Удаление трека", "Трек успешно удален");
     });
   }
 
   addTrackIntoFavoriteList(id: string) {
     this.apiService.putSaveTracksForCurrentUser(id).subscribe(() => {
+      this.isFavorite = true;
       this.notificationService.blank(
         "Добавление трека",
         "Трек успешно добавлен"
