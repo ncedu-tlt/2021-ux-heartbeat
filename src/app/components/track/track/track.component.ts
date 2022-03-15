@@ -28,7 +28,7 @@ export class TrackComponent implements OnInit, OnDestroy {
 
   constructor(public playerService: PlayerService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.controlActiveTrack$ = combineLatest([
       this.playerService.currentTrackInfo$,
       this.playerService.isPlay$
@@ -46,11 +46,11 @@ export class TrackComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.controlActiveTrack$.unsubscribe();
   }
 
-  controlPlayerCurrentTrack() {
+  controlPlayerCurrentTrack(): void {
     if (this.playerService.currentTrackInfo$.getValue() !== this.track) {
       this.playerService.currentTrackInfo$.next(this.track);
     }

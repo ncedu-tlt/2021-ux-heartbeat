@@ -13,7 +13,7 @@ export class TrackListComponent {
 
   constructor(private playerService: PlayerService) {}
 
-  setListTrackIntoPlayer() {
+  setListTrackIntoPlayer(): void {
     this.playerService.trackList$.next(this.trackList);
   }
 }

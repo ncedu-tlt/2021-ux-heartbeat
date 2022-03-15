@@ -59,11 +59,11 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  closePlayerControlOnMobile() {
+  closePlayerControlOnMobile(): void {
     this.drawerVisible = false;
   }
 
-  getUserPlaylists(id: string) {
+  getUserPlaylists(id: string): void {
     this.checkTrackIntoUserFavoriteList(id);
     this.apiService
       .getCurrentUsersPlaylists()
@@ -75,7 +75,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  addTrackIntoPlaylist(playlistId: string, trackId: string) {
+  addTrackIntoPlaylist(playlistId: string, trackId: string): void {
     this.apiService
       .addItemsToPlaylist(playlistId, trackId)
       .pipe(takeUntil(this.die$))
@@ -92,7 +92,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  removeTrackFromFavoriteList(id: string) {
+  removeTrackFromFavoriteList(id: string): void {
     this.apiService
       .deleteTracksForCurrentUser(id)
       .pipe(takeUntil(this.die$))
@@ -110,7 +110,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  addTrackIntoFavoriteList(id: string) {
+  addTrackIntoFavoriteList(id: string): void {
     this.apiService
       .putSaveTracksForCurrentUser(id)
       .pipe(takeUntil(this.die$))
@@ -128,7 +128,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  checkTrackIntoUserFavoriteList(id: string) {
+  checkTrackIntoUserFavoriteList(id: string): void {
     this.apiService
       .checkUsersSavedTracks(id)
       .pipe(takeUntil(this.die$))

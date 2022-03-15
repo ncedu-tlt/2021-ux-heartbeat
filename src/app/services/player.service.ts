@@ -155,15 +155,17 @@ export class PlayerService {
     }
   }
 
-  closeAudioContext() {
+  closeAudioContext(): void {
     this.context.close();
   }
 
-  checkTrackExistence(index: number) {
+  checkTrackExistence(
+    index: number
+  ): TrackById | NewItemsModel | null | undefined {
     return this.trackList$.getValue()?.items[index];
   }
 
-  switchTrack(action: SwitchPlayerActionEnum) {
+  switchTrack(action: SwitchPlayerActionEnum): void {
     const trackNumber: number =
       action === SwitchPlayerActionEnum.SWITCH_NEXT
         ? this.currentTrackNumber + 1

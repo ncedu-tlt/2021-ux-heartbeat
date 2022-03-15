@@ -131,7 +131,7 @@ export class ArtistCardComponent {
 
   constructor(public playerService: PlayerService) {}
 
-  setListTrackIntoPlayer() {
+  setListTrackIntoPlayer(): void {
     this.playerService.trackList$.next(null);
   }
 }
