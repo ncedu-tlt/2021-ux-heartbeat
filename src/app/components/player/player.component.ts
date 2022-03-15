@@ -32,7 +32,8 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.isMobile = window.screen.width < 850;
+    this.isMobile =
+      window.screen.width < 850 || document.documentElement.clientWidth < 850;
     this.playerService.createAudioElement();
   }
 
