@@ -7,6 +7,7 @@ import { NewTracksModel } from "../../models/new-api-models/album-by-id.model";
   styleUrls: ["./albums-page.component.less"]
 })
 export class AlbumsPageComponent {
+  public albumId = "1fdYYk890Ur";
   public album: NewTracksModel = {
     items: [
       {

@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model";
 import { TopTracksArtistByIdModel } from "../../models/new-api-models/top-tracks-artist-by-id.model";
 import { PlayerService } from "../../services/player.service";
+import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 
 @Component({
   selector: "hb-artist-card",
@@ -9,6 +10,7 @@ import { PlayerService } from "../../services/player.service";
   styleUrls: ["./artist-card.component.less"]
 })
 export class ArtistCardComponent {
+  public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
   public isCard = true;
   public artistInfo: ArtistByIdModel = {
     followers: {

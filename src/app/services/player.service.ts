@@ -14,6 +14,7 @@ import {
   NewTracksModel
 } from "../models/new-api-models/album-by-id.model";
 import { TrackById } from "../models/new-api-models/track-by-id.model";
+import { TrackLaunchContextEnum } from "../models/track-launch-context.enum";
 
 @Injectable({
   providedIn: "root"
@@ -36,6 +37,9 @@ export class PlayerService {
   public currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<
     ItemsTrackModel | NewTracksModel | null
+  >(null);
+  public trackContext$ = new BehaviorSubject<
+    string | TrackLaunchContextEnum | null
   >(null);
 
   public isPlay$ = new BehaviorSubject<boolean>(false);

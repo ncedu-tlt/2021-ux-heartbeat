@@ -7,6 +7,7 @@ import { ItemsTrackModel } from "../../models/new-api-models/top-tracks-artist-b
   styleUrls: ["./playlists-page.component.less"]
 })
 export class PlaylistsPageComponent {
+  public playlistId = "1fNh56lM22d";
   public playlist: ItemsTrackModel = {
     items: [
       {
