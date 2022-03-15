@@ -106,7 +106,7 @@
         ></object>
       </button>
       <button nz-dropdown [nzDropdownMenu]="menu"
-              [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getUserData()"
+              [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getAuthToken()"
               (click)="getUserPlaylists(playerService.currentTrackInfo$.getValue()!.id)"
               nzTrigger="click"
               nzPlacement = "topCenter"
@@ -187,7 +187,7 @@
         </div>
         <div class="mobile-player-contain__control">
           <div class="mobile-player-contain__control-items">
-            <button class="mobile-player-contain__previous-track">
+            <button class="mobile-player-contain__previous-track" (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/previous.svg"
@@ -211,7 +211,7 @@
                 height="35px"
               ></object>
             </button>
-            <button class="mobile-player-contain__next-track">
+            <button class="mobile-player-contain__next-track" (click)="this.playerService.switchTrack(actions.SWITCH_NEXT)">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/next.svg"
@@ -248,7 +248,7 @@
           </button>
           <button class="mobile-player-contain__add-track"
                   *ngIf="!isFavorite"
-                  [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getUserData()"
+                  [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getAuthToken()"
                   (click)="addTrackIntoFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
             <object
               type="image/svg+xml"
@@ -259,7 +259,7 @@
           </button>
           <button class="mobile-player-contain__delete-track"
                   *ngIf="isFavorite"
-                  [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getUserData()"
+                  [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getAuthToken()"
                   (click)="removeTrackFromFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
             <object
               type="image/svg+xml"
