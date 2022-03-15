@@ -8,6 +8,8 @@ import {
   ItemUserPlaylistModel
 } from "../../models/new-api-models/current-users-playlist.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
+import { ErrorFromSpotifyModel } from "../../models/error.model";
+import { Subject, takeUntil } from "rxjs";
 
 @Component({
   selector: "hb-player",
@@ -20,6 +22,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   public actions = SwitchPlayerActionEnum;
   public userPlaylists: ItemUserPlaylistModel[] = [];
   public isFavorite = false;
+  private die$ = new Subject<void>();
 
   constructor(
     public playerService: PlayerService,
@@ -64,6 +67,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.checkTrackIntoUserFavoriteList(id);
     this.apiService
       .getCurrentUsersPlaylists()
+      .pipe(takeUntil(this.die$))
       .subscribe((playlists: CurrentUsersPlaylistModel) => {
         this.userPlaylists = playlists.items.filter(playlist => {
           return this.authService.getUserData()?.[0].id === playlist.owner.id;
@@ -72,39 +76,70 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addTrackIntoPlaylist(playlistId: string, trackId: string) {
-    this.apiService.addItemsToPlaylist(playlistId, trackId).subscribe(() => {
-      this.notificationService.blank(
-        "Добавление трека",
-        "Трек успешно добавлен"
+    this.apiService
+      .addItemsToPlaylist(playlistId, trackId)
+      .pipe(takeUntil(this.die$))
+      .subscribe(
+        () => {
+          this.notificationService.blank(
+            "Добавление трека",
+            "Трек успешно добавлен"
+          );
+        },
+        (e: ErrorFromSpotifyModel) => {
+          this.notificationService.blank("Ошибка", e.error.error.message);
+        }
       );
-    });
   }
 
   removeTrackFromFavoriteList(id: string) {
-    this.apiService.deleteTracksForCurrentUser(id).subscribe(() => {
-      this.isFavorite = false;
-      this.notificationService.blank("Удаление трека", "Трек успешно удален");
-    });
+    this.apiService
+      .deleteTracksForCurrentUser(id)
+      .pipe(takeUntil(this.die$))
+      .subscribe(
+        () => {
+          this.isFavorite = false;
+          this.notificationService.blank(
+            "Удаление трека",
+            "Трек успешно удален"
+          );
+        },
+        (e: ErrorFromSpotifyModel) => {
+          this.notificationService.blank("Ошибка", e.error.error.message);
+        }
+      );
   }
 
   addTrackIntoFavoriteList(id: string) {
-    this.apiService.putSaveTracksForCurrentUser(id).subscribe(() => {
-      this.isFavorite = true;
-      this.notificationService.blank(
-        "Добавление трека",
-        "Трек успешно добавлен"
+    this.apiService
+      .putSaveTracksForCurrentUser(id)
+      .pipe(takeUntil(this.die$))
+      .subscribe(
+        () => {
+          this.isFavorite = true;
+          this.notificationService.blank(
+            "Добавление трека",
+            "Трек успешно добавлен"
+          );
+        },
+        (e: ErrorFromSpotifyModel) => {
+          this.notificationService.blank("Ошибка", e.error.error.message);
+        }
       );
-    });
   }
 
   checkTrackIntoUserFavoriteList(id: string) {
-    this.apiService.checkUsersSavedTracks(id).subscribe(existence => {
-      this.isFavorite = existence[0];
-    });
+    this.apiService
+      .checkUsersSavedTracks(id)
+      .pipe(takeUntil(this.die$))
+      .subscribe(existence => {
+        this.isFavorite = existence[0];
+      });
   }
 
   ngOnDestroy(): void {
     window.removeEventListener("resize", this.resizeWindow);
     this.playerService.closeAudioContext();
+    this.die$.next();
   }
 }
