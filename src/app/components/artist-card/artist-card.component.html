@@ -14,7 +14,7 @@
   <p class="artist-card__genres">{{artistInfo.genres}}</p>
   <div class="artist-card__top-tracks">
     <div *ngFor="let track of topTracks.tracks">
-      <hb-track  [track]="track" [isCard]="isCard"></hb-track>
+      <hb-track (playTrack)="setListTrackIntoPlayer()" [track]="track" [isCard]="isCard"></hb-track>
     </div>
   </div>
   <button nz-button nzType="default"
