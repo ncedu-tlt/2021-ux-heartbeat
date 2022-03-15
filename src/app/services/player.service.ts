@@ -7,11 +7,13 @@ import {
   takeUntil
 } from "rxjs";
 import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
-import {
-  ItemsTrackModel,
-  TopTracksModel
-} from "../models/new-api-models/top-tracks-artist-by-id.model";
+import { ItemsTrackModel } from "../models/new-api-models/top-tracks-artist-by-id.model";
 import { SwitchPlayerActionEnum } from "../models/switch-player-action.enum";
+import {
+  NewItemsModel,
+  NewTracksModel
+} from "../models/new-api-models/album-by-id.model";
+import { TrackById } from "../models/new-api-models/track-by-id.model";
 
 @Injectable({
   providedIn: "root"
@@ -28,9 +30,13 @@ export class PlayerService {
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<void> = new Subject();
 
-  public currentTrackInfo$ = new BehaviorSubject<TopTracksModel | null>(null);
+  public currentTrackInfo$ = new BehaviorSubject<
+    TrackById | NewItemsModel | null
+  >(null);
   public currentTrackNumber!: number;
-  public trackList$ = new BehaviorSubject<ItemsTrackModel | null>(null);
+  public trackList$ = new BehaviorSubject<
+    ItemsTrackModel | NewTracksModel | null
+  >(null);
 
   public isPlay$ = new BehaviorSubject<boolean>(false);
   public isRepeat = false;
@@ -56,13 +62,15 @@ export class PlayerService {
           this.player.src = " ";
         }
       });
-      this.trackList$.subscribe((trackList: ItemsTrackModel | null) => {
-        if (trackList) {
-          this.currentTrackNumber = trackList.items.findIndex(el => {
-            return el.track.id === this.currentTrackInfo$.getValue()?.id;
-          });
+      this.trackList$.subscribe(
+        (trackList: ItemsTrackModel | NewTracksModel | null) => {
+          if (trackList) {
+            this.currentTrackNumber = trackList.items.findIndex(el => {
+              return el.id === this.currentTrackInfo$.getValue()?.id;
+            });
+          }
         }
-      });
+      );
       this.player.crossOrigin = "anonymous";
       const source = this.context.createMediaElementSource(this.player);
       source.connect(analyser);
@@ -163,7 +171,7 @@ export class PlayerService {
 
     const newTrack = this.checkTrackExistence(trackNumber);
     if (newTrack) {
-      this.currentTrackInfo$.next(newTrack?.track);
+      this.currentTrackInfo$.next(newTrack);
       this.switchPlayerAction();
       this.currentTrackNumber = trackNumber;
     }

@@ -1,6 +1,6 @@
 <div class="track" [ngStyle]="{'min-width': isCard ? '60px' : '280px'}">
   <div class="track-contain">
-    <div [ngStyle]="{'background-image': 'url(' + track.album.images[0].url + ')',
+    <div [ngStyle]="{'background-image': 'url(' + track.album!.images[0].url + ')',
                       'margin': isCard ? '10px 8px' : '10px 20px'}"
          class="track-contain__img"
          (click)="controlPlayerCurrentTrack()">

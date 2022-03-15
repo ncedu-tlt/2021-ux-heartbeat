@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { ItemsTrackModel } from "../../../models/new-api-models/top-tracks-artist-by-id.model";
 import { PlayerService } from "../../../services/player.service";
+import { NewTracksModel } from "../../../models/new-api-models/album-by-id.model";
 
 @Component({
   selector: "hb-track-list",
@@ -8,7 +9,7 @@ import { PlayerService } from "../../../services/player.service";
   styleUrls: ["./track-list.component.less"]
 })
 export class TrackListComponent {
-  @Input() public trackList!: ItemsTrackModel;
+  @Input() public trackList!: ItemsTrackModel | NewTracksModel;
 
   constructor(private playerService: PlayerService) {}
 
