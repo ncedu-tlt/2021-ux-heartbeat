@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model";
 import { TopTracksArtistByIdModel } from "../../models/new-api-models/top-tracks-artist-by-id.model";
+import { PlayerService } from "../../services/player.service";
 
 @Component({
   selector: "hb-artist-card",
@@ -127,4 +128,10 @@ export class ArtistCardComponent {
       }
     ]
   };
+
+  constructor(private playerService: PlayerService) {}
+
+  setListTrackIntoPlayer() {
+    this.playerService.trackList$.next(null);
+  }
 }
