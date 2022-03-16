@@ -67,10 +67,10 @@ export class AuthService {
     return this.session$.getValue()?.provider_token;
   }
 
-  getUserData(): UserIdentity[] | undefined {
-    if (this.user$.getValue() !== undefined) {
+  getUserData(): UserIdentity[] | null | undefined {
+    if (this.user$.getValue()?.identities) {
       return this.user$.getValue()?.identities;
-    } else return undefined;
+    } else return null;
   }
 
   errorHandling(error: ApiError): void {

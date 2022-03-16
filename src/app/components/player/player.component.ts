@@ -17,7 +17,7 @@ import { Subject, takeUntil, tap } from "rxjs";
   styleUrls: ["./player.component.less"]
 })
 export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
-  public isMobile!: boolean;
+  public isMobile = false;
   public drawerVisible = false;
   public actions = SwitchPlayerActionEnum;
   public userPlaylists: ItemUserPlaylistModel[] = [];
