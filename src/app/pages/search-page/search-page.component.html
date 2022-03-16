@@ -1,5 +1,7 @@
-{{key}}
-<div class="search-page">
-<hb-artist-card></hb-artist-card>
-<hb-track-list></hb-track-list>
+<!--{{key}}-->
+<div class="search-page" *ngFor="let artist of artists">
+<hb-artist-card [artistInfo]="artist"></hb-artist-card>
+<!--  <div *ngFor="let track of tracks">-->
+<!--    <hb-track-list [trackList]="track"></hb-track-list>-->
+<!--  </div>-->
 </div>
