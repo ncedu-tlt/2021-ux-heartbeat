@@ -11,19 +11,19 @@ import { ApiService } from "src/app/services/api.service";
 })
 export class GenrePageComponent {
   public playlists: ItemUserPlaylistModel[] = [];
-  public genre!: string;
-  public isdisabled = false;
+  public genre: string;
+  public isDisabled = false;
   public offset = 0;
   public playlistsCollection$ = new Subscription();
 
   constructor(
     public apiService: ApiService,
     public activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+    this.genre = String(this.activatedRoute.snapshot.paramMap.get("genre"));
+  }
 
   ngOnInit(): void {
-    this.genre = String(this.activatedRoute.snapshot.paramMap.get("genre"));
-
     this.playlistsCollection$ = this.apiService
       .getCategoriesPlaylists(this.genre)
       .subscribe(playlistsCollection => {
@@ -36,10 +36,9 @@ export class GenrePageComponent {
     this.apiService
       .getCategoriesPlaylists(this.genre, this.offset)
       .subscribe(playlistsCollection => {
-        if (this.playlists.length <= 10) {
-          this.playlists.push(...playlistsCollection.playlists.items);
-        } else {
-          this.isdisabled = true;
+        this.playlists.push(...playlistsCollection.playlists.items);
+        if (playlistsCollection.playlists.items.length < 10) {
+          this.isDisabled = true;
         }
       });
   }
