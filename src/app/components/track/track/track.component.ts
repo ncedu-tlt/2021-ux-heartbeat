@@ -40,15 +40,17 @@ export class TrackComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.controlActiveTrack$ = combineLatest([
       this.playerService.currentTrackInfo$,
-      this.playerService.isPlay$
+      this.playerService.isPlay$,
+      this.playerService.trackContext$
     ]).subscribe(
-      ([currentTrack, isPlay]: [
+      ([currentTrack, isPlay, trackContext]: [
         currentTrack: TrackById | NewItemsModel | null,
-        isPlay: boolean
+        isPlay: boolean,
+        trackContext: string | TrackLaunchContextEnum | null | undefined
       ]) => {
         if (
           currentTrack?.id === this._track.id &&
-          this.trackContext === this.playerService.trackContext$.getValue()
+          this.trackContext === trackContext
         ) {
           this.isPlay = isPlay;
         } else {
