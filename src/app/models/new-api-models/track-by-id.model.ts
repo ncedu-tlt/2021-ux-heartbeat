@@ -15,8 +15,9 @@ export interface TrackById extends CommonTrackInfo {
 
 export interface AlbumItemsTrackModel {
   artists: CommonInfoAboutArtist[];
-  images: ImagesFromSpoty;
+  images: ImagesFromSpoty[];
   id: string;
   name: string;
-  track_number: number;
+  release_date: string;
+  total_tracks: number;
 }

@@ -42,13 +42,19 @@
       flex-direction: column;
       margin-left: 10px;
       margin-right: 35px;
+      max-height: 45px;
     }
 
     &__artist-name {
       font-weight: bold;
       cursor: pointer;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 130px;
 
       p {
+        text-overflow: ellipsis;
+        overflow: hidden;
         margin-bottom: 0;
       }
     }
@@ -60,7 +66,7 @@
       align-items: center;
       min-width: 420px;
 
-      @media screen and (max-width: 850px) {
+      @media screen and (max-width: 895px) {
         min-width: 100px;
       }
     }
@@ -129,6 +135,11 @@
 
     p {
       margin-bottom: 0;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 250px;
+      text-align: center;
     }
   }
 

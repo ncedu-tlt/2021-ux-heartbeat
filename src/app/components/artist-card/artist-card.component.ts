@@ -3,6 +3,7 @@ import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model"
 import { TopTracksModel } from "../../models/new-api-models/top-tracks-artist-by-id.model";
 import { ApiService } from "../../services/api.service";
 import { Subscription } from "rxjs";
+import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 
 @Component({
   selector: "hb-artist-card",
@@ -12,6 +13,7 @@ import { Subscription } from "rxjs";
 export class ArtistCardComponent implements OnInit, OnDestroy {
   @Input()
   public artistInfo!: ArtistByIdModel;
+  public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
   public isCard = true;
   public topTracks: TopTracksModel[] = [];
   public topTracksSearch$ = new Subscription();
