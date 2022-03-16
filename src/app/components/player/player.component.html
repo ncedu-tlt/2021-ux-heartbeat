@@ -5,7 +5,7 @@
       <img [routerLink]="['/album', playerService.currentTrackInfo$.getValue()!.album!.id]"
            src="{{playerService.currentTrackInfo$.getValue()!.album!.images[0].url}}" alt="#">
       <div class="player__info-about-track">
-        <div  class="player__artist-name">
+        <div class="player__artist-name">
               <p *ngIf="artistsNames">
                 {{artistsNames}}
               </p>
@@ -164,8 +164,7 @@
         <div class="mobile-player-contain__current-track">
           <img src="{{playerService.currentTrackInfo$.getValue()!.album!.images[0].url}}" alt="#" class="mobile-player-contain__img">
           <div class="mobile-player-contain__info-about-track">
-          <div
-            class="mobile-player-contain__artist-name">
+          <div class="mobile-player-contain__artist-name">
             <p *ngIf="artistsNames">
               {{artistsNames}}
             </p>
