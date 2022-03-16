@@ -6,8 +6,7 @@
            src="{{playerService.currentTrackInfo$.getValue()!.album!.images[0].url}}" alt="#">
       <div class="player__info-about-track">
         <div  class="player__artist-name">
-              <p
-                *ngIf="artistsNames">
+              <p *ngIf="artistsNames">
                 {{artistsNames}}
               </p>
         </div>
