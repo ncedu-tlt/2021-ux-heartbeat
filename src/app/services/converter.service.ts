@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import {
   ImagesFromSpoty,
-  NewTracksModel,
+  AlbumTracksModel,
   TracksModel
 } from "../models/new-api-models/album-by-id.model";
 
@@ -13,10 +13,10 @@ export class ConverterService {
     albumTrackList: TracksModel,
     id: string,
     images: ImagesFromSpoty[]
-  ): NewTracksModel {
-    const result: NewTracksModel = JSON.parse(
+  ): AlbumTracksModel {
+    const result: AlbumTracksModel = JSON.parse(
       JSON.stringify(albumTrackList)
-    ) as NewTracksModel;
+    ) as AlbumTracksModel;
     result.items.forEach(track => {
       track.album = {
         id,

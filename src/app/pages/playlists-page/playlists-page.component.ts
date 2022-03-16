@@ -84,31 +84,6 @@ export class PlaylistsPageComponent {
             name: "Imagine Dragons"
           }
         ]
-      },
-      {
-        id: "1zB4vmk8tFRmM9UULNzbLB",
-        name: "Thunder",
-        preview_url:
-          "https://p.scdn.co/mp3-preview/07e14c4e821174295fe50f03b33d98387570d1db?cid=774b29d4f13844c495f206cafdad9c86",
-        track_number: 1,
-        album: {
-          id: "4fZIyJn2wKb51QPNnWYnqt",
-          artists: [],
-          images: [
-            {
-              url: "https://i.scdn.co/image/ab67616d0000b2735675e83f707f1d7271e5cf8a"
-            }
-          ],
-          name: "Thunder",
-          release_date: "2022-03-03",
-          total_tracks: 1
-        },
-        artists: [
-          {
-            id: "1zT9SWCzN45r7oVhy0VYLK",
-            name: "Imagine Dragons"
-          }
-        ]
       }
     ]
   };

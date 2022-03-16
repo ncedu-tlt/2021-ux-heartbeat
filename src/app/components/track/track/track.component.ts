@@ -21,8 +21,15 @@ export class TrackComponent implements OnInit, OnDestroy {
   public trackTime = 30;
   private controlActiveTrack$: Subscription = new Subscription();
   public isPlay = false;
+  public artistNameList = "";
+  public _track!: TrackById | NewItemsModel;
 
-  @Input() public track!: TrackById | NewItemsModel;
+  @Input() set track(track: TrackById | NewItemsModel) {
+    this._track = track;
+    this.artistNameList = track.artists.reduce((prev, cur, index) => {
+      return `${prev}${!index ? "" : ","} ${cur.name}`;
+    }, "");
+  }
   @Input() public isCard = false;
   @Input() public trackContext!: string | TrackLaunchContextEnum;
 
@@ -40,7 +47,7 @@ export class TrackComponent implements OnInit, OnDestroy {
         isPlay: boolean
       ]) => {
         if (
-          currentTrack?.id === this.track.id &&
+          currentTrack?.id === this._track.id &&
           this.trackContext === this.playerService.trackContext$.getValue()
         ) {
           this.isPlay = isPlay;
@@ -56,13 +63,15 @@ export class TrackComponent implements OnInit, OnDestroy {
   }
 
   setCurrentTrack(): void {
-    this.playerService.currentTrackInfo$.next(this.track);
+    this.playerService.currentTrackInfo$.next(this._track);
     this.playerService.trackContext$.next(this.trackContext);
     this.playTrack.emit();
   }
 
   controlPlayerCurrentTrack(): void {
-    if (this.playerService.currentTrackInfo$.getValue()?.id !== this.track.id) {
+    if (
+      this.playerService.currentTrackInfo$.getValue()?.id !== this._track.id
+    ) {
       this.setCurrentTrack();
     } else {
       if (this.trackContext !== this.playerService.trackContext$.getValue()) {

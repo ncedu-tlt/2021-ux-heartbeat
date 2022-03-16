@@ -9,7 +9,7 @@ import {
 } from "../../models/new-api-models/current-users-playlist.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
-import { Subject, takeUntil } from "rxjs";
+import { Subject, takeUntil, tap } from "rxjs";
 
 @Component({
   selector: "hb-player",
@@ -22,6 +22,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   public actions = SwitchPlayerActionEnum;
   public userPlaylists: ItemUserPlaylistModel[] = [];
   public isFavorite = false;
+  public artistsNames: string | undefined = "";
   private die$ = new Subject<void>();
 
   constructor(
@@ -33,8 +34,19 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.isMobile =
-      window.screen.width < 850 || document.documentElement.clientWidth < 850;
+      window.screen.width < 895 || document.documentElement.clientWidth < 895;
     this.playerService.createAudioElement();
+
+    this.playerService.currentTrackInfo$
+      .pipe(
+        takeUntil(this.die$),
+        tap(track => {
+          this.artistsNames = track?.artists.reduce((prev, cur, index) => {
+            return `${prev}${!index ? "" : ","} ${cur.name}`;
+          }, "");
+        })
+      )
+      .subscribe();
   }
 
   ngAfterViewInit(): void {
@@ -43,8 +55,8 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   resizeWindow = (): void => {
     if (
-      window.screen.width < 850 ||
-      document.documentElement.clientWidth < 850
+      window.screen.width < 895 ||
+      document.documentElement.clientWidth < 895
     ) {
       this.isMobile = true;
     } else {

@@ -11,7 +11,7 @@ import { ItemsTrackModel } from "../models/new-api-models/top-tracks-artist-by-i
 import { SwitchPlayerActionEnum } from "../models/switch-player-action.enum";
 import {
   NewItemsModel,
-  NewTracksModel
+  AlbumTracksModel
 } from "../models/new-api-models/album-by-id.model";
 import { TrackById } from "../models/new-api-models/track-by-id.model";
 import { TrackLaunchContextEnum } from "../models/track-launch-context.enum";
@@ -36,10 +36,10 @@ export class PlayerService {
   >(null);
   public currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<
-    ItemsTrackModel | NewTracksModel | null
+    ItemsTrackModel | AlbumTracksModel | null
   >(null);
   public trackContext$ = new BehaviorSubject<
-    string | TrackLaunchContextEnum | null
+    string | TrackLaunchContextEnum | null | undefined
   >(null);
 
   public isPlay$ = new BehaviorSubject<boolean>(false);
@@ -67,7 +67,7 @@ export class PlayerService {
         }
       });
       this.trackList$.subscribe(
-        (trackList: ItemsTrackModel | NewTracksModel | null) => {
+        (trackList: ItemsTrackModel | AlbumTracksModel | null) => {
           if (trackList) {
             this.currentTrackNumber = trackList.items.findIndex(el => {
               return el.id === this.currentTrackInfo$.getValue()?.id;

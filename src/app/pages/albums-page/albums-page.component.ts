@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { NewTracksModel } from "../../models/new-api-models/album-by-id.model";
+import { AlbumTracksModel } from "../../models/new-api-models/album-by-id.model";
 
 @Component({
   selector: "hb-albums-page",
@@ -8,7 +8,7 @@ import { NewTracksModel } from "../../models/new-api-models/album-by-id.model";
 })
 export class AlbumsPageComponent {
   public albumId = "1fdYYk890Ur";
-  public album: NewTracksModel = {
+  public album: AlbumTracksModel = {
     items: [
       {
         id: "7uQ7e7nzbtyX87eIYHpj6Z",
