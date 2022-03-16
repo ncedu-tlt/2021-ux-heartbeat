@@ -1,4 +1,17 @@
-<div class="playlist-track">
-  <h2>Playlist</h2>
-  <hb-track-list [trackList]="playlist" [trackContext]="playlistId"></hb-track-list>
+<div class="playlists__wrapper">
+  <h2>Плейлисты</h2>
+  <hb-loader *ngIf="isLoading" class="loader"></hb-loader>
+  <div class="playlists__content">
+    <div *ngIf="playlists.length && !isLoading" class="playlist-list">
+      <div *ngFor="let playlist of playlists" class="playlist-item">
+        <div (click)="openPlaylist(playlist.id)" class="playlist">
+          <div class="playlist__record"></div>
+          <div class="playlist__image" [ngStyle]="{'border-radius': '5px','background-image': 'url(' + playlist.images[0].url + ')', 'background-position': 'center', 'background-size': 'cover'}"></div>
+          <p class="playlist__name">{{playlist.name}}</p>
+        </div>
+      </div>
+    </div>
+    <hr *ngIf="!isLoading" class="playlist-content__hr"/>
+    <hb-track-list *ngIf="isOpen" [trackList]="tracks" class="tracklist"></hb-track-list>
+  </div>
 </div>
