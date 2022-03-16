@@ -1,5 +1,7 @@
 <div class="track-list" *ngFor="let track of trackList.items">
   <hb-track
-    [track]="track.track"
+    (playTrack)="setListTrackIntoPlayer()"
+    [track]="track"
+    [trackContext]="trackContext"
   ></hb-track>
 </div>

@@ -56,6 +56,19 @@ export interface TracksModel {
   items: ItemsModel[];
 }
 
+export interface AlbumTracksModel {
+  items: NewItemsModel[];
+}
+
+export interface NewItemsModel extends ItemsModel {
+  album?: Album;
+}
+
+export interface Album {
+  id: string;
+  images: ImagesFromSpoty[];
+}
+
 export interface ItemsModel extends CommonTrackInfo {
   artists: CommonInfoAboutArtist[];
 }

@@ -1,14 +1,13 @@
 <div class="container">
   <div class="player" *ngIf="!drawerVisible">
     <div class="player__current-track" *ngIf="playerService.currentTrackInfo$.getValue()"
-         (click)="changeVisiblePlayerControlOnMobile()">
-      <img [routerLink]="['/album', playerService.currentTrackInfo$.getValue()!.album.id]"
-           src="{{playerService.currentTrackInfo$.getValue()!.album.images[0].url}}" alt="#">
+         (click)="openPlayerControlOnMobile(playerService.currentTrackInfo$.getValue()!.id)">
+      <img [routerLink]="['/album', playerService.currentTrackInfo$.getValue()!.album!.id]"
+           src="{{playerService.currentTrackInfo$.getValue()!.album!.images[0].url}}" alt="#">
       <div class="player__info-about-track">
-        <div  class="player__artist-name">
-              <p [routerLink]="['/artist', artist.id]"
-                    *ngFor="let artist of playerService.currentTrackInfo$.getValue()!.artists">
-                {{artist.name}}
+        <div class="player__artist-name">
+              <p *ngIf="artistsNames">
+                {{artistsNames}}
               </p>
         </div>
         <span class="player__track-name">{{playerService.currentTrackInfo$.getValue()!.name}}</span>
@@ -16,7 +15,7 @@
     </div>
     <div class="player__control">
       <div class="player__control-items">
-        <button class="player__previous-track">
+        <button class="player__previous-track" (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)">
           <object
             type="image/svg+xml"
             data="../../../assets/svg/previous.svg"
@@ -40,7 +39,7 @@
             height="20px"
           ></object>
         </button>
-        <button class="player__next-track">
+        <button class="player__next-track" (click)="playerService.switchTrack(actions.SWITCH_NEXT)">
           <object
             type="image/svg+xml"
             data="../../../assets/svg/next.svg"
@@ -80,7 +79,6 @@
                    nzStatus="normal"
                    class="player__volume-bar"
                    (click)="playerService.changeMusicVolume($event)">
-
       </nz-progress>
       <button class="player__mixing">
         <object
@@ -106,7 +104,12 @@
           height="15px"
         ></object>
       </button>
-      <button class="player__add-track">
+      <button nz-dropdown [nzDropdownMenu]="menu"
+              [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getAuthToken()"
+              (click)="getUserPlaylists(playerService.currentTrackInfo$.getValue()!.id)"
+              nzTrigger="click"
+              nzPlacement = "topCenter"
+              class="player__add-track">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/add.svg"
@@ -123,6 +126,28 @@
         ></object>
       </button>
     </div>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu>
+        <li nz-menu-item *ngIf="!isFavorite"
+            (click)="addTrackIntoFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
+          Добавить в избранное
+        </li>
+        <li nz-menu-item
+            *ngIf="isFavorite"
+            (click)="removeTrackFromFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
+          Убрать из избранного
+        </li>
+        <li nz-submenu nzTitle="Добавить в плейлист">
+          <ul>
+            <li nz-menu-item
+                *ngFor="let playlist of userPlaylists"
+                (click)="addTrackIntoPlaylist(playlist.id, playerService.currentTrackInfo$.getValue()!.id)">
+              {{playlist.name}}
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nz-dropdown-menu>
   </div>
   <div class="player" *ngIf="!drawerVisible">
   </div>
@@ -133,15 +158,16 @@
       nzPlacement="bottom"
       nzHeight="615px"
       [nzVisible]="drawerVisible"
-      (nzOnClose)="changeVisiblePlayerControlOnMobile()"
+      (nzOnClose)="closePlayerControlOnMobile()"
     >
       <ng-container class="mobile-player-contain" *nzDrawerContent>
         <div class="mobile-player-contain__current-track">
-          <img src="{{playerService.currentTrackInfo$.getValue()!.album.images[0].url}}" alt="#" class="mobile-player-contain__img">
+          <img src="{{playerService.currentTrackInfo$.getValue()!.album!.images[0].url}}" alt="#" class="mobile-player-contain__img">
           <div class="mobile-player-contain__info-about-track">
-          <div
-            class="mobile-player-contain__artist-name">
-            <p *ngFor="let artist of playerService.currentTrackInfo$.getValue()!.artists">{{artist.name}}</p>
+          <div class="mobile-player-contain__artist-name">
+            <p *ngIf="artistsNames">
+              {{artistsNames}}
+            </p>
           </div>
             <span class="mobile-player-contain__track-name">{{playerService.currentTrackInfo$.getValue()!.name}}</span>
           </div>
@@ -161,7 +187,7 @@
         </div>
         <div class="mobile-player-contain__control">
           <div class="mobile-player-contain__control-items">
-            <button class="mobile-player-contain__previous-track">
+            <button class="mobile-player-contain__previous-track" (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/previous.svg"
@@ -185,7 +211,7 @@
                 height="35px"
               ></object>
             </button>
-            <button class="mobile-player-contain__next-track">
+            <button class="mobile-player-contain__next-track" (click)="this.playerService.switchTrack(actions.SWITCH_NEXT)">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/next.svg"
@@ -220,10 +246,24 @@
               height="25px"
             ></object>
           </button>
-          <button class="mobile-player-contain__add-track">
+          <button class="mobile-player-contain__add-track"
+                  *ngIf="!isFavorite"
+                  [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getAuthToken()"
+                  (click)="addTrackIntoFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
             <object
               type="image/svg+xml"
               data="../../../assets/svg/favorite.svg"
+              width="25px"
+              height="25px"
+            ></object>
+          </button>
+          <button class="mobile-player-contain__delete-track"
+                  *ngIf="isFavorite"
+                  [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getAuthToken()"
+                  (click)="removeTrackFromFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
+            <object
+              type="image/svg+xml"
+              data="../../../assets/svg/fill-heart.svg"
               width="25px"
               height="25px"
             ></object>
