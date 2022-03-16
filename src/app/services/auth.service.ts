@@ -8,6 +8,7 @@ import {
 } from "@supabase/supabase-js";
 import { BehaviorSubject, Observable } from "rxjs";
 import { NzNotificationService } from "ng-zorro-antd/notification";
+import { UserIdentity } from "@supabase/gotrue-js/dist/main/lib/types";
 
 const SCOPES =
   "playlist-read-private playlist-read-collaborative user-top-read user-read-private user-read-email playlist-modify-public playlist-modify-private user-library-read user-library-modify user-follow-read user-follow-modify user-read-recently-played user-read-playback-state user-modify-playback-state";
@@ -64,6 +65,12 @@ export class AuthService {
 
   getAuthToken(): string | undefined | null {
     return this.session$.getValue()?.provider_token;
+  }
+
+  getUserData(): UserIdentity[] | null | undefined {
+    if (this.user$.getValue()?.identities) {
+      return this.user$.getValue()?.identities;
+    } else return null;
   }
 
   errorHandling(error: ApiError): void {
