@@ -57,10 +57,14 @@ export interface TracksModel {
 }
 
 export interface AlbumTracksModel {
-  items: NewItemsModel[];
+  items: NewAlbumItemsModel[];
 }
 
-export interface NewItemsModel extends ItemsModel {
+export interface NewAlbumItemsModel {
+  track: NewAlbumTracksModel;
+}
+
+export interface NewAlbumTracksModel extends ItemsModel {
   album?: Album;
 }
 
