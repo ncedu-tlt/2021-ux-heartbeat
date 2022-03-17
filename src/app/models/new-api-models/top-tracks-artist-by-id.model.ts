@@ -3,7 +3,6 @@ import {
   CommonTrackInfo,
   ImagesFromSpoty
 } from "./album-by-id.model";
-import { TrackById } from "./track-by-id.model";
 
 export interface PlaylistTracksModel {
   tracks: UserSavedTracksModel;
@@ -14,7 +13,7 @@ export interface UserSavedTracksModel {
 }
 
 export interface ItemsTrackModel {
-  items: TrackById[];
+  items: PlaylistTrackModel[];
 }
 
 export interface TopTracksArtistByIdModel {

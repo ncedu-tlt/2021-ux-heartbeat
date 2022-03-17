@@ -60,7 +60,11 @@ export interface AlbumTracksModel {
   items: NewItemsModel[];
 }
 
-export interface NewItemsModel extends ItemsModel {
+export interface NewItemsModel {
+  track: NewItemsModel2;
+}
+
+export interface NewItemsModel2 extends ItemsModel {
   album?: Album;
 }
 

@@ -3,7 +3,6 @@ import { ItemsTrackModel } from "../../../models/new-api-models/top-tracks-artis
 import { PlayerService } from "../../../services/player.service";
 import { AlbumTracksModel } from "../../../models/new-api-models/album-by-id.model";
 import { TrackLaunchContextEnum } from "../../../models/track-launch-context.enum";
-import { TracksSearchModel } from "../../../models/new-api-models/search.model";
 
 @Component({
   selector: "hb-track-list",
@@ -11,10 +10,7 @@ import { TracksSearchModel } from "../../../models/new-api-models/search.model";
   styleUrls: ["./track-list.component.less"]
 })
 export class TrackListComponent {
-  @Input() public trackList!:
-    | ItemsTrackModel
-    | AlbumTracksModel
-    | TracksSearchModel;
+  @Input() public trackList!: ItemsTrackModel | AlbumTracksModel;
   @Input() public trackContext!: string | TrackLaunchContextEnum;
 
   constructor(private playerService: PlayerService) {}

@@ -10,7 +10,7 @@ import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
 import { ItemsTrackModel } from "../models/new-api-models/top-tracks-artist-by-id.model";
 import { SwitchPlayerActionEnum } from "../models/switch-player-action.enum";
 import {
-  NewItemsModel,
+  NewItemsModel2,
   AlbumTracksModel
 } from "../models/new-api-models/album-by-id.model";
 import { TrackById } from "../models/new-api-models/track-by-id.model";
@@ -32,7 +32,7 @@ export class PlayerService {
   private stop$: Subject<void> = new Subject();
 
   public currentTrackInfo$ = new BehaviorSubject<
-    TrackById | NewItemsModel | null
+    TrackById | NewItemsModel2 | null
   >(null);
   public currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<
@@ -70,7 +70,7 @@ export class PlayerService {
         (trackList: ItemsTrackModel | AlbumTracksModel | null) => {
           if (trackList) {
             this.currentTrackNumber = trackList.items.findIndex(el => {
-              return el.id === this.currentTrackInfo$.getValue()?.id;
+              return el.track.id === this.currentTrackInfo$.getValue()?.id;
             });
           }
         }
@@ -165,8 +165,8 @@ export class PlayerService {
 
   checkTrackExistence(
     index: number
-  ): TrackById | NewItemsModel | null | undefined {
-    return this.trackList$.getValue()?.items[index];
+  ): TrackById | NewItemsModel2 | null | undefined {
+    return this.trackList$.getValue()?.items[index].track;
   }
 
   switchTrack(action: SwitchPlayerActionEnum): void {

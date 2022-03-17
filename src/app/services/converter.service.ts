@@ -14,14 +14,19 @@ export class ConverterService {
     id: string,
     images: ImagesFromSpoty[]
   ): AlbumTracksModel {
-    const result: AlbumTracksModel = JSON.parse(
-      JSON.stringify(albumTrackList)
-    ) as AlbumTracksModel;
-    result.items.forEach(track => {
-      track.album = {
-        id,
-        images
-      };
+    const result: AlbumTracksModel = {
+      items: []
+    };
+    albumTrackList.items.forEach(track => {
+      result.items.push({
+        track: {
+          ...track,
+          album: {
+            id,
+            images
+          }
+        }
+      });
     });
 
     return result;
