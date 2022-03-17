@@ -7,7 +7,11 @@ import {
   takeUntil
 } from "rxjs";
 import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
-import { ItemsTrackModel } from "../models/new-api-models/top-tracks-artist-by-id.model";
+import {
+  ItemsTrackModel,
+  NewTopArtistTracks,
+  TopTracksModel
+} from "../models/new-api-models/top-tracks-artist-by-id.model";
 import { SwitchPlayerActionEnum } from "../models/switch-player-action.enum";
 import {
   NewAlbumTracksModel,
@@ -15,6 +19,7 @@ import {
 } from "../models/new-api-models/album-by-id.model";
 import { TrackById } from "../models/new-api-models/track-by-id.model";
 import { TrackLaunchContextEnum } from "../models/track-launch-context.enum";
+import { NewSearchModel } from "../models/new-api-models/search.model";
 
 @Injectable({
   providedIn: "root"
@@ -32,11 +37,15 @@ export class PlayerService {
   private stop$: Subject<void> = new Subject();
 
   public currentTrackInfo$ = new BehaviorSubject<
-    TrackById | NewAlbumTracksModel | null
+    TrackById | NewAlbumTracksModel | TopTracksModel | null
   >(null);
   public currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<
-    ItemsTrackModel | AlbumTracksModel | null
+    | ItemsTrackModel
+    | AlbumTracksModel
+    | NewSearchModel
+    | NewTopArtistTracks
+    | null
   >(null);
   public trackContext$ = new BehaviorSubject<
     string | TrackLaunchContextEnum | null | undefined

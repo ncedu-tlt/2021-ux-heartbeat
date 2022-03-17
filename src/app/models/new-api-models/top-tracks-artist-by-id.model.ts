@@ -37,3 +37,11 @@ export interface AlbumTopTracksModel {
   release_date: string;
   total_tracks: number;
 }
+
+export interface NewTopArtistTracks {
+  items: NewTopArtistItems[];
+}
+
+export interface NewTopArtistItems {
+  track: TopTracksModel;
+}

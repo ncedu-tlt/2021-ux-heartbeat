@@ -11,6 +11,7 @@ import { combineLatest, Subscription } from "rxjs";
 import { TrackById } from "../../../models/new-api-models/track-by-id.model";
 import { NewAlbumTracksModel } from "../../../models/new-api-models/album-by-id.model";
 import { TrackLaunchContextEnum } from "../../../models/track-launch-context.enum";
+import { TopTracksModel } from "../../../models/new-api-models/top-tracks-artist-by-id.model";
 
 @Component({
   selector: "hb-track",
@@ -22,7 +23,7 @@ export class TrackComponent implements OnInit, OnDestroy {
   private controlActiveTrack$: Subscription = new Subscription();
   public isPlay = false;
   public artistNameList = "";
-  public _track!: TrackById | NewAlbumTracksModel;
+  public _track!: TrackById | NewAlbumTracksModel | TopTracksModel;
 
   @Input() set track(track: TrackById | NewAlbumTracksModel) {
     this._track = track;

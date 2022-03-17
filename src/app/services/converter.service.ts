@@ -4,6 +4,12 @@ import {
   AlbumTracksModel,
   TracksModel
 } from "../models/new-api-models/album-by-id.model";
+import {
+  NewTopArtistTracks,
+  TopTracksModel
+} from "../models/new-api-models/top-tracks-artist-by-id.model";
+import { TrackById } from "../models/new-api-models/track-by-id.model";
+import { NewSearchModel } from "../models/new-api-models/search.model";
 
 @Injectable({
   providedIn: "root"
@@ -29,6 +35,36 @@ export class ConverterService {
       });
     });
 
+    return result;
+  }
+
+  convertTopArtistTracksToNewTopArtistTracks(
+    artistTopTracks: TopTracksModel[]
+  ) {
+    const result: NewTopArtistTracks = {
+      items: []
+    };
+    artistTopTracks.forEach(track => {
+      result.items.push({
+        track: {
+          ...track
+        }
+      });
+    });
+    return result;
+  }
+
+  convertTrackSearchModelToNewSearchModel(searchTrack: TrackById[]) {
+    const result: NewSearchModel = {
+      items: []
+    };
+    searchTrack.forEach(track => {
+      result.items.push({
+        track: {
+          ...track
+        }
+      });
+    });
     return result;
   }
 }
