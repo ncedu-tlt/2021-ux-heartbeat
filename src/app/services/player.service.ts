@@ -10,7 +10,7 @@ import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
 import { ItemsTrackModel } from "../models/new-api-models/top-tracks-artist-by-id.model";
 import { SwitchPlayerActionEnum } from "../models/switch-player-action.enum";
 import {
-  NewItemsModel2,
+  NewAlbumTracksModel,
   AlbumTracksModel
 } from "../models/new-api-models/album-by-id.model";
 import { TrackById } from "../models/new-api-models/track-by-id.model";
@@ -32,7 +32,7 @@ export class PlayerService {
   private stop$: Subject<void> = new Subject();
 
   public currentTrackInfo$ = new BehaviorSubject<
-    TrackById | NewItemsModel2 | null
+    TrackById | NewAlbumTracksModel | null
   >(null);
   public currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<
@@ -165,7 +165,7 @@ export class PlayerService {
 
   checkTrackExistence(
     index: number
-  ): TrackById | NewItemsModel2 | null | undefined {
+  ): TrackById | NewAlbumTracksModel | null | undefined {
     return this.trackList$.getValue()?.items[index].track;
   }
 
