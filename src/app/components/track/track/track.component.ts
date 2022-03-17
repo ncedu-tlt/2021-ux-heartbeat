@@ -9,8 +9,9 @@ import {
 import { PlayerService } from "../../../services/player.service";
 import { combineLatest, Subscription } from "rxjs";
 import { TrackById } from "../../../models/new-api-models/track-by-id.model";
-import { NewItemsModel } from "../../../models/new-api-models/album-by-id.model";
+import { NewAlbumTracksModel } from "../../../models/new-api-models/album-by-id.model";
 import { TrackLaunchContextEnum } from "../../../models/track-launch-context.enum";
+import { TopTracksModel } from "../../../models/new-api-models/top-tracks-artist-by-id.model";
 
 @Component({
   selector: "hb-track",
@@ -22,9 +23,9 @@ export class TrackComponent implements OnInit, OnDestroy {
   private controlActiveTrack$: Subscription = new Subscription();
   public isPlay = false;
   public artistNameList = "";
-  public _track!: TrackById | NewItemsModel;
+  public _track!: TrackById | NewAlbumTracksModel | TopTracksModel;
 
-  @Input() set track(track: TrackById | NewItemsModel) {
+  @Input() set track(track: TrackById | NewAlbumTracksModel) {
     this._track = track;
     this.artistNameList = track.artists.reduce((prev, cur, index) => {
       return `${prev}${!index ? "" : ","} ${cur.name}`;
@@ -44,7 +45,7 @@ export class TrackComponent implements OnInit, OnDestroy {
       this.playerService.trackContext$
     ]).subscribe(
       ([currentTrack, isPlay, trackContext]: [
-        currentTrack: TrackById | NewItemsModel | null,
+        currentTrack: TrackById | NewAlbumTracksModel | null,
         isPlay: boolean,
         trackContext: string | TrackLaunchContextEnum | null | undefined
       ]) => {
