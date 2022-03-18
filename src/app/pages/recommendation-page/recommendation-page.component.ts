@@ -10,6 +10,7 @@ import { ApiService } from "src/app/services/api.service";
 })
 export class RecommendationPageComponent {
   public recomendations: ItemUserPlaylistModel[] = [];
+  public isLoading = true;
   public recomendations$ = new Subscription();
 
   constructor(public apiService: ApiService) {}
@@ -19,6 +20,7 @@ export class RecommendationPageComponent {
       .getFeaturedPlaylists()
       .subscribe(recommendationsPlaylist => {
         this.recomendations = recommendationsPlaylist.playlists.items;
+        this.isLoading = false;
       });
   }
 

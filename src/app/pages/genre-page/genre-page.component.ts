@@ -14,6 +14,7 @@ export class GenrePageComponent {
   public genre: string;
   public isDisabled = false;
   public offset = 0;
+  public isLoading = true;
   public playlistsCollection$ = new Subscription();
 
   constructor(
@@ -28,6 +29,7 @@ export class GenrePageComponent {
       .getCategoriesPlaylists(this.genre)
       .subscribe(playlistsCollection => {
         this.playlists = playlistsCollection.playlists.items;
+        this.isLoading = false;
       });
   }
 
@@ -37,6 +39,7 @@ export class GenrePageComponent {
       .getCategoriesPlaylists(this.genre, this.offset)
       .subscribe(playlistsCollection => {
         this.playlists.push(...playlistsCollection.playlists.items);
+        this.isLoading = false;
         if (playlistsCollection.playlists.items.length < 10) {
           this.isDisabled = true;
         }

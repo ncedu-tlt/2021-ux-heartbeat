@@ -14,6 +14,7 @@ export class RecomendationCardComponent {
   public trackInfo!: PlaylistTrackModel[];
   public isCard = true;
   public trackTime = 30;
+  public isLoading = true;
   public info$ = new Subscription();
 
   constructor(public apiService: ApiService) {}
@@ -23,6 +24,7 @@ export class RecomendationCardComponent {
       .getPlaylistTracks(this.recomendation.id)
       .subscribe(topTracks => {
         this.trackInfo = topTracks.items.slice(0, 4);
+        this.isLoading = false;
       });
   }
 

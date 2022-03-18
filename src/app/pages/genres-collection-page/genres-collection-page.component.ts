@@ -10,6 +10,7 @@ import { ApiService } from "src/app/services/api.service";
 })
 export class GenresCollectionPageComponent {
   public genres: CategoryModel[] = [];
+  public isLoading = true;
   public genresCollection$ = new Subscription();
 
   constructor(public apiService: ApiService) {}
@@ -19,6 +20,7 @@ export class GenresCollectionPageComponent {
       .getListCategories()
       .subscribe(genresCollection => {
         this.genres = genresCollection.categories.items;
+        this.isLoading = false;
       });
   }
 

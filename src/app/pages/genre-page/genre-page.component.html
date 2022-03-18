@@ -3,7 +3,8 @@
         <h2>Плейлисты</h2>
         <div class="title__line"></div>
     </div>
-    <div class="wrapper">
+    <hb-loader class="loader" *ngIf="isLoading"></hb-loader>
+    <div class="wrapper" *ngIf="playlists.length && !isLoading">
         <div class="playlist" *ngFor="let playlist of playlists">
             <hb-playlist-card [playlist]="playlist"></hb-playlist-card>
         </div>
