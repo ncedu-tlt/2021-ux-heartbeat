@@ -4,11 +4,10 @@
         <div class="img" [ngStyle]="
         {'background-image' : 'url(' + recomendation.images[0].url + ')'}"></div>
         <div class="tracks">
-            <!-- <div *ngFor="let track of trackInfo">
-                <hb-track  [track]="track" [isCard]="isCard"></hb-track>
-            </div> -->
-            <div class="tracks__time">{{trackTime | timeFormat}}</div>
+            <div *ngFor="let track of trackInfo">
+                <hb-track class="tracks__track-container" [track]="track.track" [isCard]="!isCard"></hb-track>
+            </div>
         </div>
-        <button class="btn" [routerLink]="['/playlists']">Весь плейлист</button>
+        <button class="btn">Весь плейлист</button>
     </div>
 </div>

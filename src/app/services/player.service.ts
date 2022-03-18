@@ -7,14 +7,19 @@ import {
   takeUntil
 } from "rxjs";
 import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
-import { ItemsTrackModel } from "../models/new-api-models/top-tracks-artist-by-id.model";
+import {
+  ItemsTrackModel,
+  NewTopArtistTracks,
+  TopTracksModel
+} from "../models/new-api-models/top-tracks-artist-by-id.model";
 import { SwitchPlayerActionEnum } from "../models/switch-player-action.enum";
 import {
-  NewItemsModel,
+  NewAlbumTracksModel,
   AlbumTracksModel
 } from "../models/new-api-models/album-by-id.model";
 import { TrackById } from "../models/new-api-models/track-by-id.model";
 import { TrackLaunchContextEnum } from "../models/track-launch-context.enum";
+import { NewSearchModel } from "../models/new-api-models/search.model";
 
 @Injectable({
   providedIn: "root"
@@ -32,11 +37,15 @@ export class PlayerService {
   private stop$: Subject<void> = new Subject();
 
   public currentTrackInfo$ = new BehaviorSubject<
-    TrackById | NewItemsModel | null
+    TrackById | NewAlbumTracksModel | TopTracksModel | null
   >(null);
   public currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<
-    ItemsTrackModel | AlbumTracksModel | null
+    | ItemsTrackModel
+    | AlbumTracksModel
+    | NewSearchModel
+    | NewTopArtistTracks
+    | null
   >(null);
   public trackContext$ = new BehaviorSubject<
     string | TrackLaunchContextEnum | null | undefined
@@ -70,7 +79,7 @@ export class PlayerService {
         (trackList: ItemsTrackModel | AlbumTracksModel | null) => {
           if (trackList) {
             this.currentTrackNumber = trackList.items.findIndex(el => {
-              return el.id === this.currentTrackInfo$.getValue()?.id;
+              return el.track.id === this.currentTrackInfo$.getValue()?.id;
             });
           }
         }
@@ -165,8 +174,8 @@ export class PlayerService {
 
   checkTrackExistence(
     index: number
-  ): TrackById | NewItemsModel | null | undefined {
-    return this.trackList$.getValue()?.items[index];
+  ): TrackById | NewAlbumTracksModel | null | undefined {
+    return this.trackList$.getValue()?.items[index].track;
   }
 
   switchTrack(action: SwitchPlayerActionEnum): void {

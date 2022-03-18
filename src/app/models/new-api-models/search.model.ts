@@ -13,3 +13,11 @@ export interface ArtistSearchModel {
 export interface TracksSearchModel {
   items: TrackById[];
 }
+
+export interface NewSearchModel {
+  items: NewSearchItems[];
+}
+
+export interface NewSearchItems {
+  track: TrackById;
+}

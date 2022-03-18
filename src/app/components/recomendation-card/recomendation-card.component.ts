@@ -11,7 +11,7 @@ import { ApiService } from "src/app/services/api.service";
 })
 export class RecomendationCardComponent {
   @Input() public recomendation!: ItemUserPlaylistModel;
-  public trackInfo: PlaylistTrackModel[] = [];
+  public trackInfo!: PlaylistTrackModel[];
   public isCard = true;
   public trackTime = 30;
   public info$ = new Subscription();
@@ -20,9 +20,9 @@ export class RecomendationCardComponent {
 
   ngOnInit(): void {
     this.info$ = this.apiService
-      .getPlaylistById(this.recomendation.id)
+      .getPlaylistTracks(this.recomendation.id)
       .subscribe(topTracks => {
-        this.trackInfo = topTracks.tracks.items.slice(0, 4);
+        this.trackInfo = topTracks.items.slice(0, 4);
       });
   }
 
