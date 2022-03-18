@@ -1,17 +1,31 @@
-<div class="playlists__wrapper">
-  <h2>Плейлисты</h2>
-  <hb-loader *ngIf="isLoading" class="loader"></hb-loader>
-  <div class="playlists__content">
-    <div *ngIf="playlists.length && !isLoading" class="playlist-list">
-      <div *ngFor="let playlist of playlists" class="playlist-item">
-        <div (click)="openPlaylist(playlist.id)" class="playlist">
-          <div class="playlist__record"></div>
-          <div class="playlist__image" [ngStyle]="{'border-radius': '5px','background-image': 'url(' + playlist.images[0].url + ')', 'background-position': 'center', 'background-size': 'cover'}"></div>
+<div class="playlists-wrapper">
+  <hb-loader *ngIf="isLoading"></hb-loader>
+  <div *ngIf="playlists.length && !isLoading" class="playlists">
+    <div class="playlist__list">
+      <div *ngFor="let playlist of playlists" id="{{playlist.id}}" (click)="openPlaylist(playlist.id, playlist.images[0].url, playlist.owner.display_name, playlist.name)" class="playlist">
+        <div class="playlist__image" [ngStyle]="{'width': '150px','height': '150px','border-radius': '5px','background-image': 'url(' + playlist.images[0].url + ')', 'background-position': 'center', 'background-size': 'cover'}"></div>
+        <div class="playlist__info">
           <p class="playlist__name">{{playlist.name}}</p>
+          <p class="playlist__owner">{{playlist.owner.display_name}}</p>
         </div>
       </div>
     </div>
-    <hr *ngIf="!isLoading" class="playlist-content__hr"/>
-    <hb-track-list *ngIf="isOpen" [trackList]="tracks" class="tracklist"></hb-track-list>
+    <hr class="playlists__hr">
+    <div *ngIf="isOpen" class="playlists__tracks">
+      <div class="playlists-tracks__playlist">
+        <div class="playlist-tracks__avatar">
+          <img src="/assets/image/vinyl-record.png" alt="vinyl icon" class="playlist-tracks__vinyl"/>
+          <div class="playlist-tracks__image" [ngStyle]="{'width': '150px','height': '150px','border-radius': '5px','background-image': 'url(' + playlistImg + ')', 'background-position': 'center', 'background-size': 'cover'}"></div>
+        </div>
+        <div class="playlist-tracks__info">
+          <p class="playlist-tracks__name">{{playlistName}}</p>
+          <p class="playlist-tracks__author">{{playlistAuthor}}</p>
+        </div>
+      </div>
+      <hb-track-list [trackContext]="playlistId" [trackList]="tracks" class="tracklist"></hb-track-list>
+    </div>
+    <div *ngIf="!isOpen" class="playlist__waiting">
+      <p>Здесь будет отображаться выбранный плейлист.</p>
+    </div>
   </div>
 </div>

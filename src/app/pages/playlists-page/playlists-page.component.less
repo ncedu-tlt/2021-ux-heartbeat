@@ -1,39 +1,87 @@
 :host {
-  .playlists__wrapper {
-    width: 80vw;
-    margin: 50px 0 0 56px;
+  font-family: 'Roboto', sans-serif;
+  width: 1546px;
 
-    .playlists__content {
-      display: flex;
-      justify-content: space-between;
+  .playlists-wrapper {
+    margin: 50px 0 0 50px;
 
-      .playlist-item {
-        cursor: pointer;
-        width: 450px;
-        height: 150px;
-        margin-bottom: 50px;
+    .playlists {
+      display: grid;
+      gap: 60px;
+      grid-template-columns: 764px 3px 680px;
+      grid-template-rows: auto auto auto;
+
+      .playlist__list {
+        .active {
+          background-color: #C4C4C430;
+        }
 
         .playlist {
+          cursor: pointer;
+          padding: 23px 0 23px 14px;
           display: flex;
+          margin-bottom: 50px;
+          border-radius: 5px;
 
-          .playlist__image {
-            width: 150px;
-            height: 150px;
+          &:hover{
+            background-color: #C4C4C430;
           }
 
-          .playlist__name {
-            margin-left: 50px;
+          .playlist__info {
+            margin-left: 30px;
+
+            .playlist__name {
+              margin: 0;
+              font-size: 24px;
+            }
+
+            .playlist__owner {
+              font-size: 14px;
+              font-weight: 100;
+            }
           }
         }
       }
 
-      .playlist-content__hr {
-        border-left: 1px solid black;
-        height: 100vh;
+      .playlists__hr {
+        border: 1px solid #000000;
+        height: 100%;
+        align-self: center;
+        justify-self: center;
       }
 
-      .tracklist {
+      .playlists__tracks {
 
+        .playlists-tracks__playlist {
+          display: flex;
+          margin-bottom: 30px;
+
+          .playlist-tracks__avatar {
+
+            .playlist-tracks__vinyl {
+              z-index: -1;
+              width: 185px;
+              height: 128px;
+              position: absolute;
+              transform: translate(30px, 12px);
+            }
+
+          }
+
+          .playlist-tracks__info{
+            margin-left: 104px;
+
+            .playlist-tracks__name{
+              margin: 0;
+              font-size: 24px;
+            }
+
+            .playlist-tracks__author {
+              font-size: 14px;
+              font-weight: 100;
+            }
+          }
+        }
       }
     }
   }

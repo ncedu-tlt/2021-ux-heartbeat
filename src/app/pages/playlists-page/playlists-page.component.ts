@@ -18,6 +18,11 @@ export class PlaylistsPageComponent {
   public tracks!: ItemsTrackModel;
   public isLoading = true;
   public isOpen = false;
+  public playlistId!: string;
+  public playlistImg!: string;
+  public playlistAuthor!: string;
+  public playlistName!: string;
+  public isActive = false;
   private die$ = new Subject<void>();
 
   constructor(private apiService: ApiService) {}
@@ -32,14 +37,33 @@ export class PlaylistsPageComponent {
       });
   }
 
-  openPlaylist(playlistId: string): void {
+  openPlaylist(
+    playlistId: string,
+    playlistImg: string,
+    playlistAuthor: string,
+    playlistName: string
+  ): void {
     this.apiService
       .getPlaylistTracks(playlistId)
       .pipe(takeUntil(this.die$))
       .subscribe((playlistTracks: ItemsTrackModel) => {
         this.tracks = playlistTracks;
+        this.playlistId = playlistId;
+        this.playlistImg = playlistImg;
+        this.playlistAuthor = playlistAuthor;
+        this.playlistName = playlistName;
         this.isOpen = true;
       });
+    this.setActiveStatus(playlistId);
+  }
+
+  setActiveStatus(playlistId: string): void {
+    const node: HTMLElement = <HTMLElement>document.getElementById(playlistId);
+    const old: HTMLElement = <HTMLElement>document.querySelector(".active");
+    if (old != null) {
+      old.classList.toggle("active");
+    }
+    node.classList.toggle("active");
   }
 
   ngOnInit(): void {
