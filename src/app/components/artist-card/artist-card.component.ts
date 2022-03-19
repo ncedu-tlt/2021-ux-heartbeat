@@ -38,9 +38,7 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
     this.topTracksSearch$ = this.api
       .getArtistsTopTracks(this.artistInfo.id)
       .subscribe(topTracks => {
-        this.topTracks = topTracks.tracks
-          .filter(topTrack => topTrack.preview_url !== null)
-          .slice(0, 4);
+        this.topTracks = topTracks.tracks.slice(0, 4);
         this.changeTopTracks =
           this.convert.convertTopArtistTracksToNewTopArtistTracks(
             this.topTracks

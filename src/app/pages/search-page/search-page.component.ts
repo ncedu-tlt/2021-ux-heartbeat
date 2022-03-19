@@ -86,11 +86,7 @@ export class SearchPageComponent {
       .pipe(takeUntil(this.die$))
       .subscribe(
         itemsToTracks => {
-          this.tracks.push(
-            ...itemsToTracks.tracks.items.filter(
-              topTrack => topTrack.preview_url !== null
-            )
-          );
+          this.tracks.push(...itemsToTracks.tracks.items);
           if (itemsToTracks.tracks.items.length < 6) {
             this.isDisabledShowMoreTracks = true;
           }
@@ -134,9 +130,7 @@ export class SearchPageComponent {
       .searchForItem(this.key, 6)
       .pipe(takeUntil(this.die$))
       .subscribe(tracksSearchResult => {
-        this.tracks = tracksSearchResult.tracks.items.filter(
-          topTrack => topTrack.preview_url !== null
-        );
+        this.tracks = tracksSearchResult.tracks.items;
         this.changeTrackList =
           this.convert.convertTrackSearchModelToNewSearchModel(this.tracks);
         this.isLoading = false;
