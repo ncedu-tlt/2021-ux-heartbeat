@@ -48,18 +48,19 @@ export class PlaylistsPageComponent {
       .pipe(takeUntil(this.die$))
       .subscribe((playlistTracks: ItemsTrackModel) => {
         this.tracks = playlistTracks;
-        this.playlistId = playlistId;
-        this.playlistImg = playlistImg;
-        this.playlistAuthor = playlistAuthor;
-        this.playlistName = playlistName;
-        this.isOpen = true;
       });
+    this.playlistId = playlistId;
+    this.playlistImg = playlistImg;
+    this.playlistAuthor = playlistAuthor;
+    this.playlistName = playlistName;
+    this.isOpen = true;
     this.setActiveStatus(playlistId);
   }
 
   setActiveStatus(playlistId: string): void {
     const node: HTMLElement = <HTMLElement>document.getElementById(playlistId);
     const old: HTMLElement = <HTMLElement>document.querySelector(".active");
+
     if (old != null) {
       old.classList.toggle("active");
     }

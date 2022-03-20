@@ -3,7 +3,7 @@
   <div *ngIf="playlists.length && !isLoading" class="playlists">
     <div class="playlist__list">
       <div *ngFor="let playlist of playlists" id="{{playlist.id}}" (click)="openPlaylist(playlist.id, playlist.images[0].url, playlist.owner.display_name, playlist.name)" class="playlist">
-        <div class="playlist__image" [ngStyle]="{'width': '150px','height': '150px','border-radius': '5px','background-image': 'url(' + playlist.images[0].url + ')', 'background-position': 'center', 'background-size': 'cover'}"></div>
+        <div class="playlist__image" [ngStyle]="{'background-image': 'url(' + playlist.images[0].url + ')'}"></div>
         <div class="playlist__info">
           <p class="playlist__name">{{playlist.name}}</p>
           <p class="playlist__owner">{{playlist.owner.display_name}}</p>
@@ -15,7 +15,7 @@
       <div class="playlists-tracks__playlist">
         <div class="playlist-tracks__avatar">
           <img src="/assets/image/vinyl-record.png" alt="vinyl icon" class="playlist-tracks__vinyl"/>
-          <div class="playlist-tracks__image" [ngStyle]="{'width': '150px','height': '150px','border-radius': '5px','background-image': 'url(' + playlistImg + ')', 'background-position': 'center', 'background-size': 'cover'}"></div>
+          <div class="playlist-tracks__image" [ngStyle]="{'background-image': 'url(' + playlistImg + ')'}"></div>
         </div>
         <div class="playlist-tracks__info">
           <p class="playlist-tracks__name">{{playlistName}}</p>
@@ -25,7 +25,8 @@
       <hb-track-list [trackContext]="playlistId" [trackList]="tracks" class="tracklist"></hb-track-list>
     </div>
     <div *ngIf="!isOpen" class="playlist__waiting">
-      <p>Здесь будет отображаться выбранный плейлист.</p>
+      <img class="playlist-waiting__img" src="assets/image/vinyl-record.png" alt="vinyl icon"/>
+      <p class="playlist-waiting__text">Здесь будет отображаться выбранный плейлист.</p>
     </div>
   </div>
 </div>

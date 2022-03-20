@@ -3,21 +3,23 @@ export interface AlbumsByIdsModel {
 }
 
 export interface ItemsAlbumModel {
-  items: [
-    {
-      album: {
-        artists: CommonInfoAboutArtist[];
-        genres: string[];
-        id: string;
-        images: ImagesFromSpoty[];
-        name: string;
-        release_date: string;
-        tracks: {
-          items: ItemsTracksModel[];
-        };
-      };
-    }
-  ];
+  items: ItemsAlbumsContain[];
+}
+
+export interface ItemsAlbumsContain {
+  album: ItemsAlbumContain;
+}
+
+export interface ItemsAlbumContain {
+  artists: CommonInfoAboutArtist[];
+  genres: string[];
+  id: string;
+  images: ImagesFromSpoty[];
+  name: string;
+  release_date: string;
+  tracks: {
+    items: ItemsTracksModel[];
+  };
 }
 
 export interface ItemsTracksModel {
