@@ -88,7 +88,8 @@
           height="15px"
         ></object>
       </button>
-      <button class="player__no-repeat" *ngIf="!playerService.isRepeat" (click)="playerService.putOnRepeat()">
+      <button class="player__no-repeat" *ngIf="playerService.isRepeat === 0"
+              (click)="playerService.putOnRepeat()">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/repeat.svg"
@@ -96,7 +97,17 @@
           height="15px"
         ></object>
       </button>
-      <button class="player__repeat" *ngIf="playerService.isRepeat" (click)="playerService.putOnRepeat()">
+      <button class="player__repeat" *ngIf="playerService.isRepeat === 1"
+              (click)="playerService.putOnRepeat()">
+        <object
+          type="image/svg+xml"
+          data="../../../assets/svg/repeat-playlist.svg"
+          width="15px"
+          height="15px"
+        ></object>
+      </button>
+      <button class="player__repeat" *ngIf="playerService.isRepeat === 2"
+              (click)="playerService.putOnRepeat()">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/repeat-active.svg"
@@ -230,7 +241,8 @@
               height="25px"
             ></object>
           </button>
-          <button class="mobile-player-contain__no-repeat" *ngIf="!playerService.isRepeat" (click)="playerService.putOnRepeat()">
+          <button class="mobile-player-contain__no-repeat" *ngIf="playerService.isRepeat === 0"
+                  (click)="playerService.putOnRepeat()">
             <object
               type="image/svg+xml"
               data="../../../assets/svg/repeat.svg"
@@ -238,12 +250,22 @@
               height="25px"
             ></object>
           </button>
-          <button class="mobile-player-contain__repeat" *ngIf="playerService.isRepeat" (click)="playerService.putOnRepeat()">
+          <button class="mobile-player-contain__repeat" *ngIf="playerService.isRepeat === 1"
+                  (click)="playerService.putOnRepeat()">
             <object
               type="image/svg+xml"
               data="../../../assets/svg/repeat-active.svg"
               width="25px"
               height="25px"
+            ></object>
+          </button>
+          <button class="player__repeat" *ngIf="playerService.isRepeat === 2"
+                  (click)="playerService.putOnRepeat()">
+            <object
+              type="image/svg+xml"
+              data="../../../assets/svg/repeat-active.svg"
+              width="15px"
+              height="15px"
             ></object>
           </button>
           <button class="mobile-player-contain__add-track"

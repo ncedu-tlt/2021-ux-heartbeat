@@ -14,12 +14,13 @@ import {
 } from "../models/new-api-models/top-tracks-artist-by-id.model";
 import { SwitchPlayerActionEnum } from "../models/switch-player-action.enum";
 import {
-  NewAlbumTracksModel,
-  AlbumTracksModel
+  AlbumTracksModel,
+  NewAlbumTracksModel
 } from "../models/new-api-models/album-by-id.model";
 import { TrackById } from "../models/new-api-models/track-by-id.model";
 import { TrackLaunchContextEnum } from "../models/track-launch-context.enum";
 import { NewSearchModel } from "../models/new-api-models/search.model";
+import { repeatGeneratorUtils } from "../utils/repeat-generator.utils";
 
 @Injectable({
   providedIn: "root"
@@ -52,7 +53,8 @@ export class PlayerService {
   >(null);
 
   public isPlay$ = new BehaviorSubject<boolean>(false);
-  public isRepeat = false;
+  public isRepeat = 0;
+  public repeatGen: Generator<number> = repeatGeneratorUtils()();
 
   constructor() {
     document.addEventListener("click", this.resumeContext);
@@ -146,26 +148,43 @@ export class PlayerService {
     this.musicVolume$.next(this.player.volume * 100);
   }
 
-  putOnRepeat(): void {
-    this.isRepeat = !this.isRepeat;
-    this.player.loop = !this.player.loop;
+  checkMusicEnd(): void {
+    if (this.player.currentTime === this.player.duration) {
+      if (!this.player.loop) {
+        if (this.checkTrackExistence(this.currentTrackNumber + 1)) {
+          this.switchTrack(SwitchPlayerActionEnum.SWITCH_NEXT);
+        } else {
+          this.checkRepeat();
+        }
+      }
+    }
   }
 
-  checkMusicEnd(): void {
-    if (
-      this.player.currentTime === this.player.duration &&
-      !this.player.loop &&
-      this.checkTrackExistence(this.currentTrackNumber + 1)
-    ) {
-      this.switchTrack(SwitchPlayerActionEnum.SWITCH_NEXT);
-    } else if (
-      this.player.currentTime === this.player.duration &&
-      !this.player.loop
-    ) {
-      this.player.pause();
-      this.isPlay$.next(false);
-      this.stop$.next();
+  checkRepeat() {
+    if (!this.isRepeat) {
+      if (this.player.currentTime === this.player.duration) {
+        this.player.pause();
+        this.isPlay$.next(false);
+        this.stop$.next();
+      }
     }
+    if (this.isRepeat === 1) {
+      if (this.trackList$.getValue()) {
+        const newTrack = this.checkTrackExistence(0);
+        if (newTrack) {
+          this.currentTrackInfo$.next(newTrack);
+          this.switchPlayerAction();
+          this.currentTrackNumber = 0;
+        }
+      } else {
+        this.player.currentTime = 0;
+      }
+    }
+  }
+
+  putOnRepeat() {
+    this.isRepeat = this.repeatGen.next().value as number;
+    this.player.loop = this.isRepeat === 2;
   }
 
   closeAudioContext(): void {
@@ -175,20 +194,29 @@ export class PlayerService {
   checkTrackExistence(
     index: number
   ): TrackById | NewAlbumTracksModel | null | undefined {
-    return this.trackList$.getValue()?.items[index].track;
+    return this.trackList$.getValue()?.items[index]?.track;
   }
 
   switchTrack(action: SwitchPlayerActionEnum): void {
-    const trackNumber: number =
+    let trackNumber: number =
       action === SwitchPlayerActionEnum.SWITCH_NEXT
         ? this.currentTrackNumber + 1
         : this.currentTrackNumber - 1;
 
-    const newTrack = this.checkTrackExistence(trackNumber);
+    let newTrack = this.checkTrackExistence(trackNumber);
+    while (newTrack && !newTrack?.preview_url) {
+      trackNumber =
+        action === SwitchPlayerActionEnum.SWITCH_NEXT
+          ? this.currentTrackNumber + 1
+          : this.currentTrackNumber - 1;
+      newTrack = this.checkTrackExistence(trackNumber);
+    }
     if (newTrack) {
       this.currentTrackInfo$.next(newTrack);
       this.switchPlayerAction();
       this.currentTrackNumber = trackNumber;
+    } else {
+      this.checkRepeat();
     }
   }
 }
