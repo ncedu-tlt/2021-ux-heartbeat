@@ -69,11 +69,13 @@ export class SearchPageComponent {
           this.isLoading = false;
         },
         (error: ErrorFromSpotifyModel) => {
-          this.notificationService.blank(
-            "Ошибка авторизации",
-            error.error.error.message,
-            { nzDuration: 0 }
-          );
+          if (error.status == 403) {
+            this.notificationService.blank(
+              "Ошибка авторизации",
+              "Вам необходимо пройти авторизацию заново",
+              { nzDuration: 0 }
+            );
+          }
         }
       );
   }
@@ -95,11 +97,13 @@ export class SearchPageComponent {
           this.isLoading = false;
         },
         (error: ErrorFromSpotifyModel) => {
-          this.notificationService.blank(
-            "Ошибка авторизации",
-            error.error.error.message,
-            { nzDuration: 0 }
-          );
+          if (error.status === 403) {
+            this.notificationService.blank(
+              "Ошибка авторизации",
+              "Вам необходимо пройти авторизацию заново",
+              { nzDuration: 0 }
+            );
+          }
         }
       );
   }
@@ -115,11 +119,22 @@ export class SearchPageComponent {
           this.isLoading = false;
         },
         (error: ErrorFromSpotifyModel) => {
-          this.notificationService.blank(
-            "Ошибка авторизации",
-            error.error.error.message,
-            { nzDuration: 0 }
-          );
+          if (error.status == 403) {
+            this.notificationService.blank(
+              "Ошибка авторизации",
+              "Вам необходимо пройти авторизацию заново",
+              { nzDuration: 0 }
+            );
+          } else if (
+            error.status === 400 &&
+            error.error.error.message === "No search query"
+          ) {
+            this.isLoading = false;
+            this.notificationService.blank(
+              "Ошибка во время поиска",
+              "Введите в поле поиска название песни и/или имя исполнителя"
+            );
+          }
         }
       );
   }
