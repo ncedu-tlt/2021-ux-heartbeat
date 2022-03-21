@@ -20,12 +20,12 @@ export class SearchPageComponent {
   public key!: string;
   public artists: ArtistByIdModel[] = [];
   public tracks: TrackById[] = [];
+  public changeTrackList!: NewSearchModel;
+  public trackContext = TrackLaunchContextEnum.SEARCH_TRACKS;
   public isDisabledShowMoreArtists = false;
   public isDisabledShowMoreTracks = false;
   public isLoading = true;
   public offset = 0;
-  public changeTrackList!: NewSearchModel;
-  public trackContext = TrackLaunchContextEnum.SEARCH_TRACKS;
   public die$ = new Subject<void>();
 
   constructor(
@@ -69,7 +69,7 @@ export class SearchPageComponent {
           this.isLoading = false;
         },
         (error: ErrorFromSpotifyModel) => {
-          if (error.status == 403) {
+          if (error.status == 401) {
             this.notificationService.blank(
               "Ошибка авторизации",
               "Вам необходимо пройти авторизацию заново",
@@ -97,7 +97,7 @@ export class SearchPageComponent {
           this.isLoading = false;
         },
         (error: ErrorFromSpotifyModel) => {
-          if (error.status === 403) {
+          if (error.status === 401) {
             this.notificationService.blank(
               "Ошибка авторизации",
               "Вам необходимо пройти авторизацию заново",
@@ -113,13 +113,26 @@ export class SearchPageComponent {
     this.api
       .searchForItem(this.key)
       .pipe(takeUntil(this.die$))
+      .subscribe(artistsSearchResult => {
+        this.artists = artistsSearchResult.artists.items;
+        this.isLoading = false;
+      });
+  }
+
+  getSearchResultByTracks(): void {
+    this.isLoading = true;
+    this.api
+      .searchForItem(this.key, 6)
+      .pipe(takeUntil(this.die$))
       .subscribe(
-        artistsSearchResult => {
-          this.artists = artistsSearchResult.artists.items;
+        tracksSearchResult => {
+          this.tracks = tracksSearchResult.tracks.items;
+          this.changeTrackList =
+            this.convert.convertTrackSearchModelToNewSearchModel(this.tracks);
           this.isLoading = false;
         },
         (error: ErrorFromSpotifyModel) => {
-          if (error.status == 403) {
+          if (error.status == 401) {
             this.notificationService.blank(
               "Ошибка авторизации",
               "Вам необходимо пройти авторизацию заново",
@@ -130,6 +143,8 @@ export class SearchPageComponent {
             error.error.error.message === "No search query"
           ) {
             this.isLoading = false;
+            this.isDisabledShowMoreTracks = true;
+            this.isDisabledShowMoreArtists = true;
             this.notificationService.blank(
               "Ошибка во время поиска",
               "Введите в поле поиска название песни и/или имя исполнителя"
@@ -137,19 +152,6 @@ export class SearchPageComponent {
           }
         }
       );
-  }
-
-  getSearchResultByTracks(): void {
-    this.isLoading = true;
-    this.api
-      .searchForItem(this.key, 6)
-      .pipe(takeUntil(this.die$))
-      .subscribe(tracksSearchResult => {
-        this.tracks = tracksSearchResult.tracks.items;
-        this.changeTrackList =
-          this.convert.convertTrackSearchModelToNewSearchModel(this.tracks);
-        this.isLoading = false;
-      });
   }
 
   ngOnDestroy(): void {
