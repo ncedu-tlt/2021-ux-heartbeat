@@ -12,6 +12,7 @@ import { TrackById } from "../../../models/new-api-models/track-by-id.model";
 import { NewAlbumTracksModel } from "../../../models/new-api-models/album-by-id.model";
 import { TrackLaunchContextEnum } from "../../../models/track-launch-context.enum";
 import { TopTracksModel } from "../../../models/new-api-models/top-tracks-artist-by-id.model";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 
 @Component({
   selector: "hb-track",
@@ -36,7 +37,10 @@ export class TrackComponent implements OnInit, OnDestroy {
 
   @Output() playTrack = new EventEmitter<void>();
 
-  constructor(public playerService: PlayerService) {}
+  constructor(
+    public playerService: PlayerService,
+    private notification: NzNotificationService
+  ) {}
 
   ngOnInit(): void {
     this.controlActiveTrack$ = combineLatest([
@@ -82,5 +86,12 @@ export class TrackComponent implements OnInit, OnDestroy {
       }
     }
     this.playerService.switchPlayerAction();
+  }
+
+  createBasicNotification(): void {
+    this.notification.blank(
+      "Воспроизведение не доступно",
+      "В данный момент времени невозможно прослушать эту аудиозапись."
+    );
   }
 }

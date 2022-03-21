@@ -1,9 +1,9 @@
 <div class="track" [ngStyle]="{'min-width': isCard ? '60px' : '280px'}">
   <div class="track-contain">
-    <div [ngStyle]="{'background-image': 'url(' + _track.album!.images[0].url + ')',
+    <div [ngStyle]="{'background-image': 'url(' + (_track.preview_url !== null ? _track.album!.images[0].url : '../../../assets/image/default-artist-image.png') + ')',
                       'margin': isCard ? '10px 8px' : '10px 20px'}"
          class="track-contain__img"
-         (click)="controlPlayerCurrentTrack()">
+         (click)="_track.preview_url !== null ? controlPlayerCurrentTrack() : createBasicNotification() ">
       <img src="{{isPlay ? 'assets/svg/pause-track.svg' : 'assets/svg/play-track.svg'}}" alt="album">
     </div>
     <div class="track-contain-info" *ngIf="!isCard">
