@@ -66,10 +66,20 @@
       </div>
     </div>
     <div class="player__extra-control" *ngIf="!isMobile">
-      <button class="player__volume">
+      <button class="player__volume" *ngIf="playerService.player.volume"
+              (click)="playerService.controlMusicVolume()">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/volume.svg"
+          width="15px"
+          height="15px"
+        ></object>
+      </button>
+      <button class="player__volume" *ngIf="!playerService.player.volume"
+              (click)="playerService.controlMusicVolume()">
+        <object
+          type="image/svg+xml"
+          data="../../../assets/svg/no-volume.svg"
           width="15px"
           height="15px"
         ></object>

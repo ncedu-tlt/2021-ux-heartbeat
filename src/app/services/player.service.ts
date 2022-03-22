@@ -20,7 +20,7 @@ import {
 import { TrackById } from "../models/new-api-models/track-by-id.model";
 import { TrackLaunchContextEnum } from "../models/track-launch-context.enum";
 import { NewSearchModel } from "../models/new-api-models/search.model";
-import { repeatGeneratorUtils } from "../utils/repeat-generator.utils";
+import { statesGeneratorUtils } from "../utils/states-generator.utils";
 
 type trackList =
   | ItemsTrackModel
@@ -48,17 +48,20 @@ export class PlayerService {
   >(null);
   public currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<trackList | null>(null);
-  public savedTrackList!: trackList;
   public shuffleTrackList!: trackList;
   public trackContext$ = new BehaviorSubject<
     string | TrackLaunchContextEnum | null | undefined
   >(null);
 
+  public savedTrackList!: trackList;
+  public savedVolume = 100;
+
   public isPlay$ = new BehaviorSubject<boolean>(false);
   public isRepeat = 0;
   public isShuffle = false;
+  public isVolume = true;
 
-  public repeatGen: Generator<number> = repeatGeneratorUtils()();
+  public repeatGen: Generator<number> = statesGeneratorUtils(3)();
 
   constructor() {
     document.addEventListener("click", this.resumeContext);
@@ -151,6 +154,7 @@ export class PlayerService {
     this.player.volume =
       event.offsetX / (event.target as HTMLElement).offsetWidth;
     this.musicVolume$.next(this.player.volume * 100);
+    this.isVolume = !!this.player.volume;
   }
 
   checkMusicEnd(): void {
@@ -238,6 +242,18 @@ export class PlayerService {
       this.trackList$.next(this.shuffleTrackList);
     } else {
       this.trackList$.next(this.savedTrackList);
+    }
+  }
+
+  controlMusicVolume() {
+    this.isVolume = !this.isVolume;
+    if (!this.isVolume) {
+      this.savedVolume = this.player.volume;
+      this.player.volume = 0;
+      this.musicVolume$.next(this.player.volume);
+    } else {
+      this.player.volume = this.savedVolume;
+      this.musicVolume$.next(this.player.volume * 100);
     }
   }
 }
