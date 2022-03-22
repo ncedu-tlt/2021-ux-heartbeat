@@ -39,7 +39,7 @@ export class TrackComponent implements OnInit, OnDestroy {
 
   constructor(
     public playerService: PlayerService,
-    private notification: NzNotificationService
+    public notification: NzNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -88,7 +88,7 @@ export class TrackComponent implements OnInit, OnDestroy {
     this.playerService.switchPlayerAction();
   }
 
-  createBasicNotification(): void {
+  notificationCall(): void {
     this.notification.blank(
       "Воспроизведение не доступно",
       "В данный момент времени невозможно прослушать эту аудиозапись."

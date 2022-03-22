@@ -5,7 +5,7 @@
   <div>
     <h2 class="title">Исполнители</h2>
     <div class="card">
-      <div class="search-page" *ngFor="let artist of artists">
+      <div *ngFor="let artist of artists">
         <hb-artist-card [artistInfo]="artist"></hb-artist-card>
       </div>
     </div>
@@ -17,9 +17,4 @@
     <button class="addItem" (click)="showMoreTracks()" *ngIf="!isDisabledShowMoreTracks">ЕЩЕ</button>
   </div>
 </div>
-
-
-  <hb-loader *ngIf="isLoading"></hb-loader>
-
-
-
+<hb-loader *ngIf="isLoading"></hb-loader>
