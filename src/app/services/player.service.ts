@@ -224,19 +224,14 @@ export class PlayerService {
   }
 
   switchTrack(action: SwitchPlayerActionEnum): void {
-    let trackNumber: number =
-      action === SwitchPlayerActionEnum.SWITCH_NEXT
-        ? this.currentTrackNumber + 1
-        : this.currentTrackNumber - 1;
-
-    let newTrack = this.checkTrackExistence(trackNumber);
-    while (newTrack && !newTrack?.preview_url) {
+    let trackNumber, newTrack;
+    do {
       trackNumber =
         action === SwitchPlayerActionEnum.SWITCH_NEXT
           ? this.currentTrackNumber + 1
           : this.currentTrackNumber - 1;
       newTrack = this.checkTrackExistence(trackNumber);
-    }
+    } while (newTrack && !newTrack?.preview_url);
     if (newTrack) {
       this.currentTrackInfo$.next(newTrack);
       this.switchPlayerAction();
