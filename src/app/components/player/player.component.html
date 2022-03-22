@@ -90,10 +90,18 @@
                    class="player__volume-bar"
                    (click)="playerService.changeMusicVolume($event)">
       </nz-progress>
-      <button class="player__mixing" (click)="playerService.mixCurrentTrackList()">
+      <button class="player__mixing" *ngIf="!(playerService.isShuffle | async)" (click)="playerService.isShuffle.next(true)">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/mixing.svg"
+          width="15px"
+          height="15px"
+        ></object>
+      </button>
+      <button class="player__mixing" *ngIf="playerService.isShuffle | async" (click)="playerService.isShuffle.next(false)">
+        <object
+          type="image/svg+xml"
+          data="../../../assets/svg/mixing-active.svg"
           width="15px"
           height="15px"
         ></object>

@@ -28,6 +28,8 @@ type trackList =
   | NewSearchModel
   | NewTopArtistTracks;
 
+type track = TrackById | NewAlbumTracksModel | TopTracksModel;
+
 @Injectable({
   providedIn: "root"
 })
@@ -42,10 +44,9 @@ export class PlayerService {
   public musicVolume$ = new BehaviorSubject<number>(100);
   public musicCurrentTime$ = new BehaviorSubject<number>(0);
   private stop$: Subject<void> = new Subject();
+  private die$: Subject<void> = new Subject();
 
-  public currentTrackInfo$ = new BehaviorSubject<
-    TrackById | NewAlbumTracksModel | TopTracksModel | null
-  >(null);
+  public currentTrackInfo$ = new BehaviorSubject<track | null>(null);
   public currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<trackList | null>(null);
   public shuffleTrackList!: trackList;
@@ -53,13 +54,11 @@ export class PlayerService {
     string | TrackLaunchContextEnum | null | undefined
   >(null);
 
-  public savedTrackList!: trackList;
-  public savedVolume = 100;
-
   public isPlay$ = new BehaviorSubject<boolean>(false);
   public isRepeat = 0;
-  public isShuffle = false;
+  public isShuffle = new BehaviorSubject<boolean>(false);
   public isVolume = true;
+  public savedVolume = 100;
 
   public repeatGen: Generator<number> = statesGeneratorUtils(3)();
 
@@ -77,21 +76,33 @@ export class PlayerService {
       this.player = new Audio();
       this.context = new AudioContext();
       const analyser = this.context.createAnalyser();
-      this.currentTrackInfo$.subscribe(track => {
+      this.currentTrackInfo$.pipe(takeUntil(this.die$)).subscribe(track => {
         if (track !== null) {
           this.player.src = track.preview_url;
         } else {
           this.player.src = " ";
         }
       });
-      this.trackList$.subscribe((trackList: trackList | null) => {
-        if (trackList) {
-          this.currentTrackNumber = trackList.items.findIndex(el => {
-            return el.track.id === this.currentTrackInfo$.getValue()?.id;
-          });
-          this.savedTrackList = this.shuffleTrackList = JSON.parse(
-            JSON.stringify(trackList)
-          ) as trackList;
+      this.trackList$
+        .pipe(takeUntil(this.die$))
+        .subscribe((trackList: trackList | null) => {
+          if (trackList) {
+            this.currentTrackNumber = trackList.items.findIndex(el => {
+              return el.track.id === this.currentTrackInfo$.getValue()?.id;
+            });
+            this.shuffleTrackList = JSON.parse(
+              JSON.stringify(trackList)
+            ) as trackList;
+            if (this.isShuffle.getValue()) {
+              this.mixCurrentTrackList();
+            }
+          }
+        });
+      this.isShuffle.pipe(takeUntil(this.die$)).subscribe(isShuffle => {
+        if (isShuffle) {
+          if (this.trackList$.getValue()) {
+            this.mixCurrentTrackList();
+          }
         }
       });
       this.player.crossOrigin = "anonymous";
@@ -169,7 +180,7 @@ export class PlayerService {
     }
   }
 
-  checkRepeat() {
+  checkRepeat(): void {
     if (!this.isRepeat) {
       if (this.player.currentTime === this.player.duration) {
         this.player.pause();
@@ -191,19 +202,25 @@ export class PlayerService {
     }
   }
 
-  putOnRepeat() {
+  putOnRepeat(): void {
     this.isRepeat = this.repeatGen.next().value as number;
     this.player.loop = this.isRepeat === 2;
   }
 
   closeAudioContext(): void {
     this.context.close();
+    this.stop$.next();
+    this.die$.next();
   }
 
   checkTrackExistence(
     index: number
   ): TrackById | NewAlbumTracksModel | null | undefined {
-    return this.trackList$.getValue()?.items[index]?.track;
+    if (this.isShuffle.getValue()) {
+      return this.shuffleTrackList.items[index]?.track;
+    } else {
+      return this.trackList$.getValue()?.items[index]?.track;
+    }
   }
 
   switchTrack(action: SwitchPlayerActionEnum): void {
@@ -229,23 +246,25 @@ export class PlayerService {
     }
   }
 
-  mixCurrentTrackList() {
-    this.isShuffle = !this.isShuffle;
-    if (this.isShuffle && this.savedTrackList) {
-      for (let i = this.shuffleTrackList.items.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [this.shuffleTrackList.items[i], this.shuffleTrackList.items[j]] = [
-          this.shuffleTrackList.items[j],
-          this.shuffleTrackList.items[i]
-        ];
-      }
-      this.trackList$.next(this.shuffleTrackList);
-    } else {
-      this.trackList$.next(this.savedTrackList);
+  mixCurrentTrackList(): void {
+    [
+      this.shuffleTrackList.items[this.currentTrackNumber].track,
+      this.shuffleTrackList.items[0].track
+    ] = [
+      this.shuffleTrackList.items[0].track,
+      this.currentTrackInfo$.getValue() as track
+    ];
+    this.currentTrackNumber = 0;
+    for (let i = this.shuffleTrackList.items.length - 1; i > 1; i--) {
+      const j = Math.floor(Math.random() * i) + 1;
+      [this.shuffleTrackList.items[i], this.shuffleTrackList.items[j]] = [
+        this.shuffleTrackList.items[j],
+        this.shuffleTrackList.items[i]
+      ];
     }
   }
 
-  controlMusicVolume() {
+  controlMusicVolume(): void {
     this.isVolume = !this.isVolume;
     if (!this.isVolume) {
       this.savedVolume = this.player.volume;
