@@ -80,7 +80,7 @@
                    class="player__volume-bar"
                    (click)="playerService.changeMusicVolume($event)">
       </nz-progress>
-      <button class="player__mixing">
+      <button class="player__mixing" (click)="playerService.mixCurrentTrackList()">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/mixing.svg"

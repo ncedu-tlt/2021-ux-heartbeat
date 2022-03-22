@@ -22,6 +22,12 @@ import { TrackLaunchContextEnum } from "../models/track-launch-context.enum";
 import { NewSearchModel } from "../models/new-api-models/search.model";
 import { repeatGeneratorUtils } from "../utils/repeat-generator.utils";
 
+type trackList =
+  | ItemsTrackModel
+  | AlbumTracksModel
+  | NewSearchModel
+  | NewTopArtistTracks;
+
 @Injectable({
   providedIn: "root"
 })
@@ -41,19 +47,17 @@ export class PlayerService {
     TrackById | NewAlbumTracksModel | TopTracksModel | null
   >(null);
   public currentTrackNumber!: number;
-  public trackList$ = new BehaviorSubject<
-    | ItemsTrackModel
-    | AlbumTracksModel
-    | NewSearchModel
-    | NewTopArtistTracks
-    | null
-  >(null);
+  public trackList$ = new BehaviorSubject<trackList | null>(null);
+  public savedTrackList!: trackList;
+  public shuffleTrackList!: trackList;
   public trackContext$ = new BehaviorSubject<
     string | TrackLaunchContextEnum | null | undefined
   >(null);
 
   public isPlay$ = new BehaviorSubject<boolean>(false);
   public isRepeat = 0;
+  public isShuffle = false;
+
   public repeatGen: Generator<number> = repeatGeneratorUtils()();
 
   constructor() {
@@ -77,15 +81,16 @@ export class PlayerService {
           this.player.src = " ";
         }
       });
-      this.trackList$.subscribe(
-        (trackList: ItemsTrackModel | AlbumTracksModel | null) => {
-          if (trackList) {
-            this.currentTrackNumber = trackList.items.findIndex(el => {
-              return el.track.id === this.currentTrackInfo$.getValue()?.id;
-            });
-          }
+      this.trackList$.subscribe((trackList: trackList | null) => {
+        if (trackList) {
+          this.currentTrackNumber = trackList.items.findIndex(el => {
+            return el.track.id === this.currentTrackInfo$.getValue()?.id;
+          });
+          this.savedTrackList = this.shuffleTrackList = JSON.parse(
+            JSON.stringify(trackList)
+          ) as trackList;
         }
-      );
+      });
       this.player.crossOrigin = "anonymous";
       const source = this.context.createMediaElementSource(this.player);
       source.connect(analyser);
@@ -217,6 +222,22 @@ export class PlayerService {
       this.currentTrackNumber = trackNumber;
     } else {
       this.checkRepeat();
+    }
+  }
+
+  mixCurrentTrackList() {
+    this.isShuffle = !this.isShuffle;
+    if (this.isShuffle && this.savedTrackList) {
+      for (let i = this.shuffleTrackList.items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [this.shuffleTrackList.items[i], this.shuffleTrackList.items[j]] = [
+          this.shuffleTrackList.items[j],
+          this.shuffleTrackList.items[i]
+        ];
+      }
+      this.trackList$.next(this.shuffleTrackList);
+    } else {
+      this.trackList$.next(this.savedTrackList);
     }
   }
 }
