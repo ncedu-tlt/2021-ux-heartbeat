@@ -73,8 +73,15 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       item => item.nativeElement.id == this.oldSelected
     );
 
-    oldPlaylist?.nativeElement.classList.toggle("active");
-    currentPlaylist?.nativeElement.classList.toggle("active");
+    if (!currentPlaylist) {
+      return;
+    }
+    currentPlaylist.nativeElement.classList.toggle("active");
+
+    if (!oldPlaylist) {
+      return;
+    }
+    oldPlaylist.nativeElement.classList.toggle("active");
   }
 
   ngOnInit(): void {

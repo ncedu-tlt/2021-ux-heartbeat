@@ -82,8 +82,15 @@ export class AlbumsPageComponent implements OnInit, OnDestroy {
       item => item.nativeElement.id == this.oldSelected
     );
 
-    oldAlbum?.nativeElement.classList.toggle("active");
-    currentAlbum?.nativeElement.classList.toggle("active");
+    if (!currentAlbum) {
+      return;
+    }
+    currentAlbum.nativeElement.classList.toggle("active");
+
+    if (!oldAlbum) {
+      return;
+    }
+    oldAlbum.nativeElement.classList.toggle("active");
   }
 
   ngOnInit() {
