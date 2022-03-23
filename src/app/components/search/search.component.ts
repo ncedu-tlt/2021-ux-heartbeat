@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
+import { SearchStateService } from "../../services/search-state.service";
 
 @Component({
   selector: "hb-search",
@@ -9,10 +10,14 @@ import { Router } from "@angular/router";
 export class SearchComponent {
   public search = "";
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private searchStateService: SearchStateService
+  ) {}
 
   searchBtnClicked() {
     this.search = this.search.trim();
+    this.searchStateService.setSearchState(this.search);
     this.router.navigateByUrl(`/search?keyword=${this.search}`);
   }
 }
