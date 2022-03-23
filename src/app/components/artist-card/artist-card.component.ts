@@ -1,9 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model";
-import {
-  NewTopArtistTracks,
-  TopTracksModel
-} from "../../models/new-api-models/top-tracks-artist-by-id.model";
+import { NewTopArtistTracks } from "../../models/new-api-models/top-tracks-artist-by-id.model";
 import { ApiService } from "../../services/api.service";
 import { Subscription } from "rxjs";
 import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
@@ -20,7 +17,6 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
   public artistInfo!: ArtistByIdModel;
   public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
   public isCard = true;
-  public topTracks: TopTracksModel[] = [];
   public changeTopTracks!: NewTopArtistTracks;
   public topTracksSearch$ = new Subscription();
 
@@ -38,10 +34,9 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
     this.topTracksSearch$ = this.api
       .getArtistsTopTracks(this.artistInfo.id)
       .subscribe(topTracks => {
-        this.topTracks = topTracks.tracks.slice(0, 4);
         this.changeTopTracks =
           this.convert.convertTopArtistTracksToNewTopArtistTracks(
-            this.topTracks
+            topTracks.tracks.slice(0, 4)
           );
       });
   }

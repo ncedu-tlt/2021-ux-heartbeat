@@ -6,6 +6,7 @@ import { Observable, Subject } from "rxjs";
 })
 export class SearchStateService {
   public searchState$: Subject<string> = new Subject();
+
   public getSearchState(): Observable<string> {
     return this.searchState$.asObservable();
   }

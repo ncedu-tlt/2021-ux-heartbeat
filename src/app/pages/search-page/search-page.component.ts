@@ -1,9 +1,8 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model";
-import { Subject, takeUntil } from "rxjs";
+import { catchError, Subject, takeUntil, throwError } from "rxjs";
 import { ApiService } from "../../services/api.service";
-import { TrackById } from "../../models/new-api-models/track-by-id.model";
 import { SearchStateService } from "../../services/search-state.service";
 import { ConverterService } from "../../services/converter.service";
 import { NewSearchModel } from "../../models/new-api-models/search.model";
@@ -19,7 +18,6 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 export class SearchPageComponent {
   public key!: string;
   public artists: ArtistByIdModel[] = [];
-  public tracks: TrackById[] = [];
   public changeTrackList!: NewSearchModel;
   public trackContext = TrackLaunchContextEnum.SEARCH_TRACKS;
   public isDisabledShowMoreArtists = false;
@@ -59,44 +57,8 @@ export class SearchPageComponent {
     this.offset += 2;
     this.api
       .searchForItem(this.key, 2, this.offset)
-      .pipe(takeUntil(this.die$))
-      .subscribe(
-        itemsToArtists => {
-          this.artists.push(...itemsToArtists.artists.items);
-          if (itemsToArtists.artists.items.length < 2) {
-            this.isDisabledShowMoreArtists = true;
-          }
-          this.isLoading = false;
-        },
-        (error: ErrorFromSpotifyModel) => {
-          if (error.status == 401) {
-            this.notificationService.blank(
-              "Ошибка авторизации",
-              "Вам необходимо пройти авторизацию заново",
-              { nzDuration: 0 }
-            );
-          }
-        }
-      );
-  }
-
-  showMoreTracks(): any {
-    this.isLoading = true;
-    this.offset += 6;
-    this.api
-      .searchForItem(this.key, 6, this.offset)
-      .pipe(takeUntil(this.die$))
-      .subscribe(
-        itemsToTracks => {
-          this.tracks.push(...itemsToTracks.tracks.items);
-          if (itemsToTracks.tracks.items.length < 6) {
-            this.isDisabledShowMoreTracks = true;
-          }
-          this.changeTrackList =
-            this.convert.convertTrackSearchModelToNewSearchModel(this.tracks);
-          this.isLoading = false;
-        },
-        (error: ErrorFromSpotifyModel) => {
+      .pipe(
+        catchError((error: ErrorFromSpotifyModel) => {
           if (error.status === 401) {
             this.notificationService.blank(
               "Ошибка авторизации",
@@ -104,8 +66,48 @@ export class SearchPageComponent {
               { nzDuration: 0 }
             );
           }
+          return throwError(() => new Error(error.error.error.message));
+        }),
+        takeUntil(this.die$)
+      )
+      .subscribe(itemsToArtists => {
+        this.artists.push(...itemsToArtists.artists.items);
+        if (itemsToArtists.artists.items.length < 2) {
+          this.isDisabledShowMoreArtists = true;
         }
-      );
+        this.isLoading = false;
+      });
+  }
+
+  showMoreTracks(): any {
+    this.isLoading = true;
+    this.offset += 6;
+    this.api
+      .searchForItem(this.key, 6, this.offset)
+      .pipe(
+        catchError((error: ErrorFromSpotifyModel) => {
+          if (error.status === 401) {
+            this.notificationService.blank(
+              "Ошибка авторизации",
+              "Вам необходимо пройти авторизацию заново",
+              { nzDuration: 0 }
+            );
+          }
+          return throwError(() => new Error(error.error.error.message));
+        }),
+        takeUntil(this.die$)
+      )
+      .subscribe(itemsToTracks => {
+        const itemsForConvert =
+          this.convert.convertTrackSearchModelToNewSearchModel(
+            itemsToTracks.tracks.items
+          );
+        this.changeTrackList.items.push(...itemsForConvert.items);
+        if (itemsForConvert.items.length < 6) {
+          this.isDisabledShowMoreTracks = true;
+        }
+        this.isLoading = false;
+      });
   }
 
   getSearchResultByArtists(): void {
@@ -123,22 +125,16 @@ export class SearchPageComponent {
     this.isLoading = true;
     this.api
       .searchForItem(this.key, 6)
-      .pipe(takeUntil(this.die$))
-      .subscribe(
-        tracksSearchResult => {
-          this.tracks = tracksSearchResult.tracks.items;
-          this.changeTrackList =
-            this.convert.convertTrackSearchModelToNewSearchModel(this.tracks);
-          this.isLoading = false;
-        },
-        (error: ErrorFromSpotifyModel) => {
-          if (error.status == 401) {
+      .pipe(
+        catchError((error: ErrorFromSpotifyModel) => {
+          if (error.status === 401) {
             this.notificationService.blank(
               "Ошибка авторизации",
               "Вам необходимо пройти авторизацию заново",
               { nzDuration: 0 }
             );
-          } else if (
+          }
+          if (
             error.status === 400 &&
             error.error.error.message === "No search query"
           ) {
@@ -150,8 +146,17 @@ export class SearchPageComponent {
               "Введите в поле поиска название песни и/или имя исполнителя"
             );
           }
-        }
-      );
+          return throwError(() => new Error(error.error.error.message));
+        }),
+        takeUntil(this.die$)
+      )
+      .subscribe(tracksSearchResult => {
+        this.changeTrackList =
+          this.convert.convertTrackSearchModelToNewSearchModel(
+            tracksSearchResult.tracks.items
+          );
+        this.isLoading = false;
+      });
   }
 
   ngOnDestroy(): void {
