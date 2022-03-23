@@ -52,6 +52,7 @@ import { GenreCardComponent } from "./components/genre-card/genre-card.component
 import { PlaylistCardComponent } from "./components/playlist-card/playlist-card.component";
 import { NzEmptyModule } from "ng-zorro-antd/empty";
 import { RecomendationCardComponent } from "src/app/components/recomendation-card/recomendation-card.component";
+import { NzResultModule } from "ng-zorro-antd/result";
 
 registerLocaleData(ru);
 
@@ -104,7 +105,8 @@ registerLocaleData(ru);
     NzDrawerModule,
     NzButtonModule,
     NzDropDownModule,
-    NzEmptyModule
+    NzEmptyModule,
+    NzResultModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },

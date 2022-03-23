@@ -24,6 +24,10 @@ export class TrackListComponent {
   constructor(private playerService: PlayerService) {}
 
   setListTrackIntoPlayer(): void {
-    this.playerService.trackList$.next(this.trackList);
+    if (this.trackContext === TrackLaunchContextEnum.SEARCH_TRACKS) {
+      this.playerService.trackList$.next(null);
+    } else {
+      this.playerService.trackList$.next(this.trackList);
+    }
   }
 }

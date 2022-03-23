@@ -413,10 +413,14 @@ export class ApiService {
     });
   }
 
-  searchForItem(keyword: string): Observable<SearchModel> {
+  searchForItem(
+    keyword: string,
+    limit = 2,
+    offset = 0
+  ): Observable<SearchModel> {
     return this.http.get<SearchModel>("https://api.spotify.com/v1/search", {
       headers: this.headers,
-      params: { q: keyword, type: "artist,track" }
+      params: { q: keyword, type: "artist,track", limit, offset }
     });
   }
 }
