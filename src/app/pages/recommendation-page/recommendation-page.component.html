@@ -1,5 +1,5 @@
 <hb-loader class="loader" *ngIf="isLoading"></hb-loader>
-<div class="container" *ngIf="recomendations.length && !isLoading">
+<div class="recomendation-container" *ngIf="recomendations.length && !isLoading">
     <div *ngFor="let recomendation of recomendations">
         <hb-recomendation-card [recomendation]="recomendation"></hb-recomendation-card>
     </div>

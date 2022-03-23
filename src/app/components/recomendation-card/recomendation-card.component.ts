@@ -2,7 +2,9 @@ import { Component, Input, ViewEncapsulation } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ItemUserPlaylistModel } from "src/app/models/new-api-models/current-users-playlist.model";
 import { PlaylistTrackModel } from "src/app/models/new-api-models/top-tracks-artist-by-id.model";
+import { TrackLaunchContextEnum } from "src/app/models/track-launch-context.enum";
 import { ApiService } from "src/app/services/api.service";
+import { PlayerService } from "src/app/services/player.service";
 
 @Component({
   selector: "hb-recomendation-card",
@@ -11,14 +13,19 @@ import { ApiService } from "src/app/services/api.service";
   encapsulation: ViewEncapsulation.None
 })
 export class RecomendationCardComponent {
-  @Input() public recomendation!: ItemUserPlaylistModel;
   public trackInfo!: PlaylistTrackModel[];
+  public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
   public isCard = true;
   public trackTime = 30;
   public isLoading = true;
   public info$ = new Subscription();
 
-  constructor(public apiService: ApiService) {}
+  @Input() public recomendation!: ItemUserPlaylistModel;
+
+  constructor(
+    public apiService: ApiService,
+    private playerService: PlayerService
+  ) {}
 
   ngOnInit(): void {
     this.info$ = this.apiService
@@ -27,6 +34,10 @@ export class RecomendationCardComponent {
         this.trackInfo = topTracks.items.slice(0, 4);
         this.isLoading = false;
       });
+  }
+
+  setListTrackIntoPlayer(): void {
+    this.playerService.trackList$.next(null);
   }
 
   ngOnDestroy(): void {

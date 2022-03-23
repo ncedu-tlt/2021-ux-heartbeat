@@ -1,31 +1,30 @@
 @import '../../../assets/styles/colors.less';
 
-.container {
+.card-container {
     margin-top: 24px;
     display: flex;
     align-items: center;
     flex-direction: column;
     flex-wrap: wrap;
-        justify-content: space-between;
-}
-
-.card {
-    margin-right: 20px;
-    margin-bottom: 30px;
-    width: 270px;
-    height: 240px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    border-radius: 10px;
-    border: 1px solid @black;
-    cursor: pointer;
-    &__name {
-        text-decoration: none;
-        text-align: center;
-        color: @white;
-        margin: 0;
-        text-transform: uppercase;
-        font-size: 28px;
+    justify-content: space-between;
+    .card {
+        margin-right: 20px;
+        margin-bottom: 30px;
+        width: 270px;
+        height: 240px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        border-radius: 10px;
+        border: 1px solid @black;
+        cursor: pointer;
+        &__name {
+            text-decoration: none;
+            text-align: center;
+            color: @white;
+            margin: 0;
+            text-transform: uppercase;
+            font-size: 28px;
+        }
     }
 }

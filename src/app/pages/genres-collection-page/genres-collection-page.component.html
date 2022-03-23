@@ -1,5 +1,5 @@
 <hb-loader class="loader" *ngIf="isLoading"></hb-loader>
-<div class="container" *ngIf="genres.length && !isLoading">
+<div class="genres-container" *ngIf="genres.length && !isLoading">
     <div class="genres" *ngFor = "let genre of genres">
         <hb-genre-card [genre]="genre"></hb-genre-card>
     </div>
