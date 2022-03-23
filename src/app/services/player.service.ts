@@ -175,7 +175,7 @@ export class PlayerService {
   checkTrackExistence(
     index: number
   ): TrackById | NewAlbumTracksModel | null | undefined {
-    return this.trackList$.getValue()?.items[index].track;
+    return this.trackList$.getValue()?.items[index]?.track;
   }
 
   switchTrack(action: SwitchPlayerActionEnum): void {
