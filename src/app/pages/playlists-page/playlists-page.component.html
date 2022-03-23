@@ -2,7 +2,7 @@
   <hb-loader *ngIf="isLoading"></hb-loader>
   <div *ngIf="playlists.length && !isLoading" class="playlists">
     <div class="playlist__list">
-      <div *ngFor="let playlist of playlists" id="{{playlist.id}}" (click)="openPlaylist(playlist.id, playlist.images[0].url, playlist.owner.display_name, playlist.name)" class="playlist">
+      <div *ngFor="let playlist of playlists" #playlist id="{{playlist.id}}" (click)="openPlaylist(playlist)" class="playlist">
         <div class="playlist__image" [ngStyle]="{'background-image': 'url(' + playlist.images[0].url + ')'}"></div>
         <div class="playlist__info">
           <p class="playlist__name">{{playlist.name}}</p>
@@ -15,14 +15,14 @@
       <div class="playlists-tracks__playlist">
         <div class="playlist-tracks__avatar">
           <img src="/assets/image/vinyl-record.png" alt="vinyl icon" class="playlist-tracks__vinyl"/>
-          <div class="playlist-tracks__image" [ngStyle]="{'background-image': 'url(' + playlistImg + ')'}"></div>
+          <div class="playlist-tracks__image" [ngStyle]="{'background-image': 'url(' + this.playlist.images[0].url + ')'}"></div>
         </div>
         <div class="playlist-tracks__info">
-          <p class="playlist-tracks__name">{{playlistName}}</p>
-          <p class="playlist-tracks__author">{{playlistAuthor}}</p>
+          <p class="playlist-tracks__name">{{this.playlist.name}}</p>
+          <p class="playlist-tracks__author">{{this.playlist.owner.display_name}}</p>
         </div>
       </div>
-      <hb-track-list [trackContext]="playlistId" [trackList]="tracks" class="tracklist"></hb-track-list>
+      <hb-track-list [trackContext]="this.playlist.id" [trackList]="tracks" class="tracklist"></hb-track-list>
     </div>
     <div *ngIf="!isOpen" class="playlist__waiting">
       <img class="playlist-waiting__img" src="assets/image/vinyl-record.png" alt="vinyl icon"/>

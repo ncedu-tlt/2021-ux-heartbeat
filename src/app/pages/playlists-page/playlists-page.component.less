@@ -1,12 +1,14 @@
+@playlist-background: #C4C4C430;
+
 :host {
   font-family: 'Roboto', sans-serif;
   width: 1546px;
 
-  @media screen and ( min-width: 1280px ) and ( max-width: 1545px ) {
+  @media screen and (min-width: 1280px) and (max-width: 1545px) {
     width: 1280px;
   }
 
-  @media screen and ( min-width: 920px ) and ( max-width: 1279.99px) {
+  @media screen and (min-width: 920px) and (max-width: 1279.99px) {
     width: 920px;
   }
 
@@ -20,11 +22,11 @@
       grid-template-columns: 764px 3px 680px;
       grid-template-rows: auto auto auto;
 
-      @media screen and ( min-width: 1280px ) and (max-width: 1545px) {
+      @media screen and (min-width: 1280px) and (max-width: 1545px) {
         grid-template-columns: 462px 3px 394px;
       }
 
-      @media screen and (min-width: 920px) and ( max-width: 1279.99px ) {
+      @media screen and (min-width: 920px) and (max-width: 1279.99px) {
         grid-template-columns: 323px 3px 361px;
       }
 
@@ -38,7 +40,7 @@
 
       .playlist__list {
         .active {
-          background-color: #C4C4C430;
+          background-color: @playlist-background;
         }
 
         .playlist {
@@ -49,7 +51,7 @@
           border-radius: 5px;
 
           &:hover{
-            background-color: #C4C4C430;
+            background-color: @playlist-background;
           }
 
           .playlist__info {
@@ -59,7 +61,7 @@
               margin: 0;
               font-size: 24px;
 
-              @media screen and ( min-width: 920px ) and ( max-width: 1279.99px ) {
+              @media screen and (min-width: 920px) and (max-width: 1279.99px) {
                 font-size: 17px;
               }
             }
@@ -130,13 +132,13 @@
         align-items: center;
         align-content: center;
 
-        @media screen and( min-width:920px ) and (max-width: 1279.99px) {
+        @media screen and (min-width:920px) and (max-width: 1279.99px) {
           right: 7%;
         }
         .playlist-waiting__img {
           width: 450px;
 
-          @media screen and ( min-width: 920px ) and ( max-width: 1279.99px) {
+          @media screen and (min-width: 920px) and (max-width: 1279.99px) {
             width: 320px
           }
         }
@@ -145,7 +147,7 @@
           margin-top: 35px;
           font-size: 24px;
 
-          @media screen and ( min-width:920px) and ( max-width: 1279.99px) {
+          @media screen and (min-width:920px) and (max-width: 1279.99px) {
             font-size: 16px;
           }
         }

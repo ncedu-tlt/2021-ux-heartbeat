@@ -3,14 +3,14 @@ export interface AlbumsByIdsModel {
 }
 
 export interface ItemsAlbumModel {
-  items: ItemsAlbumsContain[];
+  items: AlbumItemModel[];
 }
 
-export interface ItemsAlbumsContain {
-  album: ItemsAlbumContain;
+export interface AlbumItemModel {
+  album: AlbumModel;
 }
 
-export interface ItemsAlbumContain {
+export interface AlbumModel {
   artists: CommonInfoAboutArtist[];
   genres: string[];
   id: string;

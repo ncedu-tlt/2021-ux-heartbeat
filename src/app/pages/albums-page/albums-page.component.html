@@ -2,7 +2,7 @@
   <hb-loader *ngIf="isLoading"></hb-loader>
   <div *ngIf="albums.length && !isLoading" class="albums">
     <div class="albums-list">
-      <div *ngFor="let album of albums" id="{{album.album.id}}" (click)="openAlbum(album.album.id, album.album.images, album.album.name, album.album.artists[0].name)" class="album">
+      <div *ngFor="let album of albums" #album id="{{album.album.id}}" (click)="openAlbum(album)" class="album">
         <div class="album__image" [ngStyle]="{'background-image': 'url(' + album.album.images[0].url + ')'}"></div>
         <div class="album-info">
           <div class="album__name">{{album.album.name}}</div>
@@ -15,14 +15,16 @@
       <div class="selected-album__album">
         <div class="selected-album__album-photo">
           <img class="selected-album__vinyl" src="assets/image/vinyl-record.png" alt="vinyl icon"/>
-          <div class="selected-album__img" [ngStyle]="{'width': '150px','height': '150px','border-radius': '5px','background-image': 'url(' + albumImage[0].url + ')', 'background-position': 'center', 'background-size': 'cover'}"></div>
+          <div class="selected-album__img" [ngStyle]="{'background-image': 'url(' + album.album.images[0].url + ')'}"></div>
         </div>
         <div class="selected-album__album-info">
-          <p class="selected-album__name">{{albumName}}</p>
-          <p class="selected-album__author">{{albumArtists}}</p>
+          <p class="selected-album__name">{{album.album.name}}</p>
+          <div class="selected-album__artists">
+            <p *ngFor="let artist of album.album.artists" class="selected-album__artist">● {{artist.name}}</p>
+          </div>
         </div>
       </div>
-      <hb-track-list [trackContext]="albumId" [trackList]="tracks"></hb-track-list>
+      <hb-track-list [trackContext]="album.album.id" [trackList]="tracks"></hb-track-list>
     </div>
     <div *ngIf="!isOpen" class="albums-waiting">
       <img class="albums-waiting__img" src="assets/image/vinyl-record.png" alt="vinyl icon"/>

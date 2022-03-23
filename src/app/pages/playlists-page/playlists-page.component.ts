@@ -1,4 +1,11 @@
-import { Component } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChildren
+} from "@angular/core";
 import { ItemsTrackModel } from "../../models/new-api-models/top-tracks-artist-by-id.model";
 import {
   CurrentUsersPlaylistModel,
@@ -13,17 +20,19 @@ import { ApiService } from "../../services/api.service";
   templateUrl: "./playlists-page.component.html",
   styleUrls: ["./playlists-page.component.less"]
 })
-export class PlaylistsPageComponent {
+export class PlaylistsPageComponent implements OnInit, OnDestroy {
   public playlists: ItemUserPlaylistModel[] = [];
+  public playlist!: ItemUserPlaylistModel;
   public tracks!: ItemsTrackModel;
   public isLoading = true;
   public isOpen = false;
-  public playlistId!: string;
-  public playlistImg!: string;
-  public playlistAuthor!: string;
-  public playlistName!: string;
-  public isActive = false;
   private die$ = new Subject<void>();
+
+  @ViewChildren("playlist")
+  private children!: QueryList<ElementRef<HTMLDivElement>>;
+
+  private oldSelected = "";
+  private selectedId = "";
 
   constructor(private apiService: ApiService) {}
 
@@ -37,34 +46,35 @@ export class PlaylistsPageComponent {
       });
   }
 
-  openPlaylist(
-    playlistId: string,
-    playlistImg: string,
-    playlistAuthor: string,
-    playlistName: string
-  ): void {
+  openPlaylist(playlist: ItemUserPlaylistModel): void {
     this.apiService
-      .getPlaylistTracks(playlistId)
+      .getPlaylistTracks(playlist.id)
       .pipe(takeUntil(this.die$))
       .subscribe((playlistTracks: ItemsTrackModel) => {
         this.tracks = playlistTracks;
       });
-    this.playlistId = playlistId;
-    this.playlistImg = playlistImg;
-    this.playlistAuthor = playlistAuthor;
-    this.playlistName = playlistName;
+    this.playlist = playlist;
     this.isOpen = true;
-    this.setActiveStatus(playlistId);
+    this.selectPlaylist(playlist.id);
   }
 
-  setActiveStatus(playlistId: string): void {
-    const node: HTMLElement = <HTMLElement>document.getElementById(playlistId);
-    const old: HTMLElement = <HTMLElement>document.querySelector(".active");
-
-    if (old != null) {
-      old.classList.toggle("active");
+  public selectPlaylist(id: string): void {
+    if (!this.selectedId) {
+      this.selectedId = id;
+    } else {
+      this.oldSelected = this.selectedId;
+      this.selectedId = id;
     }
-    node.classList.toggle("active");
+
+    const currentPlaylist = this.children.find(
+      item => item.nativeElement.id == id
+    );
+    const oldPlaylist = this.children.find(
+      item => item.nativeElement.id == this.oldSelected
+    );
+
+    oldPlaylist?.nativeElement.classList.toggle("active");
+    currentPlaylist?.nativeElement.classList.toggle("active");
   }
 
   ngOnInit(): void {
