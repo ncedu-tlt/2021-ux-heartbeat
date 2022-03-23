@@ -14,7 +14,7 @@ import { ConverterService } from "../../services/converter.service";
 })
 export class ArtistCardComponent implements OnInit, OnDestroy {
   @Input()
-  public artistInfo!: ArtistByIdModel
+  public artistInfo!: ArtistByIdModel;
   public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
   public isCard = true;
   public changeTopTracks!: NewTopArtistTracks;
