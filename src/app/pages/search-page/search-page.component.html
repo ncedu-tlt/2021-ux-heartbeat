@@ -1,5 +1,20 @@
-{{key}}
-<div class="search-page">
-<hb-artist-card></hb-artist-card>
-<hb-track-list></hb-track-list>
+<div class="container">
+  <div class="notFound">
+    <nz-result *ngIf="!artists.length && !isLoading" nzStatus="404" nzSubTitle="По вашему запросу ничего не найдено."></nz-result>
+  </div>
+  <div>
+    <h2 class="title">Исполнители</h2>
+    <div class="card">
+      <div *ngFor="let artist of artists">
+        <hb-artist-card [artistInfo]="artist"></hb-artist-card>
+      </div>
+    </div>
+    <button class="addItem" (click)="showMoreArtists()" *ngIf="!isDisabledShowMoreArtists">ЕЩЕ</button>
+  </div>
+  <div>
+    <h2 class="title">Треки</h2>
+    <hb-track-list [trackList]="changeTrackList" [trackContext]="trackContext"></hb-track-list>
+    <button class="addItem" (click)="showMoreTracks()" *ngIf="!isDisabledShowMoreTracks">ЕЩЕ</button>
+  </div>
 </div>
+<hb-loader *ngIf="isLoading"></hb-loader>
