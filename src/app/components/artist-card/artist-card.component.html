@@ -1,9 +1,9 @@
 <div class="artist-card">
-  <button nz-button nzType="default"
+  <button (click)="subscription !== true ? subscribeArtist() : unsubscribeArtist()" nz-button nzType="default"
           nzSize="default"
           nzShape="round"
           class="artist-card__follow">
-    Подписаться
+    {{subscription !== true ? "Подписаться" : "Отписаться"}}
   </button>
   <div class="artist-card__img"
        [ngStyle]="

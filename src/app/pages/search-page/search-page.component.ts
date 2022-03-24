@@ -9,6 +9,7 @@ import { NewSearchModel } from "../../models/new-api-models/search.model";
 import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
+import { FollowedArtistModel } from "../../models/new-api-models/followed-artist.model";
 
 @Component({
   selector: "hb-search-page",
@@ -25,6 +26,7 @@ export class SearchPageComponent {
   public isLoading = true;
   public offset = 0;
   public die$ = new Subject<void>();
+  public followedArtistsId: string[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -38,6 +40,7 @@ export class SearchPageComponent {
       .pipe(takeUntil(this.die$))
       .subscribe(key => {
         this.key = key;
+        this.getFollowedArtists();
         this.getSearchResultByArtists();
         this.getSearchResultByTracks();
         this.isDisabledShowMoreArtists = false;
@@ -47,6 +50,7 @@ export class SearchPageComponent {
 
   ngOnInit(): void {
     this.isLoading = true;
+    this.getFollowedArtists();
     this.key = <string>this.activatedRoute.snapshot.queryParams["keyword"];
     this.getSearchResultByArtists();
     this.getSearchResultByTracks();
@@ -156,6 +160,17 @@ export class SearchPageComponent {
             tracksSearchResult.tracks.items
           );
         this.isLoading = false;
+      });
+  }
+
+  getFollowedArtists(): void {
+    this.api
+      .getFollowedArtists()
+      .pipe(takeUntil(this.die$))
+      .subscribe((artistList: FollowedArtistModel) => {
+        for (const artistsId of artistList.artists.items) {
+          this.followedArtistsId.push(artistsId.id);
+        }
       });
   }
 
