@@ -43,6 +43,8 @@
       margin-left: 10px;
       margin-right: 35px;
       max-height: 45px;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     &__artist-name {
@@ -51,11 +53,22 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       width: 130px;
+    }
+
+    &__artist-names {
+      pointer-events: all;
+      white-space: nowrap;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
 
       p {
-        text-overflow: ellipsis;
-        overflow: hidden;
         margin-bottom: 0;
+      }
+
+      span:hover {
+        color: red;
+        cursor: pointer;
       }
     }
 
@@ -198,3 +211,8 @@
     height: auto;
   }
 }
+
+//@keyframes scroll {
+//  0% {transform: translate(0,0);}
+//  100% {transform: translate(-100%,0);}
+//}

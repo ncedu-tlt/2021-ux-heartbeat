@@ -5,17 +5,23 @@
       <img [routerLink]="['/album', playerService.currentTrackInfo$.getValue()!.album!.id]"
            src="{{playerService.currentTrackInfo$.getValue()!.album!.images[0].url}}" alt="#">
       <div class="player__info-about-track">
-        <div class="player__artist-name">
-              <p *ngIf="artistsNames">
-                {{artistsNames}}
-              </p>
+        <div class="player__artist-name"
+             [ngStyle]="{'transform': 'translateX(' + translateX + 'px )'}">
+          <div class="player__artist-names"  (mouseover)="setLineInMotion($event)" (mouseout)="setLineInMotion(null)">
+            <p *ngFor="let artist of playerService.currentTrackInfo$.getValue()?.artists, let i = index">
+              <span *ngIf="i">, </span>
+              <span [routerLink]="['/artist', artist.id]">
+                {{artist.name}}
+              </span>
+            </p>
+          </div>
         </div>
         <span class="player__track-name">{{playerService.currentTrackInfo$.getValue()!.name}}</span>
       </div>
     </div>
     <div class="player__control">
       <div class="player__control-items">
-        <button class="player__previous-track" (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)">
+        <button class="player__previous-track" (click)="playerService.switchTrack(actions.SWITCH_PREVIOUS)">
           <object
             type="image/svg+xml"
             data="../../../assets/svg/previous.svg"

@@ -9,7 +9,7 @@ import {
 } from "../../models/new-api-models/current-users-playlist.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
-import { Subject, takeUntil, tap } from "rxjs";
+import { interval, Observable, Subject, takeUntil } from "rxjs";
 
 @Component({
   selector: "hb-player",
@@ -17,13 +17,23 @@ import { Subject, takeUntil, tap } from "rxjs";
   styleUrls: ["./player.component.less"]
 })
 export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
+  public ARTIST_NAMES_BLOCK_WIDTH = 130;
+
   public isMobile = false;
   public drawerVisible = false;
   public actions = SwitchPlayerActionEnum;
   public userPlaylists: ItemUserPlaylistModel[] = [];
   public isFavorite = false;
   public artistsNames: string | undefined = "";
+  public isHover = false;
+  public translateX = 0;
+  public lineScrollWidth!: number;
+
+  public isRight = false;
+  public isLeft = false;
+
   private die$ = new Subject<void>();
+  private stop$ = new Subject<void>();
 
   constructor(
     public playerService: PlayerService,
@@ -38,15 +48,12 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.playerService.createAudioElement();
 
     this.playerService.currentTrackInfo$
-      .pipe(
-        takeUntil(this.die$),
-        tap(track => {
-          this.artistsNames = track?.artists.reduce((prev, cur, index) => {
-            return `${prev}${!index ? "" : ","} ${cur.name}`;
-          }, "");
-        })
-      )
-      .subscribe();
+      .pipe(takeUntil(this.die$))
+      .subscribe(() => {
+        this.isHover = false;
+        this.translateX = 0;
+        this.stop$.next();
+      });
   }
 
   ngAfterViewInit(): void {
@@ -148,6 +155,41 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(existence => {
         this.isFavorite = existence[0];
       });
+  }
+
+  setLineInMotion(e: Event | null): void {
+    if (!e) {
+      this.stop$.next();
+      return;
+    }
+    this.isHover = !this.isHover;
+    const motionTimer: Observable<number> = interval(80);
+    this.lineScrollWidth = (e?.currentTarget as HTMLElement).scrollWidth;
+    if (this.isHover && this.lineScrollWidth > this.ARTIST_NAMES_BLOCK_WIDTH) {
+      motionTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
+        if (this.isHover) {
+          if (
+            !this.isLeft &&
+            this.translateX >
+              this.ARTIST_NAMES_BLOCK_WIDTH - this.lineScrollWidth
+          ) {
+            this.translateX--;
+          } else {
+            this.isLeft = true;
+          }
+          if (
+            this.translateX >=
+              this.ARTIST_NAMES_BLOCK_WIDTH - this.lineScrollWidth &&
+            this.isLeft &&
+            this.translateX <= 0
+          ) {
+            this.translateX++;
+          } else {
+            this.isLeft = false;
+          }
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {
