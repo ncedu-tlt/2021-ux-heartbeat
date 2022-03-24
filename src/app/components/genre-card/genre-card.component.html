@@ -1,8 +1,6 @@
-<div class="container">
-    <div class="wrapperCard">
-        <div class="card" *ngFor="let item of genres" [routerLink]="['/home/genres-collection', item.name]" [ngStyle]="
-        {'background-image' : 'url(' + item.icons.url + ')'}">
-            <a class="card__name">{{item.name}}</a>
-        </div>
+<div class="card-container">
+    <div class="card" [routerLink]="['/home/genres-collection', genre.id]" [ngStyle]="
+        {'background-image' : 'url(' + genre.icons[0].url + ')'}">
+            <a class="card__name">{{genre.name}}</a>
     </div>
 </div>
