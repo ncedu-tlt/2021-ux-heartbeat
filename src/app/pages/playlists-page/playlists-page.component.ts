@@ -33,6 +33,10 @@ export class PlaylistsPageComponent {
             {
               id: "1zT9SWCzN45r7oVhy0VYLK",
               name: "S10"
+            },
+            {
+              id: "1zT9SWCzN45r7oVhy0VYLK",
+              name: "S10"
             }
           ]
         }

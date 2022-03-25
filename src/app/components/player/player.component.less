@@ -132,27 +132,32 @@
   &__current-track {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   &__info-about-track {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    //align-items: center;
     font-size: 25px;
     margin: 15px 0 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 280px;
+  }
+  &__artist-name {
+    font-weight: bold;
+    cursor: pointer;
   }
 
-  &__artist-name {
-    margin-right: 10px;
-    font-weight: bold;
+  &__artist-names {
+    pointer-events: all;
+    display: flex;
+    flex-direction: row;
 
     p {
       margin-bottom: 0;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      width: 250px;
-      text-align: center;
     }
   }
 
@@ -214,5 +219,7 @@
 
 //@keyframes scroll {
 //  0% {transform: translate(0,0);}
-//  100% {transform: translate(-100%,0);}
+//  25% {transform: translate(-100%,0);}
+//  75% {transform: translate(100,0);}
+//  100% {transform: translate(0,0);}
 //}

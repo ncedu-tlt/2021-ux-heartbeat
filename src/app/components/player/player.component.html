@@ -6,8 +6,8 @@
            src="{{playerService.currentTrackInfo$.getValue()!.album!.images[0].url}}" alt="#">
       <div class="player__info-about-track">
         <div class="player__artist-name"
-             [ngStyle]="{'transform': 'translateX(' + translateX + 'px )'}">
-          <div class="player__artist-names"  (mouseover)="setLineInMotion($event)" (mouseout)="setLineInMotion(null)">
+             [ngStyle]="{'transform': 'translateX(' + lineCurrentPosition + 'px )'}">
+          <div class="player__artist-names" (mouseover)="setLineInMotion($event)" (mouseout)="setLineInMotion(null)">
             <p *ngFor="let artist of playerService.currentTrackInfo$.getValue()?.artists, let i = index">
               <span *ngIf="i">, </span>
               <span [routerLink]="['/artist', artist.id]">
@@ -199,11 +199,17 @@
         <div class="mobile-player-contain__current-track">
           <img src="{{playerService.currentTrackInfo$.getValue()!.album!.images[0].url}}" alt="#" class="mobile-player-contain__img">
           <div class="mobile-player-contain__info-about-track">
-          <div class="mobile-player-contain__artist-name">
-            <p *ngIf="artistsNames">
-              {{artistsNames}}
-            </p>
-          </div>
+            <div class="mobile-player-contain__artist-name"
+                 [ngStyle]="{'transform': 'translateX(' + lineCurrentPosition + 'px )'}">
+              <div #artistNames class="mobile-player-contain__artist-names">
+                <p *ngFor="let artist of playerService.currentTrackInfo$.getValue()?.artists, let i = index">
+                  <span *ngIf="i">, </span>
+                  <span [routerLink]="['/artist', artist.id]">
+                    {{artist.name}}
+                  </span>
+                </p>
+              </div>
+            </div>
             <span class="mobile-player-contain__track-name">{{playerService.currentTrackInfo$.getValue()!.name}}</span>
           </div>
         </div>
