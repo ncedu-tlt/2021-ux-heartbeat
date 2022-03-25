@@ -64,7 +64,7 @@ export class SearchPageComponent {
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
           if (error.status === 401) {
-            this.notificationService.blank(
+            this.notificationService.error(
               "Ошибка авторизации",
               "Вам необходимо пройти авторизацию заново",
               { nzDuration: 0 }
@@ -91,7 +91,7 @@ export class SearchPageComponent {
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
           if (error.status === 401) {
-            this.notificationService.blank(
+            this.notificationService.error(
               "Ошибка авторизации",
               "Вам необходимо пройти авторизацию заново",
               { nzDuration: 0 }
@@ -132,7 +132,7 @@ export class SearchPageComponent {
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
           if (error.status === 401) {
-            this.notificationService.blank(
+            this.notificationService.error(
               "Ошибка авторизации",
               "Вам необходимо пройти авторизацию заново",
               { nzDuration: 0 }
@@ -145,7 +145,7 @@ export class SearchPageComponent {
             this.isLoading = false;
             this.isDisabledShowMoreTracks = true;
             this.isDisabledShowMoreArtists = true;
-            this.notificationService.blank(
+            this.notificationService.warning(
               "Ошибка во время поиска",
               "Введите в поле поиска название песни и/или имя исполнителя"
             );

@@ -8,6 +8,7 @@ import { PlayerService } from "../../services/player.service";
 import { ConverterService } from "../../services/converter.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
+import { NzMessageService } from "ng-zorro-antd/message";
 
 @Component({
   selector: "hb-artist-card",
@@ -29,7 +30,8 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
     private api: ApiService,
     public playerService: PlayerService,
     private convert: ConverterService,
-    private notificationService: NzNotificationService
+    private notificationService: NzNotificationService,
+    private message: NzMessageService
   ) {}
 
   setListTrackIntoPlayer(): void {
@@ -60,7 +62,7 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
           if (error.status === 401) {
-            this.notificationService.blank(
+            this.notificationService.error(
               "Ошибка авторизации",
               "Вам необходимо пройти авторизацию заново",
               { nzDuration: 0 }
@@ -72,10 +74,7 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.subscription = true;
-        this.notificationService.blank(
-          "Подписка",
-          "Вы подписались на исполнителя."
-        );
+        this.message.info("Вы подписались на исполнителя");
       });
   }
 
@@ -85,7 +84,7 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
           if (error.status === 401) {
-            this.notificationService.blank(
+            this.notificationService.error(
               "Ошибка авторизации",
               "Вам необходимо пройти авторизацию заново",
               { nzDuration: 0 }
@@ -97,10 +96,7 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.subscription = false;
-        this.notificationService.blank(
-          "Подписка",
-          "Вы отписались от исполнителя."
-        );
+        this.message.info("Вы отписались от исполнителя");
       });
   }
 
