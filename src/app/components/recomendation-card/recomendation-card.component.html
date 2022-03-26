@@ -1,0 +1,17 @@
+<div class="recomendation">
+    <h2 class="title">{{recomendation.name}}</h2>
+    <div class="img" [ngStyle]="
+    {'background-image' : 'url(' + recomendation.images[0].url + ')'}"></div>
+    <hb-loader class="loader" *ngIf="isLoading"></hb-loader>
+    <div class="tracks" *ngIf="trackInfo.length && !isLoading">
+        <div *ngFor="let track of trackInfo">
+            <hb-track class="tracks__track-container" 
+                      (playTrack)="setListTrackIntoPlayer()" 
+                      [trackContext]="trackContext" 
+                      [track]="track.track" 
+                      [isCard]="!isCard">
+            </hb-track>
+        </div>
+    </div>
+    <button class="btn">Весь плейлист</button>
+</div>
