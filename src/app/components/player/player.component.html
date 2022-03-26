@@ -18,7 +18,7 @@
         </div>
         <span class="player__track-name" nz-tooltip="" [nzTooltipMouseEnterDelay]="0.7"
               nzTooltipTitle="{{playerService.currentTrackInfo$.getValue()!.name}}"
-              nzTooltipPlacement="top">
+              nzTooltipPlacement="topLeft">
           {{playerService.currentTrackInfo$.getValue()!.name}}
         </span>
       </div>
@@ -288,7 +288,7 @@
                   (click)="playerService.putOnRepeat()">
             <object
               type="image/svg+xml"
-              data="../../../assets/svg/repeat-active.svg"
+              data="../../../assets/svg/repeat-playlist.svg"
               width="25px"
               height="25px"
             ></object>
@@ -298,8 +298,8 @@
             <object
               type="image/svg+xml"
               data="../../../assets/svg/repeat-active.svg"
-              width="15px"
-              height="15px"
+              width="25px"
+              height="25px"
             ></object>
           </button>
           <button class="mobile-player-contain__add-track"

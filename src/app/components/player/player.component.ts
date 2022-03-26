@@ -67,7 +67,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
               this.mobileArtistNameLine.nativeElement as HTMLElement
             ).scrollWidth;
             this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE);
-          }, 1000);
+          }, 0);
         }
       });
   }
@@ -98,7 +98,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.mobileArtistNameLine.nativeElement as HTMLElement
       ).scrollWidth;
       this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE);
-    }, 1000);
+    }, 0);
   }
 
   closePlayerControlOnMobile(): void {
