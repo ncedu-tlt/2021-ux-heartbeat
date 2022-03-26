@@ -25,6 +25,7 @@ import { interval, Observable, Subject, takeUntil } from "rxjs";
 })
 export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   public ARTIST_NAMES_BLOCK_WIDTH = 130;
+  public ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE = 280;
 
   @ViewChild("artistNames") mobileArtistNameLine!: ElementRef;
 
@@ -61,10 +62,12 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.lineCurrentPosition = 0;
         this.stop$.next();
         if (this.isMobile && this.drawerVisible) {
-          this.lineScrollWidth = (
-            this.mobileArtistNameLine.nativeElement as HTMLElement
-          ).scrollWidth;
-          this.changeLinePosition();
+          setTimeout(() => {
+            this.lineScrollWidth = (
+              this.mobileArtistNameLine.nativeElement as HTMLElement
+            ).scrollWidth;
+            this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE);
+          }, 1000);
         }
       });
   }
@@ -94,7 +97,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.lineScrollWidth = (
         this.mobileArtistNameLine.nativeElement as HTMLElement
       ).scrollWidth;
-      this.changeLinePosition();
+      this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE);
     }, 1000);
   }
 
@@ -184,36 +187,32 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     this.lineScrollWidth = (e?.currentTarget as HTMLElement).scrollWidth;
     if (this.lineScrollWidth > this.ARTIST_NAMES_BLOCK_WIDTH) {
-      this.changeLinePosition();
+      this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH);
     }
   }
 
-  changeLinePosition() {
-    // if (this.isMobile) {
-    //   this.lineScrollWidth =
-    //     this.mobileArtistNameLine.nativeElement.scrollWidth;
-    // }
-    this.motionTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
-      if (
-        !this.lineEdge &&
-        this.lineCurrentPosition >
-          this.ARTIST_NAMES_BLOCK_WIDTH - this.lineScrollWidth
-      ) {
-        this.lineCurrentPosition--;
-      } else {
-        this.lineEdge = true;
-      }
-      if (
-        this.lineCurrentPosition >=
-          this.ARTIST_NAMES_BLOCK_WIDTH - this.lineScrollWidth &&
-        this.lineEdge &&
-        this.lineCurrentPosition <= 0
-      ) {
-        this.lineCurrentPosition++;
-      } else {
-        this.lineEdge = false;
-      }
-    });
+  changeLinePosition(blockWidth: number) {
+    if (this.lineScrollWidth > blockWidth) {
+      this.motionTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
+        if (
+          !this.lineEdge &&
+          this.lineCurrentPosition > blockWidth - this.lineScrollWidth
+        ) {
+          this.lineCurrentPosition--;
+        } else {
+          this.lineEdge = true;
+        }
+        if (
+          this.lineCurrentPosition >= blockWidth - this.lineScrollWidth &&
+          this.lineEdge &&
+          this.lineCurrentPosition <= 0
+        ) {
+          this.lineCurrentPosition++;
+        } else {
+          this.lineEdge = false;
+        }
+      });
+    }
   }
 
   ngOnDestroy(): void {
