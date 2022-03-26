@@ -36,9 +36,9 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   public isFavorite = false;
   public artistsNames: string | undefined = "";
 
-  public lineCurrentPosition = 0;
-  public lineScrollWidth!: number;
-  public lineEdge = false;
+  public movingLineCurrentPosition = 0;
+  public movingLineScrollWidth!: number;
+  public movingLineEdge = false;
   public motionTimer: Observable<number> = interval(80);
 
   private die$ = new Subject<void>();
@@ -55,15 +55,14 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isMobile =
       window.screen.width < 895 || document.documentElement.clientWidth < 895;
     this.playerService.createAudioElement();
-
     this.playerService.currentTrackInfo$
       .pipe(takeUntil(this.die$))
       .subscribe(() => {
-        this.lineCurrentPosition = 0;
+        this.movingLineCurrentPosition = 0;
         this.stop$.next();
         if (this.isMobile && this.drawerVisible) {
           setTimeout(() => {
-            this.lineScrollWidth = (
+            this.movingLineScrollWidth = (
               this.mobileArtistNameLine.nativeElement as HTMLElement
             ).scrollWidth;
             this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE);
@@ -94,7 +93,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.checkTrackIntoUserFavoriteList(id);
     }
     setTimeout(() => {
-      this.lineScrollWidth = (
+      this.movingLineScrollWidth = (
         this.mobileArtistNameLine.nativeElement as HTMLElement
       ).scrollWidth;
       this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE);
@@ -185,31 +184,33 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.stop$.next();
       return;
     }
-    this.lineScrollWidth = (e?.currentTarget as HTMLElement).scrollWidth;
-    if (this.lineScrollWidth > this.ARTIST_NAMES_BLOCK_WIDTH) {
+    this.movingLineScrollWidth = (e?.currentTarget as HTMLElement).scrollWidth;
+    if (this.movingLineScrollWidth > this.ARTIST_NAMES_BLOCK_WIDTH) {
       this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH);
     }
   }
 
-  changeLinePosition(blockWidth: number) {
-    if (this.lineScrollWidth > blockWidth) {
+  changeLinePosition(blockWidth: number): void {
+    if (this.movingLineScrollWidth > blockWidth) {
       this.motionTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
         if (
-          !this.lineEdge &&
-          this.lineCurrentPosition > blockWidth - this.lineScrollWidth
+          !this.movingLineEdge &&
+          this.movingLineCurrentPosition >
+            blockWidth - this.movingLineScrollWidth
         ) {
-          this.lineCurrentPosition--;
+          this.movingLineCurrentPosition--;
         } else {
-          this.lineEdge = true;
+          this.movingLineEdge = true;
         }
         if (
-          this.lineCurrentPosition >= blockWidth - this.lineScrollWidth &&
-          this.lineEdge &&
-          this.lineCurrentPosition <= 0
+          this.movingLineCurrentPosition >=
+            blockWidth - this.movingLineScrollWidth &&
+          this.movingLineEdge &&
+          this.movingLineCurrentPosition <= 0
         ) {
-          this.lineCurrentPosition++;
+          this.movingLineCurrentPosition++;
         } else {
-          this.lineEdge = false;
+          this.movingLineEdge = false;
         }
       });
     }
@@ -219,5 +220,6 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     window.removeEventListener("resize", this.resizeWindow);
     this.playerService.closeAudioContext();
     this.die$.next();
+    this.stop$.next();
   }
 }

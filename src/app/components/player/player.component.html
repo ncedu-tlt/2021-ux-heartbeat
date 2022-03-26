@@ -6,7 +6,7 @@
            src="{{playerService.currentTrackInfo$.getValue()!.album!.images[0].url}}" alt="#">
       <div class="player__info-about-track">
         <div class="player__artists"
-             [ngStyle]="{'transform': 'translateX(' + lineCurrentPosition + 'px )', 'width': ARTIST_NAMES_BLOCK_WIDTH + 'px'}"
+             [ngStyle]="{'transform': 'translateX(' + movingLineCurrentPosition + 'px )', 'width': ARTIST_NAMES_BLOCK_WIDTH + 'px'}"
              (mouseover)="setLineInMotion($event)" (mouseout)="setLineInMotion(null)">
           <p *ngFor="let artist of playerService.currentTrackInfo$.getValue()?.artists, let i = index">
             <span *ngIf="i">, </span>
@@ -32,7 +32,8 @@
             height="20px"
           ></object>
         </button>
-        <button *ngIf="!(playerService.isPlay$ | async)" class="player__play" (click)="playerService.switchPlayerAction()">
+        <button *ngIf="!(playerService.isPlay$ | async)" class="player__play"
+                (click)="playerService.switchPlayerAction()">
           <object
             type="image/svg+xml"
             data="../../../assets/svg/play.svg"
@@ -40,7 +41,8 @@
             height="20px"
           ></object>
         </button>
-        <button class="player__pause" *ngIf="playerService.isPlay$ | async" (click)="playerService.switchPlayerAction()">
+        <button class="player__pause" *ngIf="playerService.isPlay$ | async"
+                (click)="playerService.switchPlayerAction()">
           <object
             type="image/svg+xml"
             data="../../../assets/svg/pause.svg"
@@ -99,7 +101,8 @@
                    class="player__volume-bar"
                    (click)="playerService.changeMusicVolume($event)">
       </nz-progress>
-      <button class="player__mixing" *ngIf="!(playerService.isShuffle | async)" (click)="playerService.isShuffle.next(true)">
+      <button class="player__mixing" *ngIf="!(playerService.isShuffle | async)"
+              (click)="playerService.isShuffle.next(true)">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/mixing.svg"
@@ -107,7 +110,8 @@
           height="15px"
         ></object>
       </button>
-      <button class="player__mixing" *ngIf="playerService.isShuffle | async" (click)="playerService.isShuffle.next(false)">
+      <button class="player__mixing" *ngIf="playerService.isShuffle | async"
+              (click)="playerService.isShuffle.next(false)">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/mixing-active.svg"
@@ -146,7 +150,7 @@
               [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getAuthToken()"
               (click)="getUserPlaylists(playerService.currentTrackInfo$.getValue()!.id)"
               nzTrigger="click"
-              nzPlacement = "topCenter"
+              nzPlacement="topCenter"
               class="player__add-track">
         <object
           type="image/svg+xml"
@@ -205,7 +209,7 @@
           <div class="mobile-player-contain__info-about-track"
                [ngStyle]="{'width': ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE + 'px'}">
             <div class="mobile-player-contain__artists" #artistNames
-                 [ngStyle]="{'transform': 'translateX(' + lineCurrentPosition + 'px )'}">
+                 [ngStyle]="{'transform': 'translateX(' + movingLineCurrentPosition + 'px )'}">
               <p *ngFor="let artist of playerService.currentTrackInfo$.getValue()?.artists, let i = index">
                 <span *ngIf="i">, </span>
                 <span class="mobile-player-contain__artist-name" [routerLink]="['/artist', artist.id]">
@@ -231,7 +235,8 @@
         </div>
         <div class="mobile-player-contain__control">
           <div class="mobile-player-contain__control-items">
-            <button class="mobile-player-contain__previous-track" (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)">
+            <button class="mobile-player-contain__previous-track"
+                    (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/previous.svg"
@@ -239,7 +244,8 @@
                 height="30px"
               ></object>
             </button>
-            <button *ngIf="!(playerService.isPlay$ | async)" class="mobile-player-contain__play" (click)="playerService.switchPlayerAction()">
+            <button *ngIf="!(playerService.isPlay$ | async)" class="mobile-player-contain__play"
+                    (click)="playerService.switchPlayerAction()">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/play.svg"
@@ -247,7 +253,8 @@
                 height="35px"
               ></object>
             </button>
-            <button class="mobile-player-contain__pause" *ngIf="playerService.isPlay$ | async" (click)="playerService.switchPlayerAction()">
+            <button class="mobile-player-contain__pause" *ngIf="playerService.isPlay$ | async"
+                    (click)="playerService.switchPlayerAction()">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/pause.svg"
@@ -255,7 +262,8 @@
                 height="35px"
               ></object>
             </button>
-            <button class="mobile-player-contain__next-track" (click)="this.playerService.switchTrack(actions.SWITCH_NEXT)">
+            <button class="mobile-player-contain__next-track"
+                    (click)="this.playerService.switchTrack(actions.SWITCH_NEXT)">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/next.svg"
