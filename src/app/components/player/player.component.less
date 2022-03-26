@@ -45,6 +45,7 @@
       max-height: 45px;
       overflow: hidden;
       white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     &__artist-name {
@@ -70,6 +71,13 @@
         color: red;
         cursor: pointer;
       }
+    }
+
+    &__track-name {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 130px;
     }
 
     &__control {

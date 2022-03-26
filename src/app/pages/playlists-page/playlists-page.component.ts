@@ -44,7 +44,7 @@ export class PlaylistsPageComponent {
       {
         track: {
           id: "1zB4vmk8tFRmM9UULNzbLB",
-          name: "Thunder",
+          name: "ThunderThunderThunderThunderThunderThunderThunderThunderThunder",
           preview_url:
             "https://p.scdn.co/mp3-preview/07e14c4e821174295fe50f03b33d98387570d1db?cid=774b29d4f13844c495f206cafdad9c86",
           track_number: 1,

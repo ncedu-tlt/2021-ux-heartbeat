@@ -16,7 +16,11 @@
             </p>
           </div>
         </div>
-        <span class="player__track-name">{{playerService.currentTrackInfo$.getValue()!.name}}</span>
+        <span class="player__track-name" nz-tooltip="" [nzTooltipMouseEnterDelay]="0.7"
+              nzTooltipTitle="{{playerService.currentTrackInfo$.getValue()!.name}}"
+              nzTooltipPlacement="top">
+          {{playerService.currentTrackInfo$.getValue()!.name}}
+        </span>
       </div>
     </div>
     <div class="player__control">
