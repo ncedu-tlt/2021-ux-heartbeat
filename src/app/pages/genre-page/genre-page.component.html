@@ -1,1 +1,13 @@
-<hb-playlist-card></hb-playlist-card>
+<div class="playlists-container">
+    <div class="title">
+        <h2>Плейлисты</h2>
+        <div class="title__line"></div>
+    </div>
+    <hb-loader class="loader" *ngIf="isLoading"></hb-loader>
+    <div class="wrapper" *ngIf="playlists.length && !isLoading">
+        <div class="playlist" *ngFor="let playlist of playlists">
+            <hb-playlist-card [playlist]="playlist"></hb-playlist-card>
+        </div>
+    </div>
+    <button (click)="showMore()" *ngIf="!isDisabled" class="addItem">ЕЩЕ</button> 
+</div>

@@ -51,6 +51,7 @@ import { RoundArtistCardComponent } from "./components/round-artist-card/round-a
 import { GenreCardComponent } from "./components/genre-card/genre-card.component";
 import { PlaylistCardComponent } from "./components/playlist-card/playlist-card.component";
 import { NzEmptyModule } from "ng-zorro-antd/empty";
+import { RecomendationCardComponent } from "src/app/components/recomendation-card/recomendation-card.component";
 import { NzResultModule } from "ng-zorro-antd/result";
 
 registerLocaleData(ru);
@@ -86,7 +87,8 @@ registerLocaleData(ru);
     RoundArtistCardComponent,
     ArtistCardComponent,
     GenreCardComponent,
-    PlaylistCardComponent
+    PlaylistCardComponent,
+    RecomendationCardComponent
   ],
   imports: [
     BrowserModule,

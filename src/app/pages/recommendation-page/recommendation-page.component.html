@@ -1,2 +1,6 @@
-<h1>Recommendation-page works!</h1>
-<hb-artist-card></hb-artist-card>
+<hb-loader class="loader" *ngIf="isLoading"></hb-loader>
+<div class="recomendation-container" *ngIf="recomendations.length && !isLoading">
+    <div *ngFor="let recomendation of recomendations">
+        <hb-recomendation-card [recomendation]="recomendation"></hb-recomendation-card>
+    </div>
+</div>
