@@ -23,7 +23,7 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
   public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
   public changeTopTracks!: NewTopArtistTracks;
   public isCard = true;
-  public subscription!: boolean;
+  public subscription = false;
   public die$ = new Subject<void>();
 
   constructor(

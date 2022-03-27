@@ -1,11 +1,21 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model";
-import { catchError, Subject, takeUntil, throwError } from "rxjs";
+import {
+  catchError,
+  Observable,
+  Subject,
+  takeUntil,
+  throwError,
+  combineLatest
+} from "rxjs";
 import { ApiService } from "../../services/api.service";
 import { SearchStateService } from "../../services/search-state.service";
 import { ConverterService } from "../../services/converter.service";
-import { NewSearchModel } from "../../models/new-api-models/search.model";
+import {
+  NewSearchModel,
+  SearchModel
+} from "../../models/new-api-models/search.model";
 import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
@@ -40,9 +50,7 @@ export class SearchPageComponent {
       .pipe(takeUntil(this.die$))
       .subscribe(key => {
         this.key = key;
-        this.getFollowedArtists();
-        this.getSearchResultByArtists();
-        this.getSearchResultByTracks();
+        this.resolveSearchResult();
         this.isDisabledShowMoreArtists = false;
         this.isDisabledShowMoreTracks = false;
       });
@@ -50,10 +58,20 @@ export class SearchPageComponent {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.getFollowedArtists();
     this.key = <string>this.activatedRoute.snapshot.queryParams["keyword"];
-    this.getSearchResultByArtists();
-    this.getSearchResultByTracks();
+    this.resolveSearchResult();
+  }
+
+  getSearchResultByArtists(): Observable<SearchModel> {
+    return this.api.searchForItem(this.key);
+  }
+
+  getSearchResultByTracks(): Observable<SearchModel> {
+    return this.api.searchForItem(this.key, 6);
+  }
+
+  getFollowedArtists(): Observable<FollowedArtistModel> {
+    return this.api.getFollowedArtists();
   }
 
   showMoreArtists(): void {
@@ -114,21 +132,12 @@ export class SearchPageComponent {
       });
   }
 
-  getSearchResultByArtists(): void {
-    this.isLoading = true;
-    this.api
-      .searchForItem(this.key)
-      .pipe(takeUntil(this.die$))
-      .subscribe(artistsSearchResult => {
-        this.artists = artistsSearchResult.artists.items;
-        this.isLoading = false;
-      });
-  }
-
-  getSearchResultByTracks(): void {
-    this.isLoading = true;
-    this.api
-      .searchForItem(this.key, 6)
+  resolveSearchResult(): void {
+    combineLatest([
+      this.getSearchResultByArtists(),
+      this.getSearchResultByTracks(),
+      this.getFollowedArtists()
+    ])
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
           if (error.status === 401) {
@@ -154,23 +163,19 @@ export class SearchPageComponent {
         }),
         takeUntil(this.die$)
       )
-      .subscribe(tracksSearchResult => {
+      .subscribe(([itemsToArtists, tracksSearchResult, artistList]) => {
+        this.artists = itemsToArtists.artists.items;
+
         this.changeTrackList =
           this.convert.convertTrackSearchModelToNewSearchModel(
             tracksSearchResult.tracks.items
           );
-        this.isLoading = false;
-      });
-  }
 
-  getFollowedArtists(): void {
-    this.api
-      .getFollowedArtists()
-      .pipe(takeUntil(this.die$))
-      .subscribe((artistList: FollowedArtistModel) => {
         for (const artistsId of artistList.artists.items) {
           this.followedArtistsId.push(artistsId.id);
         }
+
+        this.isLoading = false;
       });
   }
 
