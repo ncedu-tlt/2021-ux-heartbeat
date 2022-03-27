@@ -1,4 +1,4 @@
-@album-background: #C4C4C430;
+@import "../../../assets/styles/colors";
 
 :host {
   font-family: 'Roboto', sans-serif;
@@ -31,7 +31,7 @@
 
       .albums-list {
         .active {
-          background-color: @album-background;
+          background-color: @album-playlist-background;
         }
 
         .album {
@@ -42,7 +42,7 @@
           border-radius: 5px;
 
           &:hover{
-            background-color: @album-background;
+            background-color: @album-playlist-background;
           }
 
           .album__image {

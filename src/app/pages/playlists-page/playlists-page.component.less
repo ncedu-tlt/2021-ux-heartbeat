@@ -1,4 +1,4 @@
-@playlist-background: #C4C4C430;
+@import "../../../assets/styles/colors";
 
 :host {
   font-family: 'Roboto', sans-serif;
@@ -40,7 +40,7 @@
 
       .playlist__list {
         .active {
-          background-color: @playlist-background;
+          background-color: @album-playlist-background;
         }
 
         .playlist {
@@ -51,7 +51,7 @@
           border-radius: 5px;
 
           &:hover{
-            background-color: @playlist-background;
+            background-color: @album-playlist-background;
           }
 
           .playlist__info {
