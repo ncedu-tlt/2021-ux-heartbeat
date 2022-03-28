@@ -1,4 +1,34 @@
-<h1>Click to <a [routerLink]="['/album', '2nLOHgzXzwFEpl62zAgCEC']">SOME ALBUM</a> to go to album's page</h1>
-<div class="album">
-  <hb-track-list [trackContext]="albumId" [trackList]="album"></hb-track-list>
+<div class="albums-wrapper">
+  <hb-loader *ngIf="isLoading"></hb-loader>
+  <div *ngIf="albums.length && !isLoading" class="albums">
+    <div class="albums-list">
+      <div *ngFor="let album of albums" #album id="{{album.album.id}}" (click)="openAlbum(album)" class="album">
+        <div class="album__image" [ngStyle]="{'background-image': 'url(' + album.album.images[0].url + ')'}"></div>
+        <div class="album-info">
+          <div class="album__name">{{album.album.name}}</div>
+          <div class="album__artists">{{album.album.artists[0].name}}</div>
+        </div>
+      </div>
+    </div>
+    <hr class="albums-hr"/>
+    <div *ngIf="isOpen" class="selected-album">
+      <div class="selected-album__album">
+        <div class="selected-album__album-photo">
+          <img class="selected-album__vinyl" src="assets/image/vinyl-record.png" alt="vinyl icon"/>
+          <div class="selected-album__img" [ngStyle]="{'background-image': 'url(' + album.album.images[0].url + ')'}"></div>
+        </div>
+        <div class="selected-album__album-info">
+          <p class="selected-album__name">{{album.album.name}}</p>
+          <div class="selected-album__artists">
+            <p *ngFor="let artist of album.album.artists" class="selected-album__artist">● {{artist.name}}</p>
+          </div>
+        </div>
+      </div>
+      <hb-track-list [trackContext]="album.album.id" [trackList]="tracks"></hb-track-list>
+    </div>
+    <div *ngIf="!isOpen" class="albums-waiting">
+      <img class="albums-waiting__img" src="assets/image/vinyl-record.png" alt="vinyl icon"/>
+      <p class="albums-waiting__text">Здесь будет отображаться выбранный альбом.</p>
+    </div>
+  </div>
 </div>
