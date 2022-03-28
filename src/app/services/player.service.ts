@@ -192,10 +192,13 @@ export class PlayerService {
     if (this.isRepeat === RepeatStateEnum.PLAYLIST_REPEAT) {
       if (this.trackList$.getValue()) {
         const newTrack = this.checkTrackExistence(0);
-        if (newTrack) {
+        if (newTrack && newTrack.preview_url) {
           this.currentTrackInfo$.next(newTrack);
           this.switchPlayerAction();
           this.currentTrackNumber = 0;
+        } else {
+          this.currentTrackNumber = 0;
+          this.switchTrack(SwitchPlayerActionEnum.SWITCH_NEXT);
         }
       } else {
         this.player.currentTime = 0;
