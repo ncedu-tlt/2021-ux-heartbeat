@@ -1,14 +1,19 @@
-<div class="container" *ngIf="{ track: (playerService.currentTrackInfo$ | async), isPLay: (playerService.isPlay$ | async) } as info">
+<div class="container" *ngIf="{
+                                track: (playerService.currentTrackInfo$ | async),
+                                isPLay: (playerService.isPlay$ | async),
+                                isShuffle: (playerService.isShuffle | async),
+                                musicTimer: (playerService.musicCurrentTime$ | async)
+                              } as player">
   <div class="player" *ngIf="!drawerVisible">
-    <div class="player__current-track" *ngIf="info.track"
-         (click)="openPlayerControlOnMobile(info.track.id)">
-      <img [routerLink]="['/album', info.track.album!.id]"
-           src="{{info.track.album!.images[0].url}}" alt="#">
+    <div class="player__current-track" *ngIf="player.track"
+         (click)="openPlayerControlOnMobile(player.track.id)">
+      <img [routerLink]="['/album', player.track.album!.id]"
+           src="{{player.track.album!.images[0].url}}" alt="#">
       <div class="player__info-about-track">
         <div class="player__artists"
              [ngStyle]="{'transform': 'translateX(' + movingLineCurrentPosition + 'px )', 'width': ARTIST_NAMES_BLOCK_WIDTH + 'px'}"
              (mouseover)="setLineInMotion($event)" (mouseout)="setLineInMotion(null)">
-          <p *ngFor="let artist of info.track.artists, let i = index">
+          <p *ngFor="let artist of player.track.artists, let i = index">
             <span *ngIf="i">, </span>
             <span class="player__artist-name" [routerLink]="['/artist', artist.id]">
                 {{artist.name}}
@@ -16,9 +21,9 @@
           </p>
         </div>
         <span class="player__track-name" nz-tooltip="" [nzTooltipMouseEnterDelay]="0.7"
-              nzTooltipTitle="{{info.track.name}}"
+              nzTooltipTitle="{{player.track.name}}"
               nzTooltipPlacement="topLeft">
-          {{info.track.name}}
+          {{player.track.name}}
         </span>
       </div>
     </div>
@@ -32,7 +37,7 @@
             height="20px"
           ></object>
         </button>
-        <button *ngIf="!info.isPLay" class="player__play"
+        <button *ngIf="!player.isPLay" class="player__play"
                 (click)="playerService.switchPlayerAction()">
           <object
             type="image/svg+xml"
@@ -41,7 +46,7 @@
             height="20px"
           ></object>
         </button>
-        <button class="player__pause" *ngIf="info.isPLay"
+        <button class="player__pause" *ngIf="player.isPLay"
                 (click)="playerService.switchPlayerAction()">
           <object
             type="image/svg+xml"
@@ -63,7 +68,7 @@
         <nz-progress nzTooltipPlacement="topLeft"
                      [nzTooltipOverlayStyle]="playerService.currentTooltipPosition"
                      nz-tooltip=""
-                     [nzTooltipTitle]="info.track ? (playerService.timeOnTooltip$ | async | timeFormat) : null"
+                     [nzTooltipTitle]="player.track ? (playerService.timeOnTooltip$ | async | timeFormat) : null"
                      [nzPercent]=playerService.currentPositionOnProgressBar
                      [nzShowInfo]="false"
                      nzStatus="active"
@@ -72,7 +77,7 @@
                      (mousemove)="playerService.changeTooltipPosition($event)">
         </nz-progress>
         <span class="player__time">
-          {{playerService.musicCurrentTime$.getValue() | timeFormat}}
+          {{player.musicTimer | timeFormat}}
       </span>
       </div>
     </div>
@@ -101,7 +106,7 @@
                    class="player__volume-bar"
                    (click)="playerService.changeMusicVolume($event)">
       </nz-progress>
-      <button class="player__mixing" *ngIf="!(playerService.isShuffle | async)"
+      <button class="player__mixing" *ngIf="!player.isShuffle"
               (click)="playerService.isShuffle.next(true)">
         <object
           type="image/svg+xml"
@@ -110,7 +115,7 @@
           height="15px"
         ></object>
       </button>
-      <button class="player__mixing" *ngIf="playerService.isShuffle | async"
+      <button class="player__mixing" *ngIf="player.isShuffle"
               (click)="playerService.isShuffle.next(false)">
         <object
           type="image/svg+xml"
@@ -147,8 +152,8 @@
         ></object>
       </button>
       <button nz-dropdown [nzDropdownMenu]="menu"
-              [disabled]="!info.track || !authService.getAuthToken()"
-              (click)="getUserPlaylists(info.track!.id)"
+              [disabled]="!player.track || !authService.getAuthToken()"
+              (click)="getUserPlaylists(player.track!.id)"
               nzTrigger="click"
               nzPlacement="topCenter"
               class="player__add-track">
@@ -171,19 +176,19 @@
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu>
         <li nz-menu-item *ngIf="!isFavorite"
-            (click)="addTrackIntoFavoriteList(info.track!.id)">
+            (click)="addTrackIntoFavoriteList(player.track!.id)">
           Добавить в избранное
         </li>
         <li nz-menu-item
             *ngIf="isFavorite"
-            (click)="removeTrackFromFavoriteList(info.track!.id)">
+            (click)="removeTrackFromFavoriteList(player.track!.id)">
           Убрать из избранного
         </li>
         <li nz-submenu nzTitle="Добавить в плейлист">
           <ul>
             <li nz-menu-item
                 *ngFor="let playlist of userPlaylists"
-                (click)="addTrackIntoPlaylist(playlist.id, info.track!.id)">
+                (click)="addTrackIntoPlaylist(playlist.id, player.track!.id)">
               {{playlist.name}}
             </li>
           </ul>
@@ -193,7 +198,7 @@
   </div>
   <div class="player" *ngIf="!drawerVisible">
   </div>
-  <div class="mobile-player" *ngIf="isMobile && info.track">
+  <div class="mobile-player" *ngIf="isMobile && player.track">
     <nz-drawer
       nzWrapClassName="mobile-player-drawer"
       [nzClosable]="false"
@@ -204,20 +209,20 @@
     >
       <ng-container class="mobile-player-contain" *nzDrawerContent>
         <div class="mobile-player-contain__current-track">
-          <img src="{{info.track.album!.images[0].url}}" alt="#"
+          <img src="{{player.track.album!.images[0].url}}" alt="#"
                class="mobile-player-contain__img">
           <div class="mobile-player-contain__info-about-track"
                [ngStyle]="{'width': ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE + 'px'}">
             <div class="mobile-player-contain__artists" #artistNames
                  [ngStyle]="{'transform': 'translateX(' + movingLineCurrentPosition + 'px )'}">
-              <p *ngFor="let artist of info.track.artists, let i = index">
+              <p *ngFor="let artist of player.track.artists, let i = index">
                 <span *ngIf="i">, </span>
                 <span class="mobile-player-contain__artist-name" [routerLink]="['/artist', artist.id]">
                     {{artist.name}}
                   </span>
               </p>
             </div>
-            <span class="mobile-player-contain__track-name">{{info.track.name}}</span>
+            <span class="mobile-player-contain__track-name">{{player.track.name}}</span>
           </div>
         </div>
         <div class="mobile-player-contain__progress">
@@ -230,7 +235,7 @@
             (mousemove)="playerService.changeTooltipPosition($event)">
           </nz-progress>
           <span class="mobile-player-contain__time">
-          {{playerService.musicCurrentTime$.getValue() | timeFormat}}
+          {{player.musicTimer | timeFormat}}
       </span>
         </div>
         <div class="mobile-player-contain__control">
@@ -244,7 +249,7 @@
                 height="30px"
               ></object>
             </button>
-            <button *ngIf="!info.isPLay" class="mobile-player-contain__play"
+            <button *ngIf="!player.isPLay" class="mobile-player-contain__play"
                     (click)="playerService.switchPlayerAction()">
               <object
                 type="image/svg+xml"
@@ -253,7 +258,7 @@
                 height="35px"
               ></object>
             </button>
-            <button class="mobile-player-contain__pause" *ngIf="info.isPLay"
+            <button class="mobile-player-contain__pause" *ngIf="player.isPLay"
                     (click)="playerService.switchPlayerAction()">
               <object
                 type="image/svg+xml"
@@ -311,8 +316,8 @@
           </button>
           <button class="mobile-player-contain__add-track"
                   *ngIf="!isFavorite"
-                  [disabled]="!info.track || !authService.getAuthToken()"
-                  (click)="addTrackIntoFavoriteList(info.track!.id)">
+                  [disabled]="!player.track || !authService.getAuthToken()"
+                  (click)="addTrackIntoFavoriteList(player.track!.id)">
             <object
               type="image/svg+xml"
               data="../../../assets/svg/favorite.svg"
@@ -322,8 +327,8 @@
           </button>
           <button class="mobile-player-contain__delete-track"
                   *ngIf="isFavorite"
-                  [disabled]="!info.track || !authService.getAuthToken()"
-                  (click)="removeTrackFromFavoriteList(info.track!.id)">
+                  [disabled]="!player.track || !authService.getAuthToken()"
+                  (click)="removeTrackFromFavoriteList(player.track!.id)">
             <object
               type="image/svg+xml"
               data="../../../assets/svg/fill-heart.svg"
