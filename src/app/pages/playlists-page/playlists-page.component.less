@@ -1,6 +1,157 @@
-.playlist-track {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+@import "../../../assets/styles/colors";
+
+:host {
+  font-family: 'Roboto', sans-serif;
+  width: 1546px;
+
+  @media screen and (min-width: 1280px) and (max-width: 1545px) {
+    width: 1280px;
+  }
+
+  @media screen and (min-width: 920px) and (max-width: 1279.99px) {
+    width: 920px;
+  }
+
+  .playlists-wrapper {
+    margin: 50px 0 0 50px;
+    width: inherit;
+
+    .playlists {
+      display: grid;
+      gap: 60px;
+      grid-template-columns: 764px 3px 680px;
+      grid-template-rows: auto auto auto;
+
+      @media screen and (min-width: 1280px) and (max-width: 1545px) {
+        grid-template-columns: 462px 3px 394px;
+      }
+
+      @media screen and (min-width: 920px) and (max-width: 1279.99px) {
+        grid-template-columns: 323px 3px 361px;
+      }
+
+      .playlist__image {
+        width: 150px;
+        height: 150px;
+        border-radius: 5px;
+        background-position: center;
+        background-size: cover;
+      }
+
+      .playlist__list {
+        .active {
+          background-color: @album-playlist-background;
+        }
+
+        .playlist {
+          cursor: pointer;
+          padding: 23px 0 23px 14px;
+          display: flex;
+          margin-bottom: 50px;
+          border-radius: 5px;
+
+          &:hover{
+            background-color: @album-playlist-background;
+          }
+
+          .playlist__info {
+            margin-left: 30px;
+
+            .playlist__name {
+              margin: 0;
+              font-size: 24px;
+
+              @media screen and (min-width: 920px) and (max-width: 1279.99px) {
+                font-size: 17px;
+              }
+            }
+
+            .playlist__owner {
+              font-size: 14px;
+              font-weight: 100;
+            }
+          }
+        }
+      }
+
+      .playlists__hr {
+        border: 1px solid #000000;
+        height: 100%;
+        align-self: center;
+        justify-self: center;
+      }
+
+      .playlists__tracks {
+
+        .playlists-tracks__playlist {
+          display: flex;
+          margin-bottom: 30px;
+
+          .playlist-tracks__avatar {
+
+            .playlist-tracks__image {
+              width: 150px;
+              height: 150px;
+              border-radius: 5px;
+              background-position: center;
+              background-size: cover;
+            }
+
+            .playlist-tracks__vinyl {
+              z-index: -1;
+              width: 185px;
+              height: 128px;
+              position: absolute;
+              transform: translate(30px, 12px);
+            }
+
+          }
+
+          .playlist-tracks__info{
+            margin-left: 104px;
+
+            .playlist-tracks__name{
+              margin: 0;
+              font-size: 24px;
+            }
+
+            .playlist-tracks__author {
+              font-size: 14px;
+              font-weight: 100;
+            }
+          }
+        }
+      }
+
+      .playlist__waiting {
+        display: flex;
+        position: fixed;
+        top: 27%;
+        right: 9%;
+        flex-direction: column;
+        align-items: center;
+        align-content: center;
+
+        @media screen and (min-width:920px) and (max-width: 1279.99px) {
+          right: 7%;
+        }
+        .playlist-waiting__img {
+          width: 450px;
+
+          @media screen and (min-width: 920px) and (max-width: 1279.99px) {
+            width: 320px
+          }
+        }
+
+        .playlist-waiting__text {
+          margin-top: 35px;
+          font-size: 24px;
+
+          @media screen and (min-width:920px) and (max-width: 1279.99px) {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
 }
