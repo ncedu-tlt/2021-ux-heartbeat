@@ -124,7 +124,7 @@
           height="15px"
         ></object>
       </button>
-      <button class="player__no-repeat" *ngIf="playerService.isRepeat === 0"
+      <button class="player__no-repeat" *ngIf="playerService.isRepeat === repeatState.NO_REPEAT"
               (click)="playerService.putOnRepeat()">
         <object
           type="image/svg+xml"
@@ -133,7 +133,7 @@
           height="15px"
         ></object>
       </button>
-      <button class="player__repeat" *ngIf="playerService.isRepeat === 1"
+      <button class="player__repeat" *ngIf="playerService.isRepeat === repeatState.PLAYLIST_REPEAT"
               (click)="playerService.putOnRepeat()">
         <object
           type="image/svg+xml"
@@ -142,7 +142,7 @@
           height="15px"
         ></object>
       </button>
-      <button class="player__repeat" *ngIf="playerService.isRepeat === 2"
+      <button class="player__repeat" *ngIf="playerService.isRepeat === repeatState.TRACK_REPEAT"
               (click)="playerService.putOnRepeat()">
         <object
           type="image/svg+xml"
@@ -287,7 +287,7 @@
               height="25px"
             ></object>
           </button>
-          <button class="mobile-player-contain__no-repeat" *ngIf="playerService.isRepeat === 0"
+          <button class="mobile-player-contain__no-repeat" *ngIf="playerService.isRepeat === repeatState.NO_REPEAT"
                   (click)="playerService.putOnRepeat()">
             <object
               type="image/svg+xml"
@@ -296,7 +296,7 @@
               height="25px"
             ></object>
           </button>
-          <button class="mobile-player-contain__repeat" *ngIf="playerService.isRepeat === 1"
+          <button class="mobile-player-contain__repeat" *ngIf="playerService.isRepeat === repeatState.PLAYLIST_REPEAT"
                   (click)="playerService.putOnRepeat()">
             <object
               type="image/svg+xml"
@@ -305,7 +305,7 @@
               height="25px"
             ></object>
           </button>
-          <button class="player__repeat" *ngIf="playerService.isRepeat === 2"
+          <button class="player__repeat" *ngIf="playerService.isRepeat === repeatState.TRACK_REPEAT"
                   (click)="playerService.putOnRepeat()">
             <object
               type="image/svg+xml"

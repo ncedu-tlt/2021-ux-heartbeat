@@ -17,6 +17,7 @@ import {
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { interval, Observable, Subject, takeUntil } from "rxjs";
+import { RepeatStateEnum } from "../../models/repeat-state.enum";
 
 @Component({
   selector: "hb-player",
@@ -27,7 +28,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   public ARTIST_NAMES_BLOCK_WIDTH = 130;
   public ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE = 280;
 
-  @ViewChild("artistNames") mobileArtistNameLine!: ElementRef;
+  @ViewChild("artistNames") mobileArtistNameLine!: ElementRef<HTMLElement>;
 
   public isMobile = false;
   public drawerVisible = false;
@@ -35,6 +36,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   public userPlaylists: ItemUserPlaylistModel[] = [];
   public isFavorite = false;
   public artistsNames: string | undefined = "";
+  public repeatState = RepeatStateEnum;
 
   public movingLineCurrentPosition = 0;
   public movingLineScrollWidth!: number;
@@ -62,9 +64,8 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stop$.next();
         if (this.isMobile && this.drawerVisible) {
           setTimeout(() => {
-            this.movingLineScrollWidth = (
-              this.mobileArtistNameLine.nativeElement as HTMLElement
-            ).scrollWidth;
+            this.movingLineScrollWidth =
+              this.mobileArtistNameLine.nativeElement.scrollWidth;
             this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE);
           }, 0);
         }
@@ -92,9 +93,8 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.drawerVisible = true;
       this.checkTrackIntoUserFavoriteList(id);
       setTimeout(() => {
-        this.movingLineScrollWidth = (
-          this.mobileArtistNameLine.nativeElement as HTMLElement
-        ).scrollWidth;
+        this.movingLineScrollWidth =
+          this.mobileArtistNameLine.nativeElement.scrollWidth;
         this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE);
       }, 0);
     }
@@ -184,36 +184,36 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.stop$.next();
       return;
     }
-    this.movingLineScrollWidth = (e?.currentTarget as HTMLElement).scrollWidth;
+    this.movingLineScrollWidth = (e.currentTarget as HTMLElement).scrollWidth;
     if (this.movingLineScrollWidth > this.ARTIST_NAMES_BLOCK_WIDTH) {
       this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH);
     }
   }
 
   changeLinePosition(blockWidth: number): void {
-    if (this.movingLineScrollWidth > blockWidth) {
-      this.motionTimer$.pipe(takeUntil(this.stop$)).subscribe(() => {
-        if (
-          !this.movingLineEdge &&
-          this.movingLineCurrentPosition >
-            blockWidth - this.movingLineScrollWidth
-        ) {
-          this.movingLineCurrentPosition--;
-        } else {
-          this.movingLineEdge = true;
-        }
-        if (
-          this.movingLineCurrentPosition >=
-            blockWidth - this.movingLineScrollWidth &&
-          this.movingLineEdge &&
-          this.movingLineCurrentPosition <= 0
-        ) {
-          this.movingLineCurrentPosition++;
-        } else {
-          this.movingLineEdge = false;
-        }
-      });
+    if (this.movingLineScrollWidth <= blockWidth) {
+      return;
     }
+    this.motionTimer$.pipe(takeUntil(this.stop$)).subscribe(() => {
+      if (
+        !this.movingLineEdge &&
+        this.movingLineCurrentPosition > blockWidth - this.movingLineScrollWidth
+      ) {
+        this.movingLineCurrentPosition--;
+      } else {
+        this.movingLineEdge = true;
+      }
+      if (
+        this.movingLineCurrentPosition >=
+          blockWidth - this.movingLineScrollWidth &&
+        this.movingLineEdge &&
+        this.movingLineCurrentPosition <= 0
+      ) {
+        this.movingLineCurrentPosition++;
+      } else {
+        this.movingLineEdge = false;
+      }
+    });
   }
 
   ngOnDestroy(): void {

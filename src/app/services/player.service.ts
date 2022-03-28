@@ -20,15 +20,16 @@ import {
 import { TrackById } from "../models/new-api-models/track-by-id.model";
 import { TrackLaunchContextEnum } from "../models/track-launch-context.enum";
 import { NewSearchModel } from "../models/new-api-models/search.model";
-import { statesGeneratorUtils } from "../utils/states-generator.utils";
+import { repeatStatesGeneratorUtils } from "../utils/repeat-states-generator.utils";
+import { RepeatStateEnum } from "../models/repeat-state.enum";
 
-type trackList =
+type TrackList =
   | ItemsTrackModel
   | AlbumTracksModel
   | NewSearchModel
   | NewTopArtistTracks;
 
-type track = TrackById | NewAlbumTracksModel | TopTracksModel;
+type Track = TrackById | NewAlbumTracksModel | TopTracksModel;
 
 @Injectable({
   providedIn: "root"
@@ -46,21 +47,21 @@ export class PlayerService {
   private stop$: Subject<void> = new Subject();
   private die$: Subject<void> = new Subject();
 
-  public currentTrackInfo$ = new BehaviorSubject<track | null>(null);
+  public currentTrackInfo$ = new BehaviorSubject<Track | null>(null);
   private currentTrackNumber!: number;
-  public trackList$ = new BehaviorSubject<trackList | null>(null);
-  private shuffleTrackList!: trackList;
+  public trackList$ = new BehaviorSubject<TrackList | null>(null);
+  private shuffleTrackList!: TrackList;
   public trackContext$ = new BehaviorSubject<
     string | TrackLaunchContextEnum | null | undefined
   >(null);
 
   public isPlay$ = new BehaviorSubject<boolean>(false);
-  public isRepeat = 0;
+  public isRepeat = RepeatStateEnum.NO_REPEAT;
   public isShuffle$ = new BehaviorSubject<boolean>(false);
   private isVolume = true;
   private savedVolume = 100;
 
-  public repeatGen: Generator<number> = statesGeneratorUtils(3)();
+  public repeatGen: Generator<RepeatStateEnum> = repeatStatesGeneratorUtils()();
 
   constructor() {
     document.addEventListener("click", this.resumeContext);
@@ -85,31 +86,28 @@ export class PlayerService {
       });
       this.trackList$
         .pipe(takeUntil(this.die$))
-        .subscribe((trackList: trackList | null) => {
+        .subscribe((trackList: TrackList | null) => {
           if (trackList) {
             this.currentTrackNumber = trackList.items.findIndex(el => {
               return el.track.id === this.currentTrackInfo$.getValue()?.id;
             });
             this.shuffleTrackList = JSON.parse(
               JSON.stringify(trackList)
-            ) as trackList;
+            ) as TrackList;
             if (this.isShuffle$.getValue()) {
               this.mixCurrentTrackList();
             }
           }
         });
       this.isShuffle$.pipe(takeUntil(this.die$)).subscribe(isShuffle => {
-        if (isShuffle) {
-          if (this.trackList$.getValue()) {
-            this.mixCurrentTrackList();
-          }
-        } else {
-          if (this.trackList$.getValue()?.items) {
-            this.currentTrackNumber =
-              this.trackList$.getValue()?.items.findIndex(el => {
-                return el.track.id === this.currentTrackInfo$.getValue()?.id;
-              }) || 0;
-          }
+        if (isShuffle && this.trackList$.getValue()) {
+          this.mixCurrentTrackList();
+        }
+        if (!isShuffle && this.trackList$.getValue()?.items) {
+          this.currentTrackNumber =
+            this.trackList$.getValue()?.items.findIndex(el => {
+              return el.track.id === this.currentTrackInfo$.getValue()?.id;
+            }) || 0;
         }
       });
       this.player.crossOrigin = "anonymous";
@@ -176,26 +174,22 @@ export class PlayerService {
   }
 
   checkMusicEnd(): void {
-    if (this.player.currentTime === this.player.duration) {
-      if (!this.player.loop) {
-        if (this.checkTrackExistence(this.currentTrackNumber + 1)) {
-          this.switchTrack(SwitchPlayerActionEnum.SWITCH_NEXT);
-        } else {
-          this.checkRepeat();
-        }
+    if (this.player.currentTime === this.player.duration && !this.player.loop) {
+      if (this.checkTrackExistence(this.currentTrackNumber + 1)) {
+        this.switchTrack(SwitchPlayerActionEnum.SWITCH_NEXT);
+      } else {
+        this.checkRepeat();
       }
     }
   }
 
   checkRepeat(): void {
-    if (!this.isRepeat) {
-      if (this.player.currentTime === this.player.duration) {
-        this.player.pause();
-        this.isPlay$.next(false);
-        this.stop$.next();
-      }
+    if (!this.isRepeat && this.player.currentTime === this.player.duration) {
+      this.player.pause();
+      this.isPlay$.next(false);
+      this.stop$.next();
     }
-    if (this.isRepeat === 1) {
+    if (this.isRepeat === RepeatStateEnum.PLAYLIST_REPEAT) {
       if (this.trackList$.getValue()) {
         const newTrack = this.checkTrackExistence(0);
         if (newTrack) {
@@ -210,8 +204,8 @@ export class PlayerService {
   }
 
   putOnRepeat(): void {
-    this.isRepeat = this.repeatGen.next().value as number;
-    this.player.loop = this.isRepeat === 2;
+    this.isRepeat = this.repeatGen.next().value as RepeatStateEnum;
+    this.player.loop = this.isRepeat === RepeatStateEnum.TRACK_REPEAT;
   }
 
   closeAudioContext(): void {
@@ -223,11 +217,9 @@ export class PlayerService {
   checkTrackExistence(
     index: number
   ): TrackById | NewAlbumTracksModel | null | undefined {
-    if (this.isShuffle$.getValue()) {
-      return this.shuffleTrackList.items[index]?.track;
-    } else {
-      return this.trackList$.getValue()?.items[index]?.track;
-    }
+    return this.isShuffle$.getValue()
+      ? this.shuffleTrackList.items[index]?.track
+      : this.trackList$.getValue()?.items[index]?.track;
   }
 
   switchTrack(action: SwitchPlayerActionEnum): void {
@@ -257,7 +249,7 @@ export class PlayerService {
       this.shuffleTrackList.items[0].track
     ] = [
       this.shuffleTrackList.items[0].track,
-      this.currentTrackInfo$.getValue() as track
+      this.currentTrackInfo$.getValue() as Track
     ];
     this.currentTrackNumber = 0;
     for (let i = this.shuffleTrackList.items.length - 1; i > 1; i--) {
