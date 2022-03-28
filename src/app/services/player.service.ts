@@ -103,6 +103,13 @@ export class PlayerService {
           if (this.trackList$.getValue()) {
             this.mixCurrentTrackList();
           }
+        } else {
+          if (this.trackList$.getValue()?.items) {
+            this.currentTrackNumber =
+              this.trackList$.getValue()?.items.findIndex(el => {
+                return el.track.id === this.currentTrackInfo$.getValue()?.id;
+              }) || 0;
+          }
         }
       });
       this.player.crossOrigin = "anonymous";
