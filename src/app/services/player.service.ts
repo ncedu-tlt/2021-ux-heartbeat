@@ -47,18 +47,18 @@ export class PlayerService {
   private die$: Subject<void> = new Subject();
 
   public currentTrackInfo$ = new BehaviorSubject<track | null>(null);
-  public currentTrackNumber!: number;
+  private currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<trackList | null>(null);
-  public shuffleTrackList!: trackList;
+  private shuffleTrackList!: trackList;
   public trackContext$ = new BehaviorSubject<
     string | TrackLaunchContextEnum | null | undefined
   >(null);
 
   public isPlay$ = new BehaviorSubject<boolean>(false);
   public isRepeat = 0;
-  public isShuffle = new BehaviorSubject<boolean>(false);
-  public isVolume = true;
-  public savedVolume = 100;
+  public isShuffle$ = new BehaviorSubject<boolean>(false);
+  private isVolume = true;
+  private savedVolume = 100;
 
   public repeatGen: Generator<number> = statesGeneratorUtils(3)();
 
@@ -93,12 +93,12 @@ export class PlayerService {
             this.shuffleTrackList = JSON.parse(
               JSON.stringify(trackList)
             ) as trackList;
-            if (this.isShuffle.getValue()) {
+            if (this.isShuffle$.getValue()) {
               this.mixCurrentTrackList();
             }
           }
         });
-      this.isShuffle.pipe(takeUntil(this.die$)).subscribe(isShuffle => {
+      this.isShuffle$.pipe(takeUntil(this.die$)).subscribe(isShuffle => {
         if (isShuffle) {
           if (this.trackList$.getValue()) {
             this.mixCurrentTrackList();
@@ -223,7 +223,7 @@ export class PlayerService {
   checkTrackExistence(
     index: number
   ): TrackById | NewAlbumTracksModel | null | undefined {
-    if (this.isShuffle.getValue()) {
+    if (this.isShuffle$.getValue()) {
       return this.shuffleTrackList.items[index]?.track;
     } else {
       return this.trackList$.getValue()?.items[index]?.track;

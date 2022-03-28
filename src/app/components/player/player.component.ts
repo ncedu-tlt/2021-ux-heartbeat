@@ -39,7 +39,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   public movingLineCurrentPosition = 0;
   public movingLineScrollWidth!: number;
   public movingLineEdge = false;
-  public motionTimer: Observable<number> = interval(80);
+  public motionTimer$: Observable<number> = interval(80);
 
   private die$ = new Subject<void>();
   private stop$ = new Subject<void>();
@@ -91,13 +91,13 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.isMobile) {
       this.drawerVisible = true;
       this.checkTrackIntoUserFavoriteList(id);
+      setTimeout(() => {
+        this.movingLineScrollWidth = (
+          this.mobileArtistNameLine.nativeElement as HTMLElement
+        ).scrollWidth;
+        this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE);
+      }, 0);
     }
-    setTimeout(() => {
-      this.movingLineScrollWidth = (
-        this.mobileArtistNameLine.nativeElement as HTMLElement
-      ).scrollWidth;
-      this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE);
-    }, 0);
   }
 
   closePlayerControlOnMobile(): void {
@@ -192,7 +192,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   changeLinePosition(blockWidth: number): void {
     if (this.movingLineScrollWidth > blockWidth) {
-      this.motionTimer.pipe(takeUntil(this.stop$)).subscribe(() => {
+      this.motionTimer$.pipe(takeUntil(this.stop$)).subscribe(() => {
         if (
           !this.movingLineEdge &&
           this.movingLineCurrentPosition >

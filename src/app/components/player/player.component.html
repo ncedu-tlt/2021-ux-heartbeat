@@ -1,7 +1,7 @@
 <div class="container" *ngIf="{
                                 track: (playerService.currentTrackInfo$ | async),
                                 isPLay: (playerService.isPlay$ | async),
-                                isShuffle: (playerService.isShuffle | async),
+                                isShuffle: (playerService.isShuffle$ | async),
                                 musicTimer: (playerService.musicCurrentTime$ | async)
                               } as player">
   <div class="player" *ngIf="!drawerVisible">
@@ -107,7 +107,7 @@
                    (click)="playerService.changeMusicVolume($event)">
       </nz-progress>
       <button class="player__mixing" *ngIf="!player.isShuffle"
-              (click)="playerService.isShuffle.next(true)">
+              (click)="playerService.isShuffle$.next(true)">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/mixing.svg"
@@ -116,7 +116,7 @@
         ></object>
       </button>
       <button class="player__mixing" *ngIf="player.isShuffle"
-              (click)="playerService.isShuffle.next(false)">
+              (click)="playerService.isShuffle$.next(false)">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/mixing-active.svg"
