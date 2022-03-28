@@ -16,7 +16,7 @@
           </p>
         </div>
         <span class="player__track-name" nz-tooltip="" [nzTooltipMouseEnterDelay]="0.7"
-              nzTooltipTitle="{{playerService.currentTrackInfo$.getValue()!.name}}"
+              nzTooltipTitle="{{(playerService.currentTrackInfo$ | async)?.name}}"
               nzTooltipPlacement="topLeft">
           {{playerService.currentTrackInfo$.getValue()!.name}}
         </span>
