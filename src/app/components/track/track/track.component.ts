@@ -28,7 +28,7 @@ export class TrackComponent implements OnInit, OnDestroy {
 
   @Input() set track(track: TrackById | NewAlbumTracksModel) {
     this._track = track;
-    this.artistNameList = track.artists.reduce((prev, cur, index) => {
+    this.artistNameList = track?.artists.reduce((prev, cur, index) => {
       return `${prev}${!index ? "" : ","} ${cur.name}`;
     }, "");
   }
@@ -54,7 +54,7 @@ export class TrackComponent implements OnInit, OnDestroy {
         trackContext: string | TrackLaunchContextEnum | null | undefined
       ]) => {
         if (
-          currentTrack?.id === this._track.id &&
+          currentTrack?.id === this._track?.id &&
           this.trackContext === trackContext
         ) {
           this.isPlay = isPlay;
