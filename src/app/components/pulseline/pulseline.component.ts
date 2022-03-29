@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-
 @Component({
   selector: "hb-pulseline",
   templateUrl: "./pulseline.component.html",
