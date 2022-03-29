@@ -1,4 +1,11 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from "@angular/core";
 import { PlayerService } from "../../services/player.service";
 import { AuthService } from "../../services/auth.service";
 import { SwitchPlayerActionEnum } from "../../models/switch-player-action.enum";
@@ -9,7 +16,8 @@ import {
 } from "../../models/new-api-models/current-users-playlist.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
-import { Subject, takeUntil, tap } from "rxjs";
+import { interval, Observable, Subject, takeUntil } from "rxjs";
+import { RepeatStateEnum } from "../../models/repeat-state.enum";
 
 @Component({
   selector: "hb-player",
@@ -17,13 +25,26 @@ import { Subject, takeUntil, tap } from "rxjs";
   styleUrls: ["./player.component.less"]
 })
 export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
+  public ARTIST_NAMES_BLOCK_WIDTH = 130;
+  public ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE = 280;
+
+  @ViewChild("artistNames") mobileArtistNameLine!: ElementRef<HTMLElement>;
+
   public isMobile = false;
   public drawerVisible = false;
   public actions = SwitchPlayerActionEnum;
   public userPlaylists: ItemUserPlaylistModel[] = [];
   public isFavorite = false;
   public artistsNames: string | undefined = "";
+  public repeatState = RepeatStateEnum;
+
+  public movingLineCurrentPosition = 0;
+  public movingLineScrollWidth!: number;
+  public movingLineEdge = false;
+  public motionTimer$: Observable<number> = interval(80);
+
   private die$ = new Subject<void>();
+  private stop$ = new Subject<void>();
 
   constructor(
     public playerService: PlayerService,
@@ -36,17 +57,19 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isMobile =
       window.screen.width < 895 || document.documentElement.clientWidth < 895;
     this.playerService.createAudioElement();
-
     this.playerService.currentTrackInfo$
-      .pipe(
-        takeUntil(this.die$),
-        tap(track => {
-          this.artistsNames = track?.artists.reduce((prev, cur, index) => {
-            return `${prev}${!index ? "" : ","} ${cur.name}`;
-          }, "");
-        })
-      )
-      .subscribe();
+      .pipe(takeUntil(this.die$))
+      .subscribe(() => {
+        this.movingLineCurrentPosition = 0;
+        this.stop$.next();
+        if (this.isMobile && this.drawerVisible) {
+          setTimeout(() => {
+            this.movingLineScrollWidth =
+              this.mobileArtistNameLine.nativeElement.scrollWidth;
+            this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE);
+          }, 0);
+        }
+      });
   }
 
   ngAfterViewInit(): void {
@@ -69,11 +92,17 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.isMobile) {
       this.drawerVisible = true;
       this.checkTrackIntoUserFavoriteList(id);
+      setTimeout(() => {
+        this.movingLineScrollWidth =
+          this.mobileArtistNameLine.nativeElement.scrollWidth;
+        this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE);
+      }, 0);
     }
   }
 
   closePlayerControlOnMobile(): void {
     this.drawerVisible = false;
+    this.stop$.next();
   }
 
   getUserPlaylists(id: string): void {
@@ -150,9 +179,47 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  setLineInMotion(e: Event | null): void {
+    if (!e) {
+      this.stop$.next();
+      return;
+    }
+    this.movingLineScrollWidth = (e.currentTarget as HTMLElement).scrollWidth;
+    if (this.movingLineScrollWidth > this.ARTIST_NAMES_BLOCK_WIDTH) {
+      this.changeLinePosition(this.ARTIST_NAMES_BLOCK_WIDTH);
+    }
+  }
+
+  changeLinePosition(blockWidth: number): void {
+    if (this.movingLineScrollWidth <= blockWidth) {
+      return;
+    }
+    this.motionTimer$.pipe(takeUntil(this.stop$)).subscribe(() => {
+      if (
+        !this.movingLineEdge &&
+        this.movingLineCurrentPosition > blockWidth - this.movingLineScrollWidth
+      ) {
+        this.movingLineCurrentPosition--;
+      } else {
+        this.movingLineEdge = true;
+      }
+      if (
+        this.movingLineCurrentPosition >=
+          blockWidth - this.movingLineScrollWidth &&
+        this.movingLineEdge &&
+        this.movingLineCurrentPosition <= 0
+      ) {
+        this.movingLineCurrentPosition++;
+      } else {
+        this.movingLineEdge = false;
+      }
+    });
+  }
+
   ngOnDestroy(): void {
     window.removeEventListener("resize", this.resizeWindow);
     this.playerService.closeAudioContext();
     this.die$.next();
+    this.stop$.next();
   }
 }

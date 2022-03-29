@@ -1,21 +1,35 @@
-<div class="container">
+<div class="container" *ngIf="{
+                                track: (playerService.currentTrackInfo$ | async),
+                                isPLay: (playerService.isPlay$ | async),
+                                isShuffle: (playerService.isShuffle$ | async),
+                                musicTimer: (playerService.musicCurrentTime$ | async)
+                              } as player">
   <div class="player" *ngIf="!drawerVisible">
-    <div class="player__current-track" *ngIf="playerService.currentTrackInfo$.getValue()"
-         (click)="openPlayerControlOnMobile(playerService.currentTrackInfo$.getValue()!.id)">
-      <img [routerLink]="['/album', playerService.currentTrackInfo$.getValue()!.album!.id]"
-           src="{{playerService.currentTrackInfo$.getValue()!.album!.images[0].url}}" alt="#">
+    <div class="player__current-track" *ngIf="player.track"
+         (click)="openPlayerControlOnMobile(player.track.id)">
+      <img [routerLink]="['/album', player.track.album!.id]"
+           src="{{player.track.album!.images[0].url}}" alt="#">
       <div class="player__info-about-track">
-        <div class="player__artist-name">
-              <p *ngIf="artistsNames">
-                {{artistsNames}}
-              </p>
+        <div class="player__artists"
+             [ngStyle]="{'transform': 'translateX(' + movingLineCurrentPosition + 'px )', 'width': ARTIST_NAMES_BLOCK_WIDTH + 'px'}"
+             (mouseover)="setLineInMotion($event)" (mouseout)="setLineInMotion(null)">
+          <p *ngFor="let artist of player.track.artists, let i = index">
+            <span *ngIf="i">, </span>
+            <span class="player__artist-name" [routerLink]="['/artist', artist.id]">
+                {{artist.name}}
+              </span>
+          </p>
         </div>
-        <span class="player__track-name">{{playerService.currentTrackInfo$.getValue()!.name}}</span>
+        <span class="player__track-name" nz-tooltip="" [nzTooltipMouseEnterDelay]="0.7"
+              nzTooltipTitle="{{player.track.name}}"
+              nzTooltipPlacement="topLeft">
+          {{player.track.name}}
+        </span>
       </div>
     </div>
     <div class="player__control">
       <div class="player__control-items">
-        <button class="player__previous-track" (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)">
+        <button class="player__previous-track" (click)="playerService.switchTrack(actions.SWITCH_PREVIOUS)">
           <object
             type="image/svg+xml"
             data="../../../assets/svg/previous.svg"
@@ -23,7 +37,8 @@
             height="20px"
           ></object>
         </button>
-        <button *ngIf="!(playerService.isPlay$ | async)" class="player__play" (click)="playerService.switchPlayerAction()">
+        <button *ngIf="!player.isPLay" class="player__play"
+                (click)="playerService.switchPlayerAction()">
           <object
             type="image/svg+xml"
             data="../../../assets/svg/play.svg"
@@ -31,7 +46,8 @@
             height="20px"
           ></object>
         </button>
-        <button class="player__pause" *ngIf="playerService.isPlay$ | async" (click)="playerService.switchPlayerAction()">
+        <button class="player__pause" *ngIf="player.isPLay"
+                (click)="playerService.switchPlayerAction()">
           <object
             type="image/svg+xml"
             data="../../../assets/svg/pause.svg"
@@ -52,7 +68,7 @@
         <nz-progress nzTooltipPlacement="topLeft"
                      [nzTooltipOverlayStyle]="playerService.currentTooltipPosition"
                      nz-tooltip=""
-                     [nzTooltipTitle]="playerService.currentTrackInfo$.getValue() ? (playerService.timeOnTooltip$ | async | timeFormat) : null"
+                     [nzTooltipTitle]="player.track ? (playerService.timeOnTooltip$ | async | timeFormat) : null"
                      [nzPercent]=playerService.currentPositionOnProgressBar
                      [nzShowInfo]="false"
                      nzStatus="active"
@@ -61,15 +77,25 @@
                      (mousemove)="playerService.changeTooltipPosition($event)">
         </nz-progress>
         <span class="player__time">
-          {{playerService.musicCurrentTime$.getValue() | timeFormat}}
+          {{player.musicTimer | timeFormat}}
       </span>
       </div>
     </div>
     <div class="player__extra-control" *ngIf="!isMobile">
-      <button class="player__volume">
+      <button class="player__volume" *ngIf="playerService.player.volume"
+              (click)="playerService.controlMusicVolume()">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/volume.svg"
+          width="15px"
+          height="15px"
+        ></object>
+      </button>
+      <button class="player__volume" *ngIf="!playerService.player.volume"
+              (click)="playerService.controlMusicVolume()">
+        <object
+          type="image/svg+xml"
+          data="../../../assets/svg/no-volume.svg"
           width="15px"
           height="15px"
         ></object>
@@ -80,7 +106,8 @@
                    class="player__volume-bar"
                    (click)="playerService.changeMusicVolume($event)">
       </nz-progress>
-      <button class="player__mixing">
+      <button class="player__mixing" *ngIf="!player.isShuffle"
+              (click)="playerService.isShuffle$.next(true)">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/mixing.svg"
@@ -88,7 +115,17 @@
           height="15px"
         ></object>
       </button>
-      <button class="player__no-repeat" *ngIf="!playerService.isRepeat" (click)="playerService.putOnRepeat()">
+      <button class="player__mixing" *ngIf="player.isShuffle"
+              (click)="playerService.isShuffle$.next(false)">
+        <object
+          type="image/svg+xml"
+          data="../../../assets/svg/mixing-active.svg"
+          width="15px"
+          height="15px"
+        ></object>
+      </button>
+      <button class="player__no-repeat" *ngIf="playerService.isRepeat === repeatState.NO_REPEAT"
+              (click)="playerService.putOnRepeat()">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/repeat.svg"
@@ -96,7 +133,17 @@
           height="15px"
         ></object>
       </button>
-      <button class="player__repeat" *ngIf="playerService.isRepeat" (click)="playerService.putOnRepeat()">
+      <button class="player__repeat" *ngIf="playerService.isRepeat === repeatState.PLAYLIST_REPEAT"
+              (click)="playerService.putOnRepeat()">
+        <object
+          type="image/svg+xml"
+          data="../../../assets/svg/repeat-playlist.svg"
+          width="15px"
+          height="15px"
+        ></object>
+      </button>
+      <button class="player__repeat" *ngIf="playerService.isRepeat === repeatState.TRACK_REPEAT"
+              (click)="playerService.putOnRepeat()">
         <object
           type="image/svg+xml"
           data="../../../assets/svg/repeat-active.svg"
@@ -105,10 +152,10 @@
         ></object>
       </button>
       <button nz-dropdown [nzDropdownMenu]="menu"
-              [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getAuthToken()"
-              (click)="getUserPlaylists(playerService.currentTrackInfo$.getValue()!.id)"
+              [disabled]="!player.track || !authService.getAuthToken()"
+              (click)="getUserPlaylists(player.track!.id)"
               nzTrigger="click"
-              nzPlacement = "topCenter"
+              nzPlacement="topCenter"
               class="player__add-track">
         <object
           type="image/svg+xml"
@@ -129,19 +176,19 @@
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu>
         <li nz-menu-item *ngIf="!isFavorite"
-            (click)="addTrackIntoFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
+            (click)="addTrackIntoFavoriteList(player.track!.id)">
           Добавить в избранное
         </li>
         <li nz-menu-item
             *ngIf="isFavorite"
-            (click)="removeTrackFromFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
+            (click)="removeTrackFromFavoriteList(player.track!.id)">
           Убрать из избранного
         </li>
         <li nz-submenu nzTitle="Добавить в плейлист">
           <ul>
             <li nz-menu-item
                 *ngFor="let playlist of userPlaylists"
-                (click)="addTrackIntoPlaylist(playlist.id, playerService.currentTrackInfo$.getValue()!.id)">
+                (click)="addTrackIntoPlaylist(playlist.id, player.track!.id)">
               {{playlist.name}}
             </li>
           </ul>
@@ -151,7 +198,7 @@
   </div>
   <div class="player" *ngIf="!drawerVisible">
   </div>
-  <div class="mobile-player" *ngIf="isMobile && playerService.currentTrackInfo$.getValue()">
+  <div class="mobile-player" *ngIf="isMobile && player.track">
     <nz-drawer
       nzWrapClassName="mobile-player-drawer"
       [nzClosable]="false"
@@ -162,14 +209,20 @@
     >
       <ng-container class="mobile-player-contain" *nzDrawerContent>
         <div class="mobile-player-contain__current-track">
-          <img src="{{playerService.currentTrackInfo$.getValue()!.album!.images[0].url}}" alt="#" class="mobile-player-contain__img">
-          <div class="mobile-player-contain__info-about-track">
-          <div class="mobile-player-contain__artist-name">
-            <p *ngIf="artistsNames">
-              {{artistsNames}}
-            </p>
-          </div>
-            <span class="mobile-player-contain__track-name">{{playerService.currentTrackInfo$.getValue()!.name}}</span>
+          <img src="{{player.track.album!.images[0].url}}" alt="#"
+               class="mobile-player-contain__img">
+          <div class="mobile-player-contain__info-about-track"
+               [ngStyle]="{'width': ARTIST_NAMES_BLOCK_WIDTH_ON_MOBILE + 'px'}">
+            <div class="mobile-player-contain__artists" #artistNames
+                 [ngStyle]="{'transform': 'translateX(' + movingLineCurrentPosition + 'px )'}">
+              <p *ngFor="let artist of player.track.artists, let i = index">
+                <span *ngIf="i">, </span>
+                <span class="mobile-player-contain__artist-name" [routerLink]="['/artist', artist.id]">
+                    {{artist.name}}
+                  </span>
+              </p>
+            </div>
+            <span class="mobile-player-contain__track-name">{{player.track.name}}</span>
           </div>
         </div>
         <div class="mobile-player-contain__progress">
@@ -182,12 +235,13 @@
             (mousemove)="playerService.changeTooltipPosition($event)">
           </nz-progress>
           <span class="mobile-player-contain__time">
-          {{playerService.musicCurrentTime$.getValue() | timeFormat}}
+          {{player.musicTimer | timeFormat}}
       </span>
         </div>
         <div class="mobile-player-contain__control">
           <div class="mobile-player-contain__control-items">
-            <button class="mobile-player-contain__previous-track" (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)">
+            <button class="mobile-player-contain__previous-track"
+                    (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/previous.svg"
@@ -195,7 +249,8 @@
                 height="30px"
               ></object>
             </button>
-            <button *ngIf="!(playerService.isPlay$ | async)" class="mobile-player-contain__play" (click)="playerService.switchPlayerAction()">
+            <button *ngIf="!player.isPLay" class="mobile-player-contain__play"
+                    (click)="playerService.switchPlayerAction()">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/play.svg"
@@ -203,7 +258,8 @@
                 height="35px"
               ></object>
             </button>
-            <button class="mobile-player-contain__pause" *ngIf="playerService.isPlay$ | async" (click)="playerService.switchPlayerAction()">
+            <button class="mobile-player-contain__pause" *ngIf="player.isPLay"
+                    (click)="playerService.switchPlayerAction()">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/pause.svg"
@@ -211,7 +267,8 @@
                 height="35px"
               ></object>
             </button>
-            <button class="mobile-player-contain__next-track" (click)="this.playerService.switchTrack(actions.SWITCH_NEXT)">
+            <button class="mobile-player-contain__next-track"
+                    (click)="this.playerService.switchTrack(actions.SWITCH_NEXT)">
               <object
                 type="image/svg+xml"
                 data="../../../assets/svg/next.svg"
@@ -230,7 +287,8 @@
               height="25px"
             ></object>
           </button>
-          <button class="mobile-player-contain__no-repeat" *ngIf="!playerService.isRepeat" (click)="playerService.putOnRepeat()">
+          <button class="mobile-player-contain__no-repeat" *ngIf="playerService.isRepeat === repeatState.NO_REPEAT"
+                  (click)="playerService.putOnRepeat()">
             <object
               type="image/svg+xml"
               data="../../../assets/svg/repeat.svg"
@@ -238,7 +296,17 @@
               height="25px"
             ></object>
           </button>
-          <button class="mobile-player-contain__repeat" *ngIf="playerService.isRepeat" (click)="playerService.putOnRepeat()">
+          <button class="mobile-player-contain__repeat" *ngIf="playerService.isRepeat === repeatState.PLAYLIST_REPEAT"
+                  (click)="playerService.putOnRepeat()">
+            <object
+              type="image/svg+xml"
+              data="../../../assets/svg/repeat-playlist.svg"
+              width="25px"
+              height="25px"
+            ></object>
+          </button>
+          <button class="player__repeat" *ngIf="playerService.isRepeat === repeatState.TRACK_REPEAT"
+                  (click)="playerService.putOnRepeat()">
             <object
               type="image/svg+xml"
               data="../../../assets/svg/repeat-active.svg"
@@ -248,8 +316,8 @@
           </button>
           <button class="mobile-player-contain__add-track"
                   *ngIf="!isFavorite"
-                  [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getAuthToken()"
-                  (click)="addTrackIntoFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
+                  [disabled]="!player.track || !authService.getAuthToken()"
+                  (click)="addTrackIntoFavoriteList(player.track!.id)">
             <object
               type="image/svg+xml"
               data="../../../assets/svg/favorite.svg"
@@ -259,8 +327,8 @@
           </button>
           <button class="mobile-player-contain__delete-track"
                   *ngIf="isFavorite"
-                  [disabled]="!playerService.currentTrackInfo$.getValue() || !authService.getAuthToken()"
-                  (click)="removeTrackFromFavoriteList(playerService.currentTrackInfo$.getValue()!.id)">
+                  [disabled]="!player.track || !authService.getAuthToken()"
+                  (click)="removeTrackFromFavoriteList(player.track!.id)">
             <object
               type="image/svg+xml"
               data="../../../assets/svg/fill-heart.svg"
