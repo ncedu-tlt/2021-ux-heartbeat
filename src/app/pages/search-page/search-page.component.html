@@ -6,7 +6,7 @@
     <h2 class="title">Исполнители</h2>
     <div class="card">
       <div *ngFor="let artist of artists">
-        <hb-artist-card [artistInfo]="artist"></hb-artist-card>
+        <hb-artist-card [artistInfo]="artist" [followedArtistsId]="followedArtistsId"></hb-artist-card>
       </div>
     </div>
     <button class="addItem" (click)="showMoreArtists()" *ngIf="!isDisabledShowMoreArtists">ЕЩЕ</button>

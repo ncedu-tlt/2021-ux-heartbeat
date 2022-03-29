@@ -1,4 +1,32 @@
-<div [ngClass]="{ 'playlist-track' : !this.themeStateService.getIsDarkTheme() , 'playlist-track-dark' : this.themeStateService.getIsDarkTheme() }">
-  <h2>Playlist</h2>
-  <hb-track-list [trackList]="playlist" [trackContext]="playlistId"></hb-track-list>
+<div class="playlists-wrapper">
+  <hb-loader *ngIf="isLoading"></hb-loader>
+  <div *ngIf="playlists.length && !isLoading" class="playlists">
+    <div class="playlist__list">
+      <div *ngFor="let playlist of playlists" #playlist id="{{playlist.id}}" (click)="openPlaylist(playlist)" class="playlist">
+        <div class="playlist__image" [ngStyle]="{'background-image': 'url(' + playlist.images[0].url + ')'}"></div>
+        <div class="playlist__info">
+          <p class="playlist__name">{{playlist.name}}</p>
+          <p class="playlist__owner">{{playlist.owner.display_name}}</p>
+        </div>
+      </div>
+    </div>
+    <hr class="playlists__hr">
+    <div *ngIf="isOpen" class="playlists__tracks">
+      <div class="playlists-tracks__playlist">
+        <div class="playlist-tracks__avatar">
+          <img src="/assets/image/vinyl-record.png" alt="vinyl icon" class="playlist-tracks__vinyl"/>
+          <div class="playlist-tracks__image" [ngStyle]="{'background-image': 'url(' + this.playlist.images[0].url + ')'}"></div>
+        </div>
+        <div class="playlist-tracks__info">
+          <p class="playlist-tracks__name">{{this.playlist.name}}</p>
+          <p class="playlist-tracks__author">{{this.playlist.owner.display_name}}</p>
+        </div>
+      </div>
+      <hb-track-list [trackContext]="this.playlist.id" [trackList]="tracks" class="tracklist"></hb-track-list>
+    </div>
+    <div *ngIf="!isOpen" class="playlist__waiting">
+      <img class="playlist-waiting__img" src="assets/image/vinyl-record.png" alt="vinyl icon"/>
+      <p class="playlist-waiting__text">Здесь будет отображаться выбранный плейлист.</p>
+    </div>
+  </div>
 </div>

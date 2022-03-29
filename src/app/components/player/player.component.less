@@ -124,20 +124,30 @@
       margin-left: 10px;
       margin-right: 35px;
       max-height: 45px;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
-    &__artist-name {
+    &__artists {
       font-weight: bold;
-      cursor: pointer;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 130px;
+      display: flex;
+      flex-direction: row;
 
       p {
-        text-overflow: ellipsis;
-        overflow: hidden;
         margin-bottom: 0;
       }
+    }
+
+    &__artist-name:hover{
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    &__track-name {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 130px;
     }
 
     &__control {
@@ -255,28 +265,39 @@
   &__current-track {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   &__info-about-track {
     display: flex;
     flex-direction: column;
-    align-items: center;
     font-size: 25px;
     margin: 15px 0 10px;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
-  &__artist-name {
-    margin-right: 10px;
+  &__artists {
     font-weight: bold;
+    display: flex;
+    flex-direction: row;
 
     p {
       margin-bottom: 0;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      width: 250px;
-      text-align: center;
     }
+  }
+
+  &__artist-name:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  &__track-name {
+    font-size: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   &__progress {

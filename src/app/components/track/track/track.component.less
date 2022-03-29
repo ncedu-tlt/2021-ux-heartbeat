@@ -38,25 +38,27 @@
 
       &__artist {
         font-weight: bold;
-        cursor: pointer;
-        text-overflow: ellipsis;
         display: flex;
         flex-direction: row;
-        flex-wrap: nowrap;
-        white-space: nowrap;
 
         p {
-          margin: 0 3px 0 0;
+          cursor: pointer;
+          margin: 0 10px 0 0;
           text-overflow: ellipsis;
           overflow: hidden;
           width: 230px;
           color: @black;
+          white-space: nowrap;
         }
       }
 
       &__name {
         text-align: left;
         color: @black;
+        width: 230px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
       }
     }
   }

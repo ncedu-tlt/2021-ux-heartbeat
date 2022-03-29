@@ -5,10 +5,10 @@
     <hb-loader class="loader" *ngIf="isLoading"></hb-loader>
     <div class="tracks" *ngIf="trackInfo?.length && !isLoading">
         <div *ngFor="let track of trackInfo">
-            <hb-track class="tracks__track-container" 
-                      (playTrack)="setListTrackIntoPlayer()" 
-                      [trackContext]="trackContext" 
-                      [track]="track.track" 
+            <hb-track class="tracks__track-container"
+                      (playTrack)="setListTrackIntoPlayer()"
+                      [trackContext]="trackContext"
+                      [track]="track.track"
                       [isCard]="!isCard">
             </hb-track>
         </div>

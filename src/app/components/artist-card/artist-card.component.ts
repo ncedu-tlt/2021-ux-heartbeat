@@ -2,11 +2,14 @@ import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model";
 import { NewTopArtistTracks } from "../../models/new-api-models/top-tracks-artist-by-id.model";
 import { ApiService } from "../../services/api.service";
-import { Subscription } from "rxjs";
+import { catchError, Subject, takeUntil, throwError } from "rxjs";
 import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 import { PlayerService } from "../../services/player.service";
 import { ConverterService } from "../../services/converter.service";
 import { ThemeStateService } from "src/app/services/theme-state.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { ErrorFromSpotifyModel } from "../../models/error.model";
+import { NzMessageService } from "ng-zorro-antd/message";
 
 @Component({
   selector: "hb-artist-card",
@@ -16,16 +19,21 @@ import { ThemeStateService } from "src/app/services/theme-state.service";
 export class ArtistCardComponent implements OnInit, OnDestroy {
   @Input()
   public artistInfo!: ArtistByIdModel;
+  @Input()
+  public followedArtistsId: string[] = [];
   public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
-  public isCard = true;
   public changeTopTracks!: NewTopArtistTracks;
-  public topTracksSearch$ = new Subscription();
+  public isCard = true;
+  public subscription = false;
+  public die$ = new Subject<void>();
 
   constructor(
     private api: ApiService,
     public playerService: PlayerService,
     private convert: ConverterService,
-    public themeStateService: ThemeStateService
+    public themeStateService: ThemeStateService,
+    private notificationService: NzNotificationService,
+    private message: NzMessageService
   ) {}
 
   setListTrackIntoPlayer(): void {
@@ -33,17 +41,68 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.topTracksSearch$ = this.api
+    this.api
       .getArtistsTopTracks(this.artistInfo.id)
+      .pipe(takeUntil(this.die$))
       .subscribe(topTracks => {
         this.changeTopTracks =
           this.convert.convertTopArtistTracksToNewTopArtistTracks(
             topTracks.tracks.slice(0, 4)
           );
+        this.followedArtistsId.forEach(element => {
+          if (element === this.artistInfo.id) {
+            this.subscription = true;
+            return;
+          }
+        });
       });
   }
 
-  ngOnDestroy() {
-    this.topTracksSearch$.unsubscribe();
+  subscribeArtist(): void {
+    this.api
+      .putFollowArtists(this.artistInfo.id)
+      .pipe(
+        catchError((error: ErrorFromSpotifyModel) => {
+          if (error.status === 401) {
+            this.notificationService.error(
+              "Ошибка авторизации",
+              "Вам необходимо пройти авторизацию заново",
+              { nzDuration: 0 }
+            );
+          }
+          return throwError(() => new Error(error.error.error.message));
+        }),
+        takeUntil(this.die$)
+      )
+      .subscribe(() => {
+        this.subscription = true;
+        this.message.info("Вы подписались на исполнителя");
+      });
+  }
+
+  unsubscribeArtist(): void {
+    this.api
+      .unfollowArtists(this.artistInfo.id)
+      .pipe(
+        catchError((error: ErrorFromSpotifyModel) => {
+          if (error.status === 401) {
+            this.notificationService.error(
+              "Ошибка авторизации",
+              "Вам необходимо пройти авторизацию заново",
+              { nzDuration: 0 }
+            );
+          }
+          return throwError(() => new Error(error.error.error.message));
+        }),
+        takeUntil(this.die$)
+      )
+      .subscribe(() => {
+        this.subscription = false;
+        this.message.info("Вы отписались от исполнителя");
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.die$.next();
   }
 }

@@ -53,6 +53,7 @@ import { PlaylistCardComponent } from "./components/playlist-card/playlist-card.
 import { NzEmptyModule } from "ng-zorro-antd/empty";
 import { RecomendationCardComponent } from "src/app/components/recomendation-card/recomendation-card.component";
 import { NzResultModule } from "ng-zorro-antd/result";
+import { NzMessageModule } from "ng-zorro-antd/message";
 
 registerLocaleData(ru);
 
@@ -100,6 +101,7 @@ registerLocaleData(ru);
     NzLayoutModule,
     NzMenuModule,
     NzNotificationModule,
+    NzMessageModule,
     NzProgressModule,
     NzToolTipModule,
     NzDrawerModule,

@@ -9,11 +9,14 @@
     <div class="track-contain-info" *ngIf="!isCard">
       <div class="track-contain-info__artist">
         <p
-          *ngIf="artistNameList">
+          *ngIf="artistNameList" nz-tooltip="" [nzTooltipMouseEnterDelay]="0.7"
+          nzTooltipTitle="{{artistNameList}}" nzTooltipPlacement="topLeft">
           {{artistNameList}}
         </p>
       </div>
-      <div class="track-contain-info__name">{{_track.name}}</div>
+      <div class="track-contain-info__name" nz-tooltip="" [nzTooltipMouseEnterDelay]="0.7"
+      nzTooltipTitle="{{_track.name}}" nzTooltipPlacement="topLeft">
+        {{_track.name}}</div>
     </div>
   </div>
   <div *ngIf="!isCard" class="track-time">{{trackTime | timeFormat}}</div>

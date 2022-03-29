@@ -12,7 +12,7 @@ import { ThemeStateService } from "src/app/services/theme-state.service";
 })
 export class UserMenuComponent implements OnDestroy {
   public userName!: string;
-  public imageUrl: string | undefined;
+  public imageUrl = "";
   private subscription$: Subscription;
 
   constructor(

@@ -7,6 +7,6 @@
 <nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu>
     <li nz-menu-item routerLink="/user">Мой профиль</li>
-    <li nz-menu-item routerLink="/" (click)="authService.signOutOfSpotify()">Выйти</li>
+    <li nz-menu-item routerLink="/auth" (click)="authService.signOutOfSpotify()">Выйти</li>
   </ul>
 </nz-dropdown-menu>
