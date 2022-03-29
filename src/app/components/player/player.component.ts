@@ -10,6 +10,8 @@ import {
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { Subject, takeUntil, tap } from "rxjs";
+import { ThemeStateService } from "src/app/services/theme-state.service";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "hb-player",
@@ -29,7 +31,9 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     public playerService: PlayerService,
     public authService: AuthService,
     public apiService: ApiService,
-    private notificationService: NzNotificationService
+    private notificationService: NzNotificationService,
+    public themeStateService: ThemeStateService,
+    public domSanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {

@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 import { AlbumTracksModel } from "../../models/new-api-models/album-by-id.model";
 @Component({
   selector: "hb-albums-page",
@@ -6,6 +7,8 @@ import { AlbumTracksModel } from "../../models/new-api-models/album-by-id.model"
   styleUrls: ["./albums-page.component.less"]
 })
 export class AlbumsPageComponent {
+  constructor(public themeStateService: ThemeStateService) {}
+
   public albumId = "1fdYYk890Ur";
   public album: AlbumTracksModel = {
     items: [

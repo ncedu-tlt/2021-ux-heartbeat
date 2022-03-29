@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 import { ItemsTrackModel } from "../../models/new-api-models/top-tracks-artist-by-id.model";
 
 @Component({
@@ -7,6 +8,8 @@ import { ItemsTrackModel } from "../../models/new-api-models/top-tracks-artist-b
   styleUrls: ["./playlists-page.component.less"]
 })
 export class PlaylistsPageComponent {
+  constructor(public themeStateService: ThemeStateService) {}
+
   public playlistId = "1fNh56lM22d";
   public playlist: ItemsTrackModel = {
     items: [

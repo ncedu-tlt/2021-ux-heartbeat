@@ -1,6 +1,14 @@
-.album {
+@import '../../../assets/styles/colors.less';
+
+.album, .album-dark {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+}
+
+.album-dark {
+  * {
+    color: @white;
+  }
 }

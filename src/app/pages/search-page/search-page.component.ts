@@ -9,6 +9,7 @@ import { NewSearchModel } from "../../models/new-api-models/search.model";
 import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 
 @Component({
   selector: "hb-search-page",
@@ -31,7 +32,8 @@ export class SearchPageComponent {
     private api: ApiService,
     private searchStateService: SearchStateService,
     private convert: ConverterService,
-    private notificationService: NzNotificationService
+    private notificationService: NzNotificationService,
+    public themeStateService: ThemeStateService
   ) {
     this.searchStateService
       .getSearchState()

@@ -1,7 +1,9 @@
-.playlist {
+@import '../../../assets/styles/colors.less';
+
+.playlist, .playlist-dark {
     display: flex;
     flex-wrap: wrap;
-    justify-content: start;
+    justify-content: flex-start;
     margin-bottom: 30px;
     .card {
         margin-top: 20px;
@@ -15,7 +17,6 @@
         &__bg {
             width: 150px;
             height: 150px;
-            background: #C4C4C4;
             background-position: center;
             background-size: cover;
             border-radius: 5px;
@@ -29,7 +30,7 @@
             &-uptitle {
                 display: flex;
                 font-size: 15px;
-                color: #4b4b4b;
+                color: @black;
                 .year {
                     margin-right: 15px;
                 }
@@ -39,8 +40,14 @@
             }
             &-subtitle {
                 font-size: 15px;
-                color: #4b4b4b;
+                color: @black;
             }
         }
+    }
+}
+
+.playlist-dark {
+    * {
+        color: @white;
     }
 }

@@ -1,6 +1,14 @@
-.playlist-track {
+@import '../../../assets/styles/colors.less';
+
+.playlist-track, .playlist-track-dark {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+}
+
+.playlist-track-dark {
+  * {
+    color: @white;
+  }
 }

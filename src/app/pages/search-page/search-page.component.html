@@ -1,4 +1,4 @@
-<div class="container">
+<div [ngClass]="{ 'container' : !this.themeStateService.getIsDarkTheme() , 'container-dark' : this.themeStateService.getIsDarkTheme()  }">
   <div class="notFound">
     <nz-result *ngIf="!artists.length && !isLoading" nzStatus="404" nzSubTitle="По вашему запросу ничего не найдено."></nz-result>
   </div>

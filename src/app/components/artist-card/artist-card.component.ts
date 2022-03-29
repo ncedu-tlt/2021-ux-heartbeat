@@ -6,6 +6,7 @@ import { Subscription } from "rxjs";
 import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 import { PlayerService } from "../../services/player.service";
 import { ConverterService } from "../../services/converter.service";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 
 @Component({
   selector: "hb-artist-card",
@@ -23,7 +24,8 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
   constructor(
     private api: ApiService,
     public playerService: PlayerService,
-    private convert: ConverterService
+    private convert: ConverterService,
+    public themeStateService: ThemeStateService
   ) {}
 
   setListTrackIntoPlayer(): void {

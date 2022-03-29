@@ -3,6 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";
 import { ItemUserPlaylistModel } from "src/app/models/new-api-models/current-users-playlist.model";
 import { ApiService } from "src/app/services/api.service";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 
 @Component({
   selector: "hb-genre-page",
@@ -19,7 +20,8 @@ export class GenrePageComponent {
 
   constructor(
     public apiService: ApiService,
-    public activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute,
+    public themeStateService: ThemeStateService
   ) {
     this.genre = String(this.activatedRoute.snapshot.paramMap.get("genre"));
   }
