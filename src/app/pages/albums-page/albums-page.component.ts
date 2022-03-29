@@ -1,6 +1,3 @@
-import { Component } from "@angular/core";
-import { ThemeStateService } from "src/app/services/theme-state.service";
-import { AlbumTracksModel } from "../../models/new-api-models/album-by-id.model";
 import {
   Component,
   ElementRef,
@@ -19,13 +16,13 @@ import {
 } from "../../models/new-api-models/album-by-id.model";
 import { takeUntil } from "rxjs/operators";
 import { ConverterService } from "../../services/converter.service";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 
 @Component({
   selector: "hb-albums-page",
   templateUrl: "./albums-page.component.html",
   styleUrls: ["./albums-page.component.less"]
 })
-
 export class AlbumsPageComponent implements OnInit, OnDestroy {
   public albums: AlbumItemModel[] = [];
   public tracks!: AlbumTracksModel;

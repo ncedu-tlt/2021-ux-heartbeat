@@ -52,75 +52,27 @@
       </div>
     </div>
     <div class="player__extra-control" *ngIf="!isMobile">
-      <button class="player__volume" *ngIf="playerService.player.volume"
-              (click)="playerService.controlMusicVolume()">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/volume.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
-      <button class="player__volume" *ngIf="!playerService.player.volume"
-              (click)="playerService.controlMusicVolume()">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/no-volume.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
+      <div class="player__volume" *ngIf="playerService.player.volume"
+              (click)="playerService.controlMusicVolume()"></div>
+      <div class="player__no-volume" *ngIf="!playerService.player.volume"
+              (click)="playerService.controlMusicVolume()"></div>
       <nz-progress [nzShowInfo]="false"
                    [nzPercent]="playerService.musicVolume$ | async"
                    nzStatus="normal"
                    class="player__volume-bar"
                    (click)="playerService.changeMusicVolume($event)">
       </nz-progress>
-      <button class="player__mixing" *ngIf="!player.isShuffle"
-              (click)="playerService.isShuffle$.next(true)">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/mixing.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
-      <button class="player__mixing" *ngIf="player.isShuffle"
-              (click)="playerService.isShuffle$.next(false)">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/mixing-active.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
-      <button class="player__no-repeat" *ngIf="playerService.isRepeat === repeatState.NO_REPEAT"
+      <div class="player__mixing" *ngIf="!player.isShuffle"
+              (click)="playerService.isShuffle$.next(true)"></div>
+      <div class="player__mixing-active" *ngIf="player.isShuffle"
+              (click)="playerService.isShuffle$.next(false)"></div>
+      <div class="player__no-repeat" *ngIf="playerService.isRepeat === repeatState.NO_REPEAT"
               (click)="playerService.putOnRepeat()">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/repeat.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
-      <button class="player__repeat" *ngIf="playerService.isRepeat === repeatState.PLAYLIST_REPEAT"
-              (click)="playerService.putOnRepeat()">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/repeat-playlist.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
-      <button class="player__repeat" *ngIf="playerService.isRepeat === repeatState.TRACK_REPEAT"
-              (click)="playerService.putOnRepeat()">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/repeat-active.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
+      </div>
+      <div class="player__repeat-playlist" *ngIf="playerService.isRepeat === repeatState.PLAYLIST_REPEAT"
+              (click)="playerService.putOnRepeat()"></div>
+      <div class="player__repeat" *ngIf="playerService.isRepeat === repeatState.TRACK_REPEAT"
+              (click)="playerService.putOnRepeat()"></div>
       <button nz-dropdown [nzDropdownMenu]="menu"
               [disabled]="!player.track || !authService.getAuthToken()"
               (click)="getUserPlaylists(player.track!.id)"

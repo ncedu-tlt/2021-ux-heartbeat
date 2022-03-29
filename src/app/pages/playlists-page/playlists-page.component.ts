@@ -1,5 +1,3 @@
-import { Component } from "@angular/core";
-import { ThemeStateService } from "src/app/services/theme-state.service";
 import {
   Component,
   ElementRef,
@@ -16,13 +14,13 @@ import {
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ApiService } from "../../services/api.service";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 
 @Component({
   selector: "hb-playlists-page",
   templateUrl: "./playlists-page.component.html",
   styleUrls: ["./playlists-page.component.less"]
 })
-
 export class PlaylistsPageComponent implements OnInit, OnDestroy {
   public playlists: ItemUserPlaylistModel[] = [];
   public playlist!: ItemUserPlaylistModel;
