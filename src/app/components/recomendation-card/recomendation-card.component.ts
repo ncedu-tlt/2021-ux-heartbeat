@@ -33,7 +33,7 @@ export class RecomendationCardComponent {
     this.info$ = this.apiService
       .getPlaylistTracks(this.recomendation.id)
       .subscribe(topTracks => {
-        this.trackInfo = topTracks.items.slice(0, 4);
+        this.trackInfo = topTracks.items.filter(el => el.track).slice(0, 4);
         this.isLoading = false;
       });
   }
