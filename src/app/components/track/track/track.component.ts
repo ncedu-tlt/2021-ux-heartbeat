@@ -13,6 +13,7 @@ import { NewAlbumTracksModel } from "../../../models/new-api-models/album-by-id.
 import { TrackLaunchContextEnum } from "../../../models/track-launch-context.enum";
 import { TopTracksModel } from "../../../models/new-api-models/top-tracks-artist-by-id.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 
 @Component({
   selector: "hb-track",
@@ -39,7 +40,8 @@ export class TrackComponent implements OnInit, OnDestroy {
 
   constructor(
     public playerService: PlayerService,
-    public notification: NzNotificationService
+    public notification: NzNotificationService,
+    public themeStateService: ThemeStateService
   ) {}
 
   ngOnInit(): void {
@@ -77,7 +79,7 @@ export class TrackComponent implements OnInit, OnDestroy {
 
   controlPlayerCurrentTrack(): void {
     if (
-      this.playerService.currentTrackInfo$.getValue()?.id !== this._track.id
+      this.playerService.currentTrackInfo$.getValue()?.id !== this._track?.id
     ) {
       this.setCurrentTrack();
     } else {

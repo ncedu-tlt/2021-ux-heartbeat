@@ -1,6 +1,6 @@
 @import '../../../assets/styles/colors.less';
 
-.home__routes {
+.home__routes, .home__routes-dark {
   margin-top: 30px;
   display: flex;
   flex-direction: row;
@@ -18,6 +18,13 @@
   }
   .active {
     color: @black;
+    font-weight: 600;
+  }
+}
+
+.home__routes-dark {
+  .active {
+    color: @white;
     font-weight: 600;
   }
 }

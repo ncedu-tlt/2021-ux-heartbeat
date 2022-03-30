@@ -16,6 +16,7 @@ import {
 } from "../../models/new-api-models/album-by-id.model";
 import { takeUntil } from "rxjs/operators";
 import { ConverterService } from "../../services/converter.service";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 
 @Component({
   selector: "hb-albums-page",
@@ -38,7 +39,8 @@ export class AlbumsPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private apiService: ApiService,
-    private convertService: ConverterService
+    private convertService: ConverterService,
+    public themeStateService: ThemeStateService
   ) {}
 
   public loadAlbums(): void {

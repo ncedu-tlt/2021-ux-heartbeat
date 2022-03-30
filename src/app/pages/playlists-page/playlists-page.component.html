@@ -1,9 +1,12 @@
-<div class="playlists-wrapper">
+<div [ngClass]="{ 'playlists-wrapper' : !this.themeStateService.getIsDarkTheme() , 'playlists-wrapper-dark' : this.themeStateService.getIsDarkTheme() }">
   <hb-loader *ngIf="isLoading"></hb-loader>
   <div *ngIf="playlists.length && !isLoading" class="playlists">
     <div class="playlist__list">
       <div *ngFor="let playlist of playlists" #playlist id="{{playlist.id}}" (click)="openPlaylist(playlist)" class="playlist">
-        <div class="playlist__image" [ngStyle]="{'background-image': 'url(' + playlist.images[0].url + ')'}"></div>
+        <div class="playlist__image" [style.background-image]="this.playlist.images[0]
+                                                               ? 'url(' + playlist.images[0].url + ')'
+                                                               : 'url(./assets/image/undefined_album_image.jpg)'"
+        ></div>
         <div class="playlist__info">
           <p class="playlist__name">{{playlist.name}}</p>
           <p class="playlist__owner">{{playlist.owner.display_name}}</p>
@@ -15,14 +18,20 @@
       <div class="playlists-tracks__playlist">
         <div class="playlist-tracks__avatar">
           <img src="/assets/image/vinyl-record.png" alt="vinyl icon" class="playlist-tracks__vinyl"/>
-          <div class="playlist-tracks__image" [ngStyle]="{'background-image': 'url(' + this.playlist.images[0].url + ')'}"></div>
+          <div class="playlist-tracks__image" [style.background-image]="this.playlist.images[0]
+                                                               ? 'url(' + playlist.images[0].url + ')'
+                                                               : 'url(./assets/image/undefined_album_image.jpg)'"
+          ></div>
         </div>
         <div class="playlist-tracks__info">
           <p class="playlist-tracks__name">{{this.playlist.name}}</p>
           <p class="playlist-tracks__author">{{this.playlist.owner.display_name}}</p>
         </div>
       </div>
-      <hb-track-list [trackContext]="this.playlist.id" [trackList]="tracks" class="tracklist"></hb-track-list>
+      <hb-track-list *ngIf="this.playlist.images[0]" [trackContext]="this.playlist.id" [trackList]="tracks" class="tracklist"></hb-track-list>
+      <div *ngIf="!this.playlist.images[0]">
+        <p>Выбранный вами плейлист пуст.</p>
+      </div>
     </div>
     <div *ngIf="!isOpen" class="playlist__waiting">
       <img class="playlist-waiting__img" src="assets/image/vinyl-record.png" alt="vinyl icon"/>

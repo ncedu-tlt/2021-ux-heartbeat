@@ -1,4 +1,4 @@
-<div class="container">
+<div [ngClass]="{ 'container' : !this.themeStateService.getIsDarkTheme() , 'container-dark' : this.themeStateService.getIsDarkTheme() }">
   <h1>Исполнители</h1>
   <hb-loader class="loader" *ngIf="isLoading"></hb-loader>
   <div class="artist-list" *ngIf="artists.length && !isLoading">

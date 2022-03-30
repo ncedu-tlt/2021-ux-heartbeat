@@ -14,6 +14,7 @@ import {
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ApiService } from "../../services/api.service";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 
 @Component({
   selector: "hb-playlists-page",
@@ -34,7 +35,10 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   private oldSelected = "";
   private selectedId = "";
 
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    public themeStateService: ThemeStateService
+  ) {}
 
   loadPlaylists(): void {
     this.apiService
