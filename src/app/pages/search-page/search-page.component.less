@@ -1,6 +1,6 @@
 @import '../../../assets/styles/colors.less';
 
-.container {
+.container, .container-dark {
   padding-bottom: 100px;
   display: grid;
   grid-template-columns: 3fr 2fr;
@@ -41,3 +41,16 @@
   }
 }
 
+.container-dark {
+  * {
+    color: @white;
+  }
+  .addItem {
+    background: none;
+    border: 1px solid @white;
+    &:hover {
+      background-color: @active-button;
+      color: @black;
+    }
+  }
+}

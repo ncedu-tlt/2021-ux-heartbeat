@@ -1,4 +1,4 @@
-<div class="playlists-wrapper">
+<div [ngClass]="{ 'playlists-wrapper' : !this.themeStateService.getIsDarkTheme() , 'playlists-wrapper-dark' : this.themeStateService.getIsDarkTheme() }">
   <hb-loader *ngIf="isLoading"></hb-loader>
   <div *ngIf="playlists.length && !isLoading" class="playlists">
     <div class="playlist__list">

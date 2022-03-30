@@ -1,5 +1,5 @@
 <!-- Обертка  -->
-<div class="navigation">
+<div [ngClass]="{ 'navigation' : !this.themeStateService.getIsDarkTheme() , 'navigation-dark' : this.themeStateService.getIsDarkTheme()  }">
     <!-- Контент  -->
 
     <div class="logo">
@@ -42,4 +42,6 @@
             </li>
         </ul>
     </nav>
+
+    <div class="dark-theme" (click)="changeTheme()"></div>
 </div>

@@ -1,4 +1,4 @@
-<div class="playlist">
+<div [ngClass]="{ 'playlist' : !this.themeStateService.getIsDarkTheme() , 'playlist-dark' : this.themeStateService.getIsDarkTheme() }">
     <div class="card" >
         <div class="card__bg" [ngStyle]="
             {'background-image' : 'url(' + playlist.images[0].url + ')'}">

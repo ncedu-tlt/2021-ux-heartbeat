@@ -5,6 +5,7 @@ import { PlaylistTrackModel } from "src/app/models/new-api-models/top-tracks-art
 import { TrackLaunchContextEnum } from "src/app/models/track-launch-context.enum";
 import { ApiService } from "src/app/services/api.service";
 import { PlayerService } from "src/app/services/player.service";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 
 @Component({
   selector: "hb-recomendation-card",
@@ -24,14 +25,15 @@ export class RecomendationCardComponent {
 
   constructor(
     public apiService: ApiService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    public themeStateService: ThemeStateService
   ) {}
 
   ngOnInit(): void {
     this.info$ = this.apiService
       .getPlaylistTracks(this.recomendation.id)
       .subscribe(topTracks => {
-        this.trackInfo = topTracks.items.slice(0, 4);
+        this.trackInfo = topTracks.items.filter(el => el.track).slice(0, 4);
         this.isLoading = false;
       });
   }

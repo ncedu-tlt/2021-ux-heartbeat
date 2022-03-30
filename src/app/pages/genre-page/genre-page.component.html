@@ -1,4 +1,4 @@
-<div class="playlists-container">
+<div [ngClass]="{ 'playlists-container' : !this.themeStateService.getIsDarkTheme() , 'playlists-container-dark' : this.themeStateService.getIsDarkTheme() }">
     <div class="title">
         <h2>Плейлисты</h2>
         <div class="title__line"></div>

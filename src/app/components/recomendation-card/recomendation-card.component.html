@@ -1,4 +1,4 @@
-<div class="recomendation">
+<div [ngClass]="{ 'recomendation' : !this.themeStateService.getIsDarkTheme() , 'recomendation-dark' : this.themeStateService.getIsDarkTheme() }">
     <h2 class="title">{{recomendation.name}}</h2>
     <div class="img" [ngStyle]="
     {'background-image' : 'url(' + recomendation.images[0].url + ')'}"></div>

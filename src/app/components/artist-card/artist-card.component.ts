@@ -6,6 +6,7 @@ import { catchError, Subject, takeUntil, throwError } from "rxjs";
 import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 import { PlayerService } from "../../services/player.service";
 import { ConverterService } from "../../services/converter.service";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { NzMessageService } from "ng-zorro-antd/message";
@@ -30,6 +31,7 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
     private api: ApiService,
     public playerService: PlayerService,
     private convert: ConverterService,
+    public themeStateService: ThemeStateService,
     private notificationService: NzNotificationService,
     private message: NzMessageService
   ) {}
