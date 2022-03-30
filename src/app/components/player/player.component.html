@@ -1,4 +1,4 @@
-<div class="container" *ngIf="{
+<div [ngClass]="{ 'container' : !this.themeStateService.getIsDarkTheme() , 'container-dark' : this.themeStateService.getIsDarkTheme() }" *ngIf="{
                                 track: (playerService.currentTrackInfo$ | async),
                                 isPLay: (playerService.isPlay$ | async),
                                 isShuffle: (playerService.isShuffle$ | async),
@@ -29,40 +29,10 @@
     </div>
     <div class="player__control">
       <div class="player__control-items">
-        <button class="player__previous-track" (click)="playerService.switchTrack(actions.SWITCH_PREVIOUS)">
-          <object
-            type="image/svg+xml"
-            data="../../../assets/svg/previous.svg"
-            width="20px"
-            height="20px"
-          ></object>
-        </button>
-        <button *ngIf="!player.isPLay" class="player__play"
-                (click)="playerService.switchPlayerAction()">
-          <object
-            type="image/svg+xml"
-            data="../../../assets/svg/play.svg"
-            width="20px"
-            height="20px"
-          ></object>
-        </button>
-        <button class="player__pause" *ngIf="player.isPLay"
-                (click)="playerService.switchPlayerAction()">
-          <object
-            type="image/svg+xml"
-            data="../../../assets/svg/pause.svg"
-            width="20px"
-            height="20px"
-          ></object>
-        </button>
-        <button class="player__next-track" (click)="playerService.switchTrack(actions.SWITCH_NEXT)">
-          <object
-            type="image/svg+xml"
-            data="../../../assets/svg/next.svg"
-            width="20px"
-            height="20px"
-          ></object>
-        </button>
+        <div class="player__previous-track" (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)"></div>
+        <div *ngIf="!(playerService.isPlay$ | async)" class="player__play" (click)="playerService.switchPlayerAction()"></div>
+        <div class="player__pause" *ngIf="playerService.isPlay$ | async" (click)="playerService.switchPlayerAction()"></div>
+        <div class="player__next-track" (click)="playerService.switchTrack(actions.SWITCH_NEXT)"></div>
       </div>
       <div class="player__progress" *ngIf="!isMobile">
         <nz-progress nzTooltipPlacement="topLeft"
@@ -82,96 +52,35 @@
       </div>
     </div>
     <div class="player__extra-control" *ngIf="!isMobile">
-      <button class="player__volume" *ngIf="playerService.player.volume"
-              (click)="playerService.controlMusicVolume()">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/volume.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
-      <button class="player__volume" *ngIf="!playerService.player.volume"
-              (click)="playerService.controlMusicVolume()">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/no-volume.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
+      <div class="player__volume" *ngIf="playerService.player.volume"
+              (click)="playerService.controlMusicVolume()"></div>
+      <div class="player__no-volume" *ngIf="!playerService.player.volume"
+              (click)="playerService.controlMusicVolume()"></div>
       <nz-progress [nzShowInfo]="false"
                    [nzPercent]="playerService.musicVolume$ | async"
                    nzStatus="normal"
                    class="player__volume-bar"
                    (click)="playerService.changeMusicVolume($event)">
       </nz-progress>
-      <button class="player__mixing" *ngIf="!player.isShuffle"
-              (click)="playerService.isShuffle$.next(true)">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/mixing.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
-      <button class="player__mixing" *ngIf="player.isShuffle"
-              (click)="playerService.isShuffle$.next(false)">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/mixing-active.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
-      <button class="player__no-repeat" *ngIf="playerService.isRepeat === repeatState.NO_REPEAT"
+      <div class="player__mixing" *ngIf="!player.isShuffle"
+              (click)="playerService.isShuffle$.next(true)"></div>
+      <div class="player__mixing-active" *ngIf="player.isShuffle"
+              (click)="playerService.isShuffle$.next(false)"></div>
+      <div class="player__no-repeat" *ngIf="playerService.isRepeat === repeatState.NO_REPEAT"
               (click)="playerService.putOnRepeat()">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/repeat.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
-      <button class="player__repeat" *ngIf="playerService.isRepeat === repeatState.PLAYLIST_REPEAT"
-              (click)="playerService.putOnRepeat()">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/repeat-playlist.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
-      <button class="player__repeat" *ngIf="playerService.isRepeat === repeatState.TRACK_REPEAT"
-              (click)="playerService.putOnRepeat()">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/repeat-active.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
+      </div>
+      <div class="player__repeat-playlist" *ngIf="playerService.isRepeat === repeatState.PLAYLIST_REPEAT"
+              (click)="playerService.putOnRepeat()"></div>
+      <div class="player__repeat" *ngIf="playerService.isRepeat === repeatState.TRACK_REPEAT"
+              (click)="playerService.putOnRepeat()"></div>
       <button nz-dropdown [nzDropdownMenu]="menu"
               [disabled]="!player.track || !authService.getAuthToken()"
               (click)="getUserPlaylists(player.track!.id)"
               nzTrigger="click"
               nzPlacement="topCenter"
               class="player__add-track">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/add.svg"
-          width="15px"
-          height="15px"
-        ></object>
       </button>
-      <button class="player__music-list">
-        <object
-          type="image/svg+xml"
-          data="../../../assets/svg/music-list.svg"
-          width="15px"
-          height="15px"
-        ></object>
-      </button>
+      <div class="player__music-list"></div>
     </div>
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu>

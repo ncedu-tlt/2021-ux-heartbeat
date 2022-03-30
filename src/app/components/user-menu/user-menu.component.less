@@ -1,12 +1,19 @@
+@import '../../../assets/styles/colors.less';
+
 :host {
   display:flex;
   justify-content: space-around;
   align-items: center;
 
-  .user-menu__profile-name {
+  .user-menu__profile-name, .user-menu__profile-name-dark {
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
+    color: @black;
     margin: 0;
+  }
+
+  .user-menu__profile-name-dark {
+    color: @white;
   }
 
   .user-menu__profile-image {
@@ -15,7 +22,7 @@
     border-radius: 21px;
   }
 
-  .user-menu__profile-null-image {
+  .user-menu__profile-null-image, .user-menu__profile-null-image-dark {
     font-size: 34px;
     min-width: 45px;
     height: 45px;
@@ -30,7 +37,15 @@
     }
   }
 
+  .user-menu__profile-null-image-dark {
+    background-color: @white;
+  }
+
   .user-menu__dropdown {
     color: black;
+  }
+
+  .user-menu__dropdown-dark {
+    color: @white;
   }
 }

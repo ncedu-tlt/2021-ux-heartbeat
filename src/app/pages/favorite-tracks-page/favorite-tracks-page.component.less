@@ -1,6 +1,14 @@
-.favorite-tracks {
+@import '../../../assets/styles/colors.less';
+
+.favorite-tracks, .favorite-tracks-dark {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+}
+
+.favorite-tracks-dark {
+  * {
+    color: @white
+  }
 }

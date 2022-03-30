@@ -1,6 +1,6 @@
 @import '../../../assets/styles/colors.less';
 
-.recomendation {
+.recomendation, .recomendation-dark {
     margin-top: 15px;
     width: 350px;
     min-height: 480px;
@@ -57,6 +57,7 @@
         margin-top: 15px;
         width: 120px;
         height: 28px;
+        color: @black;
         background-color: @white;
         border: 1px solid @black;
         box-sizing: border-box;
@@ -64,8 +65,25 @@
         font-weight: 400;
         font-size: 14px;
         line-height: 16px;
+        cursor: pointer;
         &:hover {
             background-color: @active-button;
+        }
+    }
+}
+
+.recomendation-dark {
+    border: 1px solid @recomendation-border-dark;
+    * {
+        color: @white;
+    }
+    .btn {
+        color: @white;
+        background: none;
+        border: 1px solid @white;
+        &:hover {
+            background-color: @active-button;
+            color: @black;
         }
     }
 }

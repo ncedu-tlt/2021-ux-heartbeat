@@ -12,7 +12,7 @@
     width: 920px;
   }
 
-  .playlists-wrapper {
+  .playlists-wrapper, .playlists-wrapper-dark {
     margin: 50px 0 0 50px;
     width: inherit;
 
@@ -151,6 +151,17 @@
             font-size: 16px;
           }
         }
+      }
+    }
+  }
+
+  .playlists-wrapper-dark {
+    * {
+      color: @white;
+    }
+    .playlists {
+      .playlists__hr {
+        border: 1px solid @white;
       }
     }
   }

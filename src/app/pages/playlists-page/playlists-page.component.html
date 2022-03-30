@@ -1,9 +1,9 @@
-<div class="playlists-wrapper">
+<div [ngClass]="{ 'playlists-wrapper' : !this.themeStateService.getIsDarkTheme() , 'playlists-wrapper-dark' : this.themeStateService.getIsDarkTheme() }">
   <hb-loader *ngIf="isLoading"></hb-loader>
   <div *ngIf="playlists.length && !isLoading" class="playlists">
     <div class="playlist__list">
       <div *ngFor="let playlist of playlists" #playlist id="{{playlist.id}}" (click)="openPlaylist(playlist)" class="playlist">
-        <div class="playlist__image" [ngStyle]="{'background-image': 'url(' + playlist.images[0].url + ')'}"></div>
+        <div class="playlist__image" [ngStyle]="{'background-image': 'url(' + playlist.images[0]?.url + ')'}"></div>
         <div class="playlist__info">
           <p class="playlist__name">{{playlist.name}}</p>
           <p class="playlist__owner">{{playlist.owner.display_name}}</p>

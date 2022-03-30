@@ -1,6 +1,6 @@
 @import "../../../../assets/styles/colors";
 
-.track {
+.track, .track-dark {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -47,12 +47,14 @@
           text-overflow: ellipsis;
           overflow: hidden;
           width: 230px;
+          color: @black;
           white-space: nowrap;
         }
       }
 
       &__name {
         text-align: left;
+        color: @black;
         width: 230px;
         text-overflow: ellipsis;
         overflow: hidden;
@@ -63,6 +65,7 @@
 
   &-time {
     margin-right: 15px;
+    color: @black;
   }
 }
 
@@ -71,5 +74,20 @@
 }
 
 .track:hover img {
+  display: block;
+}
+
+.track-dark {
+  *, p {
+    color: @white;
+  }
+  &:hover {
+    background: @snowy;
+    *, p {
+      color: @black;
+    }
+  }
+  :hover img {
     display: block;
+  }
 }
