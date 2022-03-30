@@ -79,7 +79,7 @@ export class TrackComponent implements OnInit, OnDestroy {
 
   controlPlayerCurrentTrack(): void {
     if (
-      this.playerService.currentTrackInfo$.getValue()?.id !== this._track.id
+      this.playerService.currentTrackInfo$.getValue()?.id !== this._track?.id
     ) {
       this.setCurrentTrack();
     } else {
