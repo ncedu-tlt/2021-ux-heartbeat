@@ -21,6 +21,7 @@ export interface ArtistsModel {
 export interface ItemsArtistModel extends CommonInfoAboutArtist {
   artists: CommonInfoAboutArtist[];
   images: ImagesFromSpoty[];
+  album_group: string;
   release_date: string;
   total_tracks: string;
 }

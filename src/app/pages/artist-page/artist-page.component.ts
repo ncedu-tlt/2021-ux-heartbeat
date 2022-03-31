@@ -3,13 +3,16 @@ import { ActivatedRoute } from "@angular/router";
 import { ApiService } from "../../services/api.service";
 import {
   ArtistByIdModel,
-  ArtistsModel
+  ArtistsModel,
+  ItemsArtistModel
 } from "../../models/new-api-models/artist-by-id.model";
 import { catchError, Subject, takeUntil, throwError } from "rxjs";
 import { combineLatest } from "rxjs";
 import { TopTracksArtistByIdModel } from "../../models/new-api-models/top-tracks-artist-by-id.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
+import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
+import { PlayerService } from "../../services/player.service";
 
 @Component({
   selector: "hb-artist-page",
@@ -20,15 +23,17 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
   private key!: string;
   public artistInfo!: ArtistByIdModel;
   public isFollow!: boolean[];
-  public artistAlbums!: ArtistsModel;
+  public artistAlbums!: ItemsArtistModel[];
   public artistTopTracks!: TopTracksArtistByIdModel;
+  public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
   private die$ = new Subject<void>();
   public isLoading = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
-    private notificationService: NzNotificationService
+    private notificationService: NzNotificationService,
+    private playerService: PlayerService
   ) {}
 
   ngOnInit() {
@@ -55,7 +60,12 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
         ]) => {
           this.artistInfo = artist;
           this.isFollow = isFollow;
-          this.artistAlbums = artistAlbums;
+          this.artistAlbums = artistAlbums.items.filter(album => {
+            return (
+              album.artists[0].name === artist.name &&
+              album.album_group === "album"
+            );
+          });
           this.artistTopTracks = artistTopTracks;
           this.isLoading = false;
         }
@@ -96,6 +106,10 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
           `Вы отписалась от ${this.artistInfo.name}`
         );
       });
+  }
+
+  setListTrackIntoPlayer() {
+    this.playerService.trackList$.next(null);
   }
 
   ngOnDestroy() {

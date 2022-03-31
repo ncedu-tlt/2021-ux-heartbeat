@@ -1,0 +1,57 @@
+@import "../../../assets/styles/colors";
+
+.artist {
+  margin-top: 15px;
+  padding-bottom: 100px;
+  padding-right: 30px;
+
+  &__info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  &__img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  &__name {
+    font-size: 30px;
+  }
+
+  .top-tracks {
+
+    &__list {
+      display: flex;
+      flex-direction: row;
+      max-height: 350px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &__item {
+      width: 50%;
+    }
+  }
+
+  &__albums {
+
+    .album {
+
+      &__list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      &__item:hover {
+        background-color: @snowy;
+        cursor: pointer;
+      }
+    }
+  }
+}

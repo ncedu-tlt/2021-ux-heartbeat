@@ -1,1 +1,33 @@
-<h1>Artist-page is work!</h1>
+<div class="loader" *ngIf="isLoading">
+  <hb-loader></hb-loader>
+</div>
+<div class="artist" *ngIf="!isLoading && artistInfo">
+  <div class="artist__info">
+    <div class="artist__img" [ngStyle]="{'background-image' : 'url('+ artistInfo.images[0].url + ')'}"></div>
+    <span class="artist__name">{{artistInfo.name}}</span>
+    <button class="artist__follow" (click)="isFollow ? toUnfollowArtist() : toFollowArtist()">
+        {{isFollow ? "Отписаться" : "Подписаться"}}
+    </button>
+  </div>
+  <div class="artist__top-tracks">
+    <div class="top-tracks">
+      <div class="top-tracks__title">Популярные треки</div>
+      <div class="top-tracks__list">
+        <div class="top-tracks__item" *ngFor="let track of artistTopTracks.tracks">
+          <hb-track (playTrack)="setListTrackIntoPlayer()" [isCard]="false" [track]="track"
+                    [trackContext]="trackContext"></hb-track>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="artist__albums">
+    <div class="album">
+      <span class="album__title">Альбомы</span>
+      <div class="album__list">
+        <div class="album__item" *ngFor="let album of artistAlbums">
+          <hb-album-card [album]="album"></hb-album-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
