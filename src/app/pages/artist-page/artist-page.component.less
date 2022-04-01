@@ -24,17 +24,18 @@
 
   .top-tracks {
 
-    &__list {
-      display: flex;
-      flex-direction: row;
-      max-height: 350px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-    }
+    column-width: 700px;
 
-    &__item {
-      width: 50%;
+    &__list {
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(5, 1fr);
+
+      @media screen and (max-width: 910px) {
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 
