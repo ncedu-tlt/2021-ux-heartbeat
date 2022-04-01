@@ -7,13 +7,20 @@ import {
   EventEmitter
 } from "@angular/core";
 import { PlayerService } from "../../../services/player.service";
-import { combineLatest, Subscription } from "rxjs";
+import { combineLatest, Subject, Subscription, takeUntil } from "rxjs";
 import { TrackById } from "../../../models/new-api-models/track-by-id.model";
 import { NewAlbumTracksModel } from "../../../models/new-api-models/album-by-id.model";
 import { TrackLaunchContextEnum } from "../../../models/track-launch-context.enum";
 import { TopTracksModel } from "../../../models/new-api-models/top-tracks-artist-by-id.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ThemeStateService } from "src/app/services/theme-state.service";
+import { AuthService } from "src/app/services/auth.service";
+import { ApiService } from "src/app/services/api.service";
+import {
+  CurrentUsersPlaylistModel,
+  ItemUserPlaylistModel
+} from "src/app/models/new-api-models/current-users-playlist.model";
+import { ErrorFromSpotifyModel } from "src/app/models/error.model";
 
 @Component({
   selector: "hb-track",
@@ -21,11 +28,14 @@ import { ThemeStateService } from "src/app/services/theme-state.service";
   styleUrls: ["./track.component.less"]
 })
 export class TrackComponent implements OnInit, OnDestroy {
-  public trackTime = 30;
   private controlActiveTrack$: Subscription = new Subscription();
-  public isPlay = false;
-  public artistNameList = "";
+  public userPlaylists: ItemUserPlaylistModel[] = [];
   public _track!: TrackById | NewAlbumTracksModel | TopTracksModel;
+  public isPlay = false;
+  public isFavorite = false;
+  public artistNameList = "";
+  public trackTime = 30;
+  private die$ = new Subject<void>();
 
   @Input() set track(track: TrackById | NewAlbumTracksModel) {
     this._track = track;
@@ -40,7 +50,9 @@ export class TrackComponent implements OnInit, OnDestroy {
 
   constructor(
     public playerService: PlayerService,
+    public apiService: ApiService,
     public notification: NzNotificationService,
+    public authService: AuthService,
     public themeStateService: ThemeStateService
   ) {}
 
@@ -95,5 +107,56 @@ export class TrackComponent implements OnInit, OnDestroy {
       "Воспроизведение не доступно",
       "В данный момент времени невозможно прослушать эту аудиозапись."
     );
+  }
+
+  getUserPlaylists(id: string): void {
+    this.checkTrackIntoUserFavoriteList(id);
+    this.apiService
+      .getCurrentUsersPlaylists()
+      .pipe(takeUntil(this.die$))
+      .subscribe((playlists: CurrentUsersPlaylistModel) => {
+        this.userPlaylists = playlists.items.filter(playlist => {
+          return this.authService.getUserData()?.[0].id === playlist.owner.id;
+        });
+      });
+  }
+
+  checkTrackIntoUserFavoriteList(id: string): void {
+    this.apiService
+      .checkUsersSavedTracks(id)
+      .pipe(takeUntil(this.die$))
+      .subscribe(existence => {
+        this.isFavorite = existence[0];
+      });
+  }
+
+  addTrackIntoFavoriteList(id: string): void {
+    this.apiService
+      .putSaveTracksForCurrentUser(id)
+      .pipe(takeUntil(this.die$))
+      .subscribe(
+        () => {
+          this.isFavorite = true;
+          this.notification.blank("Добавление трека", "Трек успешно добавлен");
+        },
+        (e: ErrorFromSpotifyModel) => {
+          this.notification.blank("Ошибка", e.error.error.message);
+        }
+      );
+  }
+
+  removeTrackFromFavoriteList(id: string): void {
+    this.apiService
+      .deleteTracksForCurrentUser(id)
+      .pipe(takeUntil(this.die$))
+      .subscribe(
+        () => {
+          this.isFavorite = false;
+          this.notification.blank("Удаление трека", "Трек успешно удален");
+        },
+        (e: ErrorFromSpotifyModel) => {
+          this.notification.blank("Ошибка", e.error.error.message);
+        }
+      );
   }
 }
