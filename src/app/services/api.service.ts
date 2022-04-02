@@ -223,11 +223,16 @@ export class ApiService {
     );
   }
 
-  getPlaylistTracks(playlistId: string): Observable<ItemsTrackModel> {
+  getPlaylistTracks(
+    playlistId: string,
+    limit = 10,
+    offset = 0
+  ): Observable<ItemsTrackModel> {
     return this.http.get<ItemsTrackModel>(
       "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks",
       {
-        headers: this.headers
+        headers: this.headers,
+        params: { limit, offset }
       }
     );
   }
