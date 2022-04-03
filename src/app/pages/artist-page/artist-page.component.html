@@ -1,8 +1,7 @@
 <div class="loader" *ngIf="isLoading">
   <hb-loader></hb-loader>
 </div>
-<div
-  [ngClass]="{'container' : !this.themeStateService.getIsDarkTheme() , 'container-dark' : this.themeStateService.getIsDarkTheme()}">
+<div [ngClass]="{'container' : !this.themeStateService.getIsDarkTheme() , 'container-dark' : this.themeStateService.getIsDarkTheme()}">
   <div class="artist" *ngIf="artistInfo">
     <div class="artist__info">
       <div class="artist__img" [ngStyle]="{'background-image' : 'url('+ artistInfo.images[0].url + ')'}"></div>
