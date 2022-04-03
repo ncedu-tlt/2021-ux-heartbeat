@@ -22,7 +22,7 @@ import { PlayerService } from "../../services/player.service";
 export class ArtistPageComponent implements OnInit, OnDestroy {
   private key!: string;
   public artistInfo!: ArtistByIdModel;
-  public isFollow!: boolean[];
+  public isFollow!: boolean;
   public artistAlbums!: ItemsArtistModel[];
   public artistTopTracks!: TopTracksArtistByIdModel;
   public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
@@ -59,7 +59,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
           artistTopTracks: TopTracksArtistByIdModel
         ]) => {
           this.artistInfo = artist;
-          this.isFollow = isFollow;
+          this.isFollow = isFollow[0];
           this.artistAlbums = artistAlbums.items.filter(album => {
             return (
               album.artists[0].name === artist.name &&
@@ -83,6 +83,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(() => {
+        this.isFollow = !this.isFollow;
         this.notificationService.blank(
           "Подписка на исполнителя",
           `Вы успешно подписались на ${this.artistInfo.name}`
@@ -101,6 +102,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe(() => {
+        this.isFollow = !this.isFollow;
         this.notificationService.blank(
           "Подписка на исполнителя",
           `Вы отписалась от ${this.artistInfo.name}`
