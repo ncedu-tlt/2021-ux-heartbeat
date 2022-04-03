@@ -13,6 +13,7 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 import { PlayerService } from "../../services/player.service";
+import { ThemeStateService } from "../../services/theme-state.service";
 
 @Component({
   selector: "hb-artist-page",
@@ -35,7 +36,8 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
     private notificationService: NzNotificationService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    public themeStateService: ThemeStateService
   ) {}
 
   ngOnInit() {

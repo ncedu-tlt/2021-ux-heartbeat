@@ -105,6 +105,40 @@
         background-color: @snowy;
         cursor: pointer;
       }
+
+      &__more {
+        display: block;
+        margin: 15px auto 0;
+        width: 90px;
+        padding: 7px;
+        background: @white;
+        border: 1px solid @black;
+        border-radius: 15px;
+        font-size: 15px;
+        line-height: 10px;
+
+        &:hover {
+          background-color: @background-color-hover;
+        }
+      }
     }
+  }
+}
+
+.container-dark {
+  * {
+    color: @white;
+  }
+  .album__more {
+    background: none;
+    border: 1px solid @white;
+    &:hover {
+      background-color: @active-button;
+      color: @black;
+    }
+  }
+  .album__item:hover {
+    background-color: @snowy-dark;
+    cursor: pointer;
   }
 }
