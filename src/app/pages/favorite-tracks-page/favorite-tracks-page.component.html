@@ -3,7 +3,7 @@
   <hb-loader class="loader" *ngIf="isLoading"></hb-loader>
   <div class="favorites" *ngIf="favorites">
     <div class="favorites__list" *ngFor="let track of favorites.items">
-      <hb-track class="tracks__track-container"
+      <hb-track class="favorites__track-container"
                 (playTrack)="setListTrackIntoPlayer()"
                 [trackContext]="trackContext"
                 [track]="track.track">

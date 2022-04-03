@@ -187,7 +187,7 @@ export class ApiService {
     );
   }
 
-  getUsersSavedTracks(offset = 0, limit = 24): Observable<ItemsTrackModel> {
+  getUsersSavedTracks(offset = 0, limit = 27): Observable<ItemsTrackModel> {
     const url = `https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=${limit}`;
     return this.http.get<ItemsTrackModel>(url, {
       headers: this.headers

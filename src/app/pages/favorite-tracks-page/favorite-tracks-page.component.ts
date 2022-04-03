@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewEncapsulation } from "@angular/core";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { Subject, Subscription, takeUntil } from "rxjs";
 import { ErrorFromSpotifyModel } from "src/app/models/error.model";
@@ -16,7 +16,8 @@ import { ThemeStateService } from "src/app/services/theme-state.service";
 @Component({
   selector: "hb-favorite-tracks-page",
   templateUrl: "./favorite-tracks-page.component.html",
-  styleUrls: ["./favorite-tracks-page.component.less"]
+  styleUrls: ["./favorite-tracks-page.component.less"],
+  encapsulation: ViewEncapsulation.None
 })
 export class FavoriteTracksPageComponent {
   public favorites!: ItemsTrackModel;
@@ -44,20 +45,20 @@ export class FavoriteTracksPageComponent {
       .subscribe(favoriteTrack => {
         this.favorites = favoriteTrack;
         this.isLoading = false;
-        if (favoriteTrack.items.length < 9) {
+        if (favoriteTrack.items.length < 27) {
           this.isDisabled = true;
         }
       });
   }
 
   showMore(): void {
-    this.offset += 9;
+    this.offset += 27;
     this.apiService
       .getUsersSavedTracks(this.offset)
       .subscribe(favoriteTrack => {
         this.favorites.items.push(...favoriteTrack.items);
         this.isLoading = false;
-        if (favoriteTrack.items.length < 9) {
+        if (favoriteTrack.items.length < 27) {
           this.isDisabled = true;
         }
       });
