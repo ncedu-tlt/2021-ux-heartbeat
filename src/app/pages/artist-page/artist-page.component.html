@@ -1,7 +1,7 @@
 <div class="loader" *ngIf="isLoading">
   <hb-loader></hb-loader>
 </div>
-<div class="artist" *ngIf="!isLoading && artistInfo">
+<div class="artist" *ngIf="artistInfo">
   <div class="artist__info">
     <div class="artist__img" [ngStyle]="{'background-image' : 'url('+ artistInfo.images[0].url + ')'}"></div>
     <h1 class="artist__name">{{artistInfo.name}}</h1>
@@ -28,6 +28,7 @@
           <hb-album-card [album]="album"></hb-album-card>
         </div>
       </div>
+      <button *ngIf="showMoreDisabled" (click)="showMoreAlbums()">Еще</button>
     </div>
   </div>
 </div>

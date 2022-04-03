@@ -16,6 +16,7 @@ export interface ArtistByIdModel extends CommonInfoAboutArtist {
 
 export interface ArtistsModel {
   items: ItemsArtistModel[];
+  total: number;
 }
 
 export interface ItemsArtistModel extends CommonInfoAboutArtist {
@@ -23,5 +24,6 @@ export interface ItemsArtistModel extends CommonInfoAboutArtist {
   images: ImagesFromSpoty[];
   album_group: string;
   release_date: string;
+  available_markets: string[];
   total_tracks: string;
 }

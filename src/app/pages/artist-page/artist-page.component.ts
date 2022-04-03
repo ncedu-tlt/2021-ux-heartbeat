@@ -28,6 +28,8 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
   public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
   private die$ = new Subject<void>();
   public isLoading = true;
+  public showMoreDisabled = false;
+  public offset = 0;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -41,7 +43,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
     combineLatest([
       this.apiService.getArtistByID(this.key),
       this.apiService.checkIfUserFollowsArtists(this.key),
-      this.apiService.getArtistsAlbums(this.key),
+      this.apiService.getArtistsAlbums(this.key, "album"),
       this.apiService.getArtistsTopTracks(this.key)
     ])
       .pipe(
@@ -60,13 +62,10 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
         ]) => {
           this.artistInfo = artist;
           this.isFollow = isFollow[0];
-          this.artistAlbums = artistAlbums.items.filter(album => {
-            return (
-              album.artists[0].name === artist.name &&
-              album.album_group === "album"
-            );
-          });
+          this.artistAlbums = artistAlbums.items;
           this.artistTopTracks = artistTopTracks;
+          this.offset += 10;
+          this.showMoreDisabled = this.offset < artistAlbums.total;
           this.isLoading = false;
         }
       );
@@ -112,6 +111,25 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
 
   setListTrackIntoPlayer() {
     this.playerService.trackList$.next(null);
+  }
+
+  showMoreAlbums() {
+    this.isLoading = true;
+    this.apiService
+      .getArtistsAlbums(this.key, "album", this.offset)
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.notificationService.error("Ошибка", error.error.error.message);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(artistAlbums => {
+        this.artistAlbums.push(...artistAlbums.items);
+        this.offset += 10;
+        this.showMoreDisabled = this.offset < artistAlbums.total;
+        this.isLoading = false;
+      });
   }
 
   ngOnDestroy() {
