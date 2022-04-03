@@ -40,7 +40,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
     public themeStateService: ThemeStateService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.key = <string>this.activatedRoute.snapshot.params["id"];
     combineLatest([
       this.apiService.getArtistByID(this.key),
@@ -73,7 +73,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       );
   }
 
-  toFollowArtist() {
+  toFollowArtist(): void {
     this.apiService
       .putFollowArtists(this.key)
       .pipe(
@@ -92,7 +92,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  toUnfollowArtist() {
+  toUnfollowArtist(): void {
     this.apiService
       .unfollowArtists(this.key)
       .pipe(
@@ -111,11 +111,11 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  setListTrackIntoPlayer() {
+  setListTrackIntoPlayer(): void {
     this.playerService.trackList$.next(null);
   }
 
-  showMoreAlbums() {
+  showMoreAlbums(): void {
     this.isLoading = true;
     this.apiService
       .getArtistsAlbums(this.key, "album", this.offset)
@@ -134,7 +134,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.die$.next();
   }
 }

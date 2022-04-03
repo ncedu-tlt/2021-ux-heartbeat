@@ -27,7 +27,7 @@
         <h2 class="album__title">Альбомы</h2>
         <div class="album__list">
           <div class="album__item" *ngFor="let album of artistAlbums">
-            <hb-album-card [album]="album"></hb-album-card>
+            <hb-album-card [routerLink]="['/album', album.id]" [album]="album"></hb-album-card>
           </div>
         </div>
         <button class="album__more" *ngIf="showMoreDisabled" (click)="showMoreAlbums()">Еще</button>
