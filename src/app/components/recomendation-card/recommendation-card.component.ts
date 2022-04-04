@@ -76,6 +76,7 @@ export class RecommendationCardComponent {
         this.allPlaylist.items.filter(el => el.track);
         this.isVisible = true;
         this.isLoadingAllPlaylist = false;
+        document.body.style.overflow = "hidden";
       });
   }
 
@@ -108,6 +109,7 @@ export class RecommendationCardComponent {
 
   handleCancel(): void {
     this.isVisible = false;
+    document.body.style.overflow = "visible";
   }
 
   ngOnDestroy(): void {

@@ -97,28 +97,70 @@
       width: 80%;
       background-color: @background-color;
       border-radius: 7px;
+      position: relative;
+
+      .info-close {
+        display: none;
+
+        @media (max-width: 480px) {
+          display: block;
+          position: absolute;
+          top: 0;
+          right: 5px;
+          padding: 10px;
+          font-size: 20px;
+        }
+      }
+
+      @media (max-width: 540px) {
+        width: 90%;
+      }
+
+      @media (max-width: 480px) {
+        width: 100%;
+        padding: 15px 0;
+      }
 
       .info {
         display: flex;
         justify-content: center;
-        margin-bottom: 30px;
+        flex-direction: column;
+        margin-bottom: 15px;
 
         .playlist-info {
           display: flex;
+          position: relative;
+          justify-content: center;
+          margin: 10px;
+
+          @media (max-width: 400px) {
+            margin: 0;
+          }
           &__img {
             width: 150px;
             height: 150px;
             border-radius: 5px;
             background-size: cover;
+            margin-left: -75px;
+
+            @media (max-width: 400px) {
+              width: 125px;
+              height: 125px;
+            }
           }
           &__vinyl {
+            position: absolute;
+            left: 36%;
             z-index: -1;
-            height: 128px;
-            transform: translate(-125px, 12px);
+            height: 150px;
+            @media (max-width: 400px) {
+              height: 125px;
+            }
           }
           &__name {
-            margin-left: -100px;
+            text-align: center;
             font-size: 24px;
+            margin: 0;
           }
         }
       }

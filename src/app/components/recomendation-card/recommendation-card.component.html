@@ -17,12 +17,13 @@
   <ng-container *ngIf="isVisible">
     <div class="modal" (click)="handleCancel()">
       <div class="modal__content" (click)="$event.stopPropagation()">
+        <p class="info-close" (click)="handleCancel()">x</p>
         <div class="info">
           <div class="playlist-info">
             <div class="playlist-info__img" [ngStyle]="{'background-image': 'url(' + recommendation.images[0].url + ')'}"></div>
             <img class="playlist-info__vinyl" src="assets/image/vinyl-record.png" alt="vinyl icon"/>
-            <p class="playlist-info__name">{{recommendation.name}}</p>
           </div>
+          <p class="playlist-info__name">{{recommendation.name}}</p>
         </div>
         <hb-track-list [trackContext]="recommendation.id" [trackList]="allPlaylist"></hb-track-list>
         <button class="addItem" *ngIf="isDisabled" (click)="showMore(recommendation.id)">ЕЩЕ</button>
