@@ -25,8 +25,11 @@ export class SearchComponent {
       .subscribe(() => {
         this.search = this.search.trim();
         this.searchStateService.setSearchState(this.search);
-        this.router.navigateByUrl(`/search?keyword=${this.search}`);
       });
+  }
+
+  searchBtnClicked() {
+    this.router.navigateByUrl(`/search?keyword=${this.search}`);
   }
 
   inputChanged(): void {

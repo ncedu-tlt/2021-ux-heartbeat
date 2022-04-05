@@ -16,7 +16,7 @@
   <button class="btn" (click)="getAllPlaylist(recommendation.id)">Весь плейлист</button>
   <ng-container *ngIf="isVisible">
     <div class="modal" (click)="handleCancel()">
-      <div class="modal__content" (click)="$event.stopPropagation()">
+      <div class="modal__content" (click)="$event.stopPropagation()" [ngStyle]="{'background' : switchMode()}">
         <p class="info-close" (click)="handleCancel()">x</p>
         <div class="info">
           <div class="playlist-info">

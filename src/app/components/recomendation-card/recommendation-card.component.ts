@@ -112,6 +112,12 @@ export class RecommendationCardComponent {
     document.body.style.overflow = "visible";
   }
 
+  switchMode(): string {
+    return !this.themeStateService.getIsDarkTheme()
+      ? "#FFFFFF"
+      : "linear-gradient(252.82deg, rgba(54, 66, 109) 72.05%, rgba(12, 14, 24, 0.7) 100%) no-repeat fixed";
+  }
+
   ngOnDestroy(): void {
     this.die$.next();
   }
