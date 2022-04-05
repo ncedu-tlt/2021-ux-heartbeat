@@ -132,9 +132,14 @@ export class ApiService {
     );
   }
 
-  getArtistsAlbums(artistId: string): Observable<ArtistsModel> {
+  getArtistsAlbums(
+    artistId: string,
+    includes = "album,single,compilation,appears_on",
+    offset = 0,
+    limit = 10
+  ): Observable<ArtistsModel> {
     return this.http.get<ArtistsModel>(
-      "https://api.spotify.com/v1/artists/" + artistId + "/albums",
+      `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=${includes}&market=RU&limit=${limit}&offset=${offset}`,
       {
         headers: this.headers
       }
