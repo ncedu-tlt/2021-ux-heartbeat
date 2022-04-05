@@ -54,6 +54,7 @@ import { NzEmptyModule } from "ng-zorro-antd/empty";
 import { RecomendationCardComponent } from "src/app/components/recomendation-card/recomendation-card.component";
 import { NzResultModule } from "ng-zorro-antd/result";
 import { NzMessageModule } from "ng-zorro-antd/message";
+import { AlbumCardComponent } from "./components/album-card/album-card.component";
 
 registerLocaleData(ru);
 
@@ -89,7 +90,8 @@ registerLocaleData(ru);
     ArtistCardComponent,
     GenreCardComponent,
     PlaylistCardComponent,
-    RecomendationCardComponent
+    RecomendationCardComponent,
+    AlbumCardComponent
   ],
   imports: [
     BrowserModule,
