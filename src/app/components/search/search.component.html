@@ -1,4 +1,4 @@
 <form class="search__form">
-  <input [(ngModel)]="search" name="search" required minlength="1" class="search__input" type="search" placeholder="Введите название трека или имя исполнителя">
-  <button (click)="searchBtnClicked()"  class="search__button" type="submit"><i nz-icon nzType="search" nzTheme="outline"></i></button>
+  <input [(ngModel)]="search" (keydown)="inputChanged()" name="search" required minlength="1" class="search__input" type="search" placeholder="Введите название трека или имя исполнителя">
+  <i class="search__button" nz-icon nzType="search" nzTheme="outline"></i>
 </form>

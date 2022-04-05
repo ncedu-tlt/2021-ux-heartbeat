@@ -11,13 +11,18 @@
       border-radius: 20px;
       border: 1px solid #000000;
       padding-left: 15px;
+      padding-right: 35px;
       outline: none;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     .search__button {
       position: relative;
       top: -38px;
       left: 369px;
+      font-size: 21px;
       background: none;
       border: 0;
       cursor: pointer;
@@ -26,10 +31,6 @@
 
       @media screen and ( max-width: 850px ) {
         left: 215px;
-      }
-
-      i {
-        font-size: 21px;
       }
     }
   }
