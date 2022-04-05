@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation } from "@angular/core";
 import { NzNotificationService } from "ng-zorro-antd/notification";
-import { Subject, Subscription, takeUntil } from "rxjs";
+import { catchError, Subject, Subscription, takeUntil, throwError } from "rxjs";
+import { combineLatest } from "rxjs/internal/observable/combineLatest";
 import { ErrorFromSpotifyModel } from "src/app/models/error.model";
 import {
   CurrentUsersPlaylistModel,
@@ -86,25 +87,29 @@ export class FavoriteTracksPageComponent {
       );
   }
 
-  checkTrackIntoUserFavoriteList(id: string): void {
-    this.apiService
-      .checkUsersSavedTracks(id)
-      .pipe(takeUntil(this.die$))
-      .subscribe(existence => {
-        this.isFavorite = existence[0];
-      });
-  }
-
   getUserPlaylists(id: string): void {
-    this.checkTrackIntoUserFavoriteList(id);
-    this.apiService
-      .getCurrentUsersPlaylists()
-      .pipe(takeUntil(this.die$))
-      .subscribe((playlists: CurrentUsersPlaylistModel) => {
-        this.userPlaylists = playlists.items.filter(playlist => {
-          return this.authService.getUserData()?.[0].id === playlist.owner.id;
-        });
-      });
+    combineLatest([
+      this.apiService.checkUsersSavedTracks(id),
+      this.apiService.getCurrentUsersPlaylists()
+    ])
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.notificationService.error("Ошибка", error.error.error.message);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(
+        ([existence, playlists]: [
+          existence: boolean[],
+          playlists: CurrentUsersPlaylistModel
+        ]) => {
+          this.isFavorite = existence[0];
+          this.userPlaylists = playlists.items.filter(playlist => {
+            return this.authService.getUserData()?.[0].id === playlist.owner.id;
+          });
+        }
+      );
   }
 
   addTrackIntoPlaylist(playlistId: string, trackId: string): void {

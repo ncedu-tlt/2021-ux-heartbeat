@@ -7,7 +7,14 @@ import {
   EventEmitter
 } from "@angular/core";
 import { PlayerService } from "../../../services/player.service";
-import { combineLatest, Subject, Subscription, takeUntil } from "rxjs";
+import {
+  catchError,
+  combineLatest,
+  Subject,
+  Subscription,
+  takeUntil,
+  throwError
+} from "rxjs";
 import { TrackById } from "../../../models/new-api-models/track-by-id.model";
 import { NewAlbumTracksModel } from "../../../models/new-api-models/album-by-id.model";
 import { TrackLaunchContextEnum } from "../../../models/track-launch-context.enum";
@@ -110,24 +117,28 @@ export class TrackComponent implements OnInit, OnDestroy {
   }
 
   getUserPlaylists(id: string): void {
-    this.checkTrackIntoUserFavoriteList(id);
-    this.apiService
-      .getCurrentUsersPlaylists()
-      .pipe(takeUntil(this.die$))
-      .subscribe((playlists: CurrentUsersPlaylistModel) => {
-        this.userPlaylists = playlists.items.filter(playlist => {
-          return this.authService.getUserData()?.[0].id === playlist.owner.id;
-        });
-      });
-  }
-
-  checkTrackIntoUserFavoriteList(id: string): void {
-    this.apiService
-      .checkUsersSavedTracks(id)
-      .pipe(takeUntil(this.die$))
-      .subscribe(existence => {
-        this.isFavorite = existence[0];
-      });
+    combineLatest([
+      this.apiService.checkUsersSavedTracks(id),
+      this.apiService.getCurrentUsersPlaylists()
+    ])
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.notification.error("Ошибка", error.error.error.message);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(
+        ([existence, playlists]: [
+          existence: boolean[],
+          playlists: CurrentUsersPlaylistModel
+        ]) => {
+          this.isFavorite = existence[0];
+          this.userPlaylists = playlists.items.filter(playlist => {
+            return this.authService.getUserData()?.[0].id === playlist.owner.id;
+          });
+        }
+      );
   }
 
   addTrackIntoFavoriteList(id: string): void {
