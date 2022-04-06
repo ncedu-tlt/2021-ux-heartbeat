@@ -1,3 +1,34 @@
 <div [ngClass]="{ 'favorite-tracks' : !this.themeStateService.getIsDarkTheme() , 'favorite-tracks-dark' : this.themeStateService.getIsDarkTheme()  }">
-  <h2>Favorite tracks</h2>
+  <h2>Избранное</h2>
+  <hb-loader class="loader" *ngIf="isLoading"></hb-loader>
+  <div class="favorites" *ngIf="favorites">
+    <div class="favorites__list" *ngFor="let track of favorites.items">
+      <hb-track class="favorites__track-container"
+                (playTrack)="setListTrackIntoPlayer()"
+                [trackContext]="trackContext"
+                [track]="track.track">
+      </hb-track>
+      <div class="favorites__list-delete" (click)="removeTrackFromFavoriteList(track.track!.id)"></div>
+      <button nz-dropdown [nzDropdownMenu]="menu"
+              (click)="getUserPlaylists(track.track!.id)"
+              nzTrigger="click"
+              nzPlacement="topCenter">
+        <div class="favorites__list-add"></div>
+      </button>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+          <li nz-submenu nzTitle="Добавить в плейлист">
+            <ul>
+              <li nz-menu-item
+                  *ngFor="let playlist of userPlaylists"
+                  (click)="addTrackIntoPlaylist(playlist.id, track.track!.id)">
+                {{playlist.name}}
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nz-dropdown-menu>
+    </div>
+  </div>
+  <button (click)="showMore()" *ngIf="!isDisabled && !isLoading" class="addItem">ЕЩЕ</button>
 </div>

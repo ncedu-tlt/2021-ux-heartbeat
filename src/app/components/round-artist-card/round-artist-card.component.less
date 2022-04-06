@@ -1,4 +1,6 @@
-.round-card {
+@import "../../../assets/styles/colors";
+
+.round-card, .round-card-dark {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -18,11 +20,19 @@
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 0;
+    color: @black;
 
   }
 
   &__genre {
     text-align: center;
     font-size: 16px;
+    color: @black;
+  }
+}
+
+.round-card-dark {
+  * {
+    color: @white;
   }
 }

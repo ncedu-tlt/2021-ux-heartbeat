@@ -1,4 +1,5 @@
 import { Component, Input } from "@angular/core";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model";
 
 @Component({
@@ -8,4 +9,6 @@ import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model"
 })
 export class RoundArtistCardComponent {
   @Input() public artist!: ArtistByIdModel;
+
+  constructor(public themeStateService: ThemeStateService) {}
 }

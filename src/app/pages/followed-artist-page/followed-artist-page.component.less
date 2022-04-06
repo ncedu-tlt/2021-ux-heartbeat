@@ -27,6 +27,7 @@
 
     .artist-item:hover {
       background-color: @snowy;
+      border-radius: 15px;
       cursor: pointer;
     }
   }
@@ -35,5 +36,10 @@
 .container-dark {
   * {
     color: @white;
+  }
+  .artist-list {
+    .artist-item:hover {
+      background-color: @snowy-dark;
+    }
   }
 }

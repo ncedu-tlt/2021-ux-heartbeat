@@ -20,4 +20,24 @@
     </div>
   </div>
   <div *ngIf="!isCard" class="track-time">{{trackTime | timeFormat}}</div>
+  <button nz-dropdown [nzDropdownMenu]="menu"
+          (click)="getUserPlaylists(_track!.id)"
+          *ngIf="!isCard"
+          nzTrigger="click"
+          nzPlacement="topCenter"
+          class="track__add">
+  </button>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu>
+      <li nz-menu-item *ngIf="!isFavorite"
+          (click)="addTrackIntoFavoriteList(_track!.id)">
+        Добавить в избранное
+      </li>
+      <li nz-menu-item
+          *ngIf="isFavorite"
+          (click)="removeTrackFromFavoriteList(_track!.id)">
+        Убрать из избранного
+      </li>
+    </ul>
+  </nz-dropdown-menu>
 </div>
