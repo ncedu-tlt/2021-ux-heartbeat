@@ -25,9 +25,8 @@ export class PlaylistCardComponent {
   ) {}
 
   ngOnInit(): void {
-    this.playerService.trackContext$.subscribe(() => {
-      this.isActive =
-        this.playerService.trackContext$.getValue() === this.playlist.id;
+    this.playerService.trackContext$.subscribe(value => {
+      this.isActive = this.playlist.id === value;
     });
   }
 
