@@ -1,0 +1,14 @@
+<div class="album" (contextmenu)="openDropdownMenu($event, menu)">
+  <div class="album__img" [ngStyle]="{'background-image': 'url(' + album.images[0].url + ')'}"></div>
+  <div class="album__info">
+    <span class="album__name">{{album.name}}</span>
+    <span class="album__release-date">{{album.release_date}}</span>
+  </div>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu nzSelectable>
+      <li nz-menu-item
+          (click)="isFollow ? deleteAlbumFromFavorite() : addAlbumToFavorite()">
+        {{isFollow ? "Удалить из избранного" : "Добавить в избранное"}}</li>
+    </ul>
+  </nz-dropdown-menu>
+</div>

@@ -114,8 +114,7 @@
       nzPlacement="bottom"
       nzHeight="615px"
       [nzVisible]="drawerVisible"
-      (nzOnClose)="closePlayerControlOnMobile()"
-    >
+      (nzOnClose)="closePlayerControlOnMobile()">
       <ng-container class="mobile-player-contain" *nzDrawerContent>
         <div class="mobile-player-contain__current-track">
           <img src="{{player.track.album!.images[0].url}}" alt="#"
@@ -148,111 +147,38 @@
       </span>
         </div>
         <div class="mobile-player-contain__control">
-          <div class="mobile-player-contain__control-items">
-            <button class="mobile-player-contain__previous-track"
-                    (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)">
-              <object
-                type="image/svg+xml"
-                data="../../../assets/svg/previous.svg"
-                width="30px"
-                height="30px"
-              ></object>
-            </button>
-            <button *ngIf="!player.isPLay" class="mobile-player-contain__play"
-                    (click)="playerService.switchPlayerAction()">
-              <object
-                type="image/svg+xml"
-                data="../../../assets/svg/play.svg"
-                width="35px"
-                height="35px"
-              ></object>
-            </button>
-            <button class="mobile-player-contain__pause" *ngIf="player.isPLay"
-                    (click)="playerService.switchPlayerAction()">
-              <object
-                type="image/svg+xml"
-                data="../../../assets/svg/pause.svg"
-                width="35px"
-                height="35px"
-              ></object>
-            </button>
-            <button class="mobile-player-contain__next-track"
-                    (click)="this.playerService.switchTrack(actions.SWITCH_NEXT)">
-              <object
-                type="image/svg+xml"
-                data="../../../assets/svg/next.svg"
-                width="30px"
-                height="30px"
-              ></object>
-            </button>
-          </div>
+          <div class="mobile-player-contain__previous-track"
+               (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)"></div>
+          <div *ngIf="!player.isPLay" class="mobile-player-contain__play"
+               (click)="playerService.switchPlayerAction()"></div>
+          <div class="mobile-player-contain__pause" *ngIf="player.isPLay"
+               (click)="playerService.switchPlayerAction()"></div>
+          <div class="mobile-player-contain__next-track"
+               (click)="this.playerService.switchTrack(actions.SWITCH_NEXT)"></div>
         </div>
         <div class="mobile-player-contain__extra-control">
-          <button class="mobile-player-contain__mixing">
-            <object
-              type="image/svg+xml"
-              data="../../../assets/svg/mixing.svg"
-              width="25px"
-              height="25px"
-            ></object>
-          </button>
-          <button class="mobile-player-contain__no-repeat" *ngIf="playerService.isRepeat === repeatState.NO_REPEAT"
+          <div class="mobile-player-contain__mixing">
+          </div>
+          <div class="mobile-player-contain__no-repeat" *ngIf="playerService.isRepeat === repeatState.NO_REPEAT"
                   (click)="playerService.putOnRepeat()">
-            <object
-              type="image/svg+xml"
-              data="../../../assets/svg/repeat.svg"
-              width="25px"
-              height="25px"
-            ></object>
-          </button>
-          <button class="mobile-player-contain__repeat" *ngIf="playerService.isRepeat === repeatState.PLAYLIST_REPEAT"
-                  (click)="playerService.putOnRepeat()">
-            <object
-              type="image/svg+xml"
-              data="../../../assets/svg/repeat-playlist.svg"
-              width="25px"
-              height="25px"
-            ></object>
-          </button>
-          <button class="player__repeat" *ngIf="playerService.isRepeat === repeatState.TRACK_REPEAT"
-                  (click)="playerService.putOnRepeat()">
-            <object
-              type="image/svg+xml"
-              data="../../../assets/svg/repeat-active.svg"
-              width="25px"
-              height="25px"
-            ></object>
-          </button>
+          </div>
+          <div class="mobile-player-contain__repeat-playlist" *ngIf="playerService.isRepeat === repeatState.PLAYLIST_REPEAT"
+                  (click)="playerService.putOnRepeat()"></div>
+          <div class="mobile-player-contain__repeat" *ngIf="playerService.isRepeat === repeatState.TRACK_REPEAT"
+                  (click)="playerService.putOnRepeat()"></div>
           <button class="mobile-player-contain__add-track"
                   *ngIf="!isFavorite"
                   [disabled]="!player.track || !authService.getAuthToken()"
                   (click)="addTrackIntoFavoriteList(player.track!.id)">
-            <object
-              type="image/svg+xml"
-              data="../../../assets/svg/favorite.svg"
-              width="25px"
-              height="25px"
-            ></object>
+                  <div class="mobile-player-contain__add-track"></div>
           </button>
           <button class="mobile-player-contain__delete-track"
                   *ngIf="isFavorite"
                   [disabled]="!player.track || !authService.getAuthToken()"
                   (click)="removeTrackFromFavoriteList(player.track!.id)">
-            <object
-              type="image/svg+xml"
-              data="../../../assets/svg/fill-heart.svg"
-              width="25px"
-              height="25px"
-            ></object>
+                  <div class="mobile-player-contain__delete-track"></div>
           </button>
-          <button class="mobile-player-contain__music-list">
-            <object
-              type="image/svg+xml"
-              data="../../../assets/svg/music-list.svg"
-              width="25px"
-              height="25px"
-            ></object>
-          </button>
+          <div class="mobile-player-contain__music-list"></div>
         </div>
       </ng-container>
     </nz-drawer>
