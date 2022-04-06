@@ -81,22 +81,16 @@
     justify-content: center;
     z-index: 1;
     padding-top: 50px;
-    margin-left: 120px;
     left: 0;
     top: 0;
     width: 100%;
-    max-width: 1536px;
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
-
-    @media (max-width: 1400px) {
-      margin-left: 0;
-    }
 
     &__content {
       z-index: 2;
       overflow: auto;
-      padding: 20px;
+      padding: 20px 5px 20px 20px;
       max-width: 600px;
       height: 85%;
       width: 80%;
@@ -106,21 +100,21 @@
       .info-close {
         display: none;
 
-        @media (max-width: 480px) {
+        @media (max-width: 500px) {
           display: block;
           position: absolute;
           top: 0;
           right: 5px;
-          padding: 10px;
+          padding: 10px 5px 10px 10px;
           font-size: 20px;
         }
       }
 
-      @media (max-width: 540px) {
+      @media (max-width: 560px) {
         width: 90%;
       }
 
-      @media (max-width: 480px) {
+      @media (max-width: 500px) {
         width: 100%;
         padding: 15px 0;
       }
