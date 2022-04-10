@@ -167,11 +167,17 @@ export class SearchPageComponent {
       )
       .subscribe(([itemsToArtists, tracksSearchResult, artistList]) => {
         this.artists = itemsToArtists.artists.items;
+        if (this.artists.length < 2) {
+          this.isDisabledShowMoreArtists = true;
+        }
 
         this.changeTrackList =
           this.convert.convertTrackSearchModelToNewSearchModel(
             tracksSearchResult.tracks.items
           );
+        if (this.changeTrackList.items.length < 6) {
+          this.isDisabledShowMoreTracks = true;
+        }
 
         for (const artistsId of artistList.artists.items) {
           this.followedArtistsId.push(artistsId.id);
