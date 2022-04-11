@@ -1,8 +1,5 @@
 <div [ngClass]="{ 'container' : !this.themeStateService.getIsDarkTheme() , 'container-dark' : this.themeStateService.getIsDarkTheme()  }">
-  <div class="notFound">
-    <nz-result *ngIf="!artists.length && !isLoading" nzStatus="404" nzSubTitle="По вашему запросу ничего не найдено."></nz-result>
-  </div>
-  <div>
+  <div [ngStyle]="{'display': !artists.length ? 'none' : 'inline'}">
     <h2 class="title">Исполнители</h2>
     <div class="card">
       <div *ngFor="let artist of artists">
@@ -11,10 +8,12 @@
     </div>
     <button class="addItem" (click)="showMoreArtists()" *ngIf="!isDisabledShowMoreArtists">ЕЩЕ</button>
   </div>
-  <div>
+  <div [ngStyle]="{'display': changeTrackList && !changeTrackList.items.length ? 'none' : 'inline'}">
     <h2 class="title">Треки</h2>
     <hb-track-list [trackList]="changeTrackList" [trackContext]="trackContext"></hb-track-list>
     <button class="addItem" (click)="showMoreTracks()" *ngIf="!isDisabledShowMoreTracks">ЕЩЕ</button>
   </div>
 </div>
 <hb-loader *ngIf="isLoading"></hb-loader>
+<nz-result *ngIf="!artists.length && changeTrackList && !changeTrackList.items.length && !isLoading" nzStatus="404" nzSubTitle="По вашему запросу ничего не найдено."></nz-result>
+
