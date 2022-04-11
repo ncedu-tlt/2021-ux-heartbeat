@@ -2,7 +2,13 @@
   <hb-loader *ngIf="isLoading"></hb-loader>
   <div *ngIf="playlists.length && !isLoading" class="playlists">
     <div class="playlist__list">
-      <div *ngFor="let playlist of playlists" #playlist id="{{playlist.id}}" (click)="openPlaylist(playlist)" class="playlist">
+      <div class="playlist__add">
+        <div class="playlist__image" [style.background-image]="'url(./assets/image/new-playlist-image.png)'"
+        ></div>
+        <p class="playlist__name">Создать новый плейлист</p>
+      </div>
+      <div *ngFor="let playlist of playlists" #playlist id="{{playlist.id}}" (click)="openPlaylist(playlist)"
+           class="playlist">
         <div class="playlist__image" [style.background-image]="this.playlist.images[0]
                                                                ? 'url(' + playlist.images[0].url + ')'
                                                                : 'url(./assets/image/undefined_album_image.jpg)'"
@@ -28,14 +34,16 @@
           <p class="playlist-tracks__author">{{this.playlist.owner.display_name}}</p>
         </div>
       </div>
-      <hb-track-list *ngIf="this.playlist.images[0]" [trackContext]="this.playlist.id" [trackList]="tracks" class="tracklist"></hb-track-list>
+      <hb-track-list *ngIf="this.playlist.images[0]" [trackContext]="this.playlist.id" [trackList]="tracks"
+                     class="tracklist"></hb-track-list>
       <div *ngIf="!this.playlist.images[0]">
         <p>Выбранный вами плейлист пуст.</p>
       </div>
     </div>
     <div *ngIf="!isOpen" class="playlist__waiting">
-      <img class="playlist-waiting__img" src="assets/image/vinyl-record.png" alt="vinyl icon"/>
+      <img class="playlist-waiting__img" src="assets/image/vinyl-record.png" alt="vinyl icon" />
       <p class="playlist-waiting__text">Здесь будет отображаться выбранный плейлист.</p>
     </div>
   </div>
+
 </div>
