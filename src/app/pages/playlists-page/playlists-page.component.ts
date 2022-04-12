@@ -11,12 +11,15 @@ import {
   CurrentUsersPlaylistModel,
   ItemUserPlaylistModel
 } from "../../models/new-api-models/current-users-playlist.model";
-import { Observable, Observer, Subject } from "rxjs";
+import { catchError, Observable, Observer, Subject, throwError } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ApiService } from "../../services/api.service";
 import { ThemeStateService } from "src/app/services/theme-state.service";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzUploadFile } from "ng-zorro-antd/upload";
+import { ErrorFromSpotifyModel } from "../../models/error.model";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { PlaylistModalStateEnum } from "../../models/playlist-modal-state.enum";
 
 @Component({
   selector: "hb-playlists-page",
@@ -31,10 +34,17 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   public isOpen = false;
   private die$ = new Subject<void>();
 
+  public userId!: string;
+  public userName!: string;
   public isVisible = false;
-  loading = false;
-  avatarUrl!: string;
-  value!: string;
+  public modalStates = PlaylistModalStateEnum;
+  public modalState!: PlaylistModalStateEnum;
+  public modalPlaylistId!: string;
+  public modalWarning = false;
+  public loadingImg = false;
+  public avatarUrl!: string;
+  public playlistName!: string;
+  public playlistDescription!: string;
 
   @ViewChildren("playlist")
   private children!: QueryList<ElementRef<HTMLDivElement>>;
@@ -45,7 +55,8 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   constructor(
     private apiService: ApiService,
     public themeStateService: ThemeStateService,
-    private msg: NzMessageService
+    private msg: NzMessageService,
+    private notificationService: NzNotificationService
   ) {}
 
   loadPlaylists(): void {
@@ -98,13 +109,23 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadPlaylists();
+    this.getUserId();
   }
 
   ngOnDestroy(): void {
     this.die$.next();
   }
 
-  changeVisible() {
+  changeVisible(
+    state: PlaylistModalStateEnum,
+    name = "",
+    description = "",
+    id = ""
+  ) {
+    this.modalState = state;
+    this.playlistName = name;
+    this.modalPlaylistId = id;
+    this.playlistDescription = description;
     this.isVisible = true;
     document.body.style.overflow = "hidden";
   }
@@ -112,6 +133,9 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   handleCancel() {
     this.isVisible = false;
     document.body.style.overflow = "visible";
+    this.playlistName = "";
+    this.playlistDescription = "";
+    this.modalWarning = false;
   }
 
   switchMode() {
@@ -154,20 +178,122 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
 
     switch (info.file.status) {
       case "uploading":
-        this.loading = true;
+        this.loadingImg = true;
         break;
       case "done":
         if (originFileObj) {
           this.getBase64(originFileObj, (img: string) => {
-            this.loading = false;
+            this.loadingImg = false;
             this.avatarUrl = img;
           });
         }
         break;
       case "error":
         this.msg.error("Network error");
-        this.loading = false;
+        this.loadingImg = false;
         break;
     }
+  }
+
+  getUserId() {
+    this.apiService
+      .getCurrentUsersProfile()
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.notificationService.error("Ошибка", error.error.error.message);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(userInfo => {
+        this.userId = userInfo.id;
+        this.userName = userInfo.display_name;
+      });
+  }
+
+  createNewPlaylist(): void {
+    if (!this.playlistName) {
+      this.modalWarning = true;
+      return;
+    }
+    this.apiService
+      .createPlaylist(
+        this.userId,
+        this.playlistName,
+        this.playlistDescription,
+        false
+      )
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.notificationService.error("Ошибка", error.error.error.message);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe((createdPlaylist: ItemUserPlaylistModel) => {
+        this.playlists.unshift(createdPlaylist);
+        this.notificationService.blank(
+          "Создание плейлиста",
+          `Вы успешно создали плейлист ${this.playlistName}`
+        );
+        this.handleCancel();
+      });
+  }
+
+  changePlaylistInformation(id: string) {
+    if (!this.playlistDescription || !this.playlistName) {
+      this.modalWarning = true;
+      return;
+    }
+    this.apiService
+      .changePlaylistDetails(
+        id,
+        this.playlistName,
+        this.playlistDescription,
+        false
+      )
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.notificationService.error("Ошибка", error.error.error.message);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(() => {
+        const playlistIndex = this.playlists.findIndex(playlist => {
+          return playlist.id === id;
+        });
+        this.playlists[playlistIndex].name = this.playlistName;
+        this.playlists[playlistIndex].description = this.playlistDescription;
+        this.notificationService.blank(
+          "Изменение плейлиста",
+          `Вы успешно изменили плейлист ${this.playlistName}`
+        );
+        this.handleCancel();
+      });
+  }
+
+  deletePlaylist(id: string, name: string) {
+    this.apiService
+      .unfollowPlaylist(id)
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.notificationService.error("Ошибка", error.error.error.message);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(() => {
+        this.notificationService.blank(
+          "Удаление плейлиста",
+          `Вы успешно удалили плейлист ${name}`
+        );
+        this.playlists.splice(
+          this.playlists.findIndex(playlist => {
+            return playlist.id === id;
+          }),
+          1
+        );
+      });
   }
 }

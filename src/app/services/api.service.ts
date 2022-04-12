@@ -273,7 +273,7 @@ export class ApiService {
     isPublic: boolean
   ): Observable<void> {
     return this.http.put<void>(
-      "https://api.spotify.com/v1/playlists" + playlistId,
+      "https://api.spotify.com/v1/playlists/" + playlistId,
       {
         name,
         description,

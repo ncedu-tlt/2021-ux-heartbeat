@@ -56,10 +56,6 @@
 
           }
 
-          .playlist__image {
-
-          }
-
           .playlist__name {
             font-size: 24px;
             margin-left: 30px;
@@ -84,6 +80,25 @@
           .playlist__info {
             margin-left: 30px;
 
+            .playlist__control {
+              display: flex;
+              margin-bottom: 0;
+
+              .playlist__edit {
+                margin-right: 8px;
+
+                &:hover {
+                  cursor: pointer;
+                  color: @active-link;
+                }
+              }
+
+              .playlist__delete:hover {
+                cursor: pointer;
+                color: @active-link;
+              }
+            }
+
             .playlist__name {
               margin: 0;
               font-size: 24px;
@@ -95,7 +110,9 @@
 
             .playlist__owner {
               font-size: 14px;
-              font-weight: 100;
+              font-weight: 200;
+              margin-top: 3px;
+              margin-bottom: 12px;
             }
           }
         }
@@ -198,7 +215,7 @@
         overflow: auto;
         padding: 20px 5px 20px 20px;
         width: 450px;
-        height: 240px;
+        height: 250px;
         border-radius: 7px;
         position: relative;
       }
@@ -215,6 +232,10 @@
 
         &__name {
           margin-bottom: 5px;
+        }
+
+        &__warning {
+          color: red;
         }
       }
 
