@@ -34,13 +34,14 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   public isOpen = false;
   private die$ = new Subject<void>();
 
-  public userId!: string;
-  public userName!: string;
   public isVisible = false;
   public modalStates = PlaylistModalStateEnum;
   public modalState!: PlaylistModalStateEnum;
   public modalPlaylistId!: string;
   public modalWarning = false;
+  public userId!: string;
+  public userName!: string;
+
   public loadingImg = false;
   public avatarUrl!: string;
   public playlistName!: string;
@@ -121,7 +122,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     name = "",
     description = "",
     id = ""
-  ) {
+  ): void {
     this.modalState = state;
     this.playlistName = name;
     this.modalPlaylistId = id;
@@ -130,7 +131,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     document.body.style.overflow = "hidden";
   }
 
-  handleCancel() {
+  handleCancel(): void {
     this.isVisible = false;
     document.body.style.overflow = "visible";
     this.playlistName = "";
@@ -138,7 +139,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     this.modalWarning = false;
   }
 
-  switchMode() {
+  switchMode(): string {
     return !this.themeStateService.getIsDarkTheme()
       ? "#FFFFFF"
       : "linear-gradient(252.82deg, rgba(54, 66, 109) 72.05%, rgba(12, 14, 24, 0.7) 100%) no-repeat fixed";
@@ -195,7 +196,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  getUserId() {
+  getUserId(): void {
     this.apiService
       .getCurrentUsersProfile()
       .pipe(
@@ -240,7 +241,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  changePlaylistInformation(id: string) {
+  changePlaylistInformation(id: string): void {
     if (!this.playlistDescription || !this.playlistName) {
       this.modalWarning = true;
       return;
@@ -273,7 +274,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  deletePlaylist(id: string, name: string) {
+  deletePlaylist(id: string, name: string): void {
     this.apiService
       .unfollowPlaylist(id)
       .pipe(
