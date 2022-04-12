@@ -1,4 +1,4 @@
-<div class="albums-wrapper">
+<div [ngClass]="{ 'albums-wrapper' : !this.themeStateService.getIsDarkTheme() , 'albums-wrapper-dark' : this.themeStateService.getIsDarkTheme() }">
   <hb-loader *ngIf="isLoading"></hb-loader>
   <div *ngIf="albums.length && !isLoading" class="albums">
     <div class="albums-list">
@@ -11,7 +11,7 @@
       </div>
     </div>
     <hr class="albums-hr"/>
-    <div *ngIf="isOpen" class="selected-album">
+    <div #openedAlbum *ngIf="isOpen" class="selected-album">
       <div class="selected-album__album">
         <div class="selected-album__album-photo">
           <img class="selected-album__vinyl" src="assets/image/vinyl-record.png" alt="vinyl icon"/>

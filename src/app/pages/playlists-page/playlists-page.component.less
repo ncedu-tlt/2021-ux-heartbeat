@@ -14,7 +14,10 @@
 
   .playlists-wrapper, .playlists-wrapper-dark {
     margin: 50px 0 0 50px;
-    width: inherit;
+    @media screen and ( max-width: 919px ) {
+      margin: 50px 0 0 0;
+      padding-bottom: 80px;
+    }
 
     .playlists {
       display: grid;
@@ -28,6 +31,11 @@
 
       @media screen and (min-width: 920px) and (max-width: 1279.99px) {
         grid-template-columns: 323px 3px 361px;
+      }
+
+      @media screen and (max-width: 920px) {
+        display: flex;
+        flex-direction: column;
       }
 
       .playlist__image {
@@ -79,6 +87,9 @@
         height: 100%;
         align-self: center;
         justify-self: center;
+        @media screen and (max-width: 920px) {
+          width: 100%;
+        }
       }
 
       .playlists__tracks {
@@ -135,6 +146,12 @@
         @media screen and (min-width:920px) and (max-width: 1279.99px) {
           right: 7%;
         }
+
+        @media screen and (max-width: 920px) {
+          position: relative;
+          right: 0;
+        }
+
         .playlist-waiting__img {
           width: 450px;
 
@@ -149,6 +166,10 @@
 
           @media screen and (min-width:920px) and (max-width: 1279.99px) {
             font-size: 16px;
+          }
+
+          @media screen and (max-width: 920px) {
+            text-align: center;
           }
         }
       }

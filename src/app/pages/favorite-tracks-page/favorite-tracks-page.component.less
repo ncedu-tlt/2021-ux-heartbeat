@@ -53,12 +53,21 @@
       .track {
         &-contain {
           width: 330px;
+          @media screen and ( max-width: 509px ) {
+            width: 300px;
+          }
           &-info{
             &__artist {
               width: 220px;
+              @media screen and ( max-width: 509px ) {
+                width: 180px;
+              }
             }
             &__name {
               width: 220px;
+              @media screen and ( max-width: 509px ) {
+                width: 180px;
+              }
             }
           }
         }
@@ -103,5 +112,11 @@
   .addItem {
     background: none;
     border: 1px solid @white;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .favorites {
+    justify-content: center;
   }
 }
