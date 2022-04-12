@@ -48,7 +48,7 @@
   <ng-container *ngIf="isVisible">
     <div class="modal" (click)="handleCancel()">
       <div class="modal__content" (click)="$event.stopPropagation()" [ngStyle]="{'background' : switchMode()}">
-        <div>Редактирование плейлиста</div>
+        <div class="modal__title">Редактирование плейлиста</div>
         <div class="modal__edite-playlist">
           <nz-upload
             class="avatar-uploader"
@@ -65,10 +65,11 @@
             <img *ngIf="avatarUrl" [src]="avatarUrl" style="width: 100%" alt="Обложка плейлиста" />
           </nz-upload>
           <div class="modal-inputs">
-            <input nz-input placeholder="Basic usage" [(ngModel)]="value" />
+            <input class="modal-inputs__name" nz-input placeholder="Название плейлиста" [(ngModel)]="value" />
             <textarea
+              class="modal-inputs__description"
               nz-input
-              placeholder="Autosize height with minimum and maximum number of lines"
+              placeholder="Описание плейлиста"
               [nzAutosize]="{ minRows: 2, maxRows: 4 }"
             ></textarea>
           </div>

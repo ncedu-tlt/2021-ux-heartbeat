@@ -31,7 +31,7 @@
       }
 
       .playlist__image {
-        width: 150px;
+        min-width: 150px;
         height: 150px;
         border-radius: 5px;
         background-position: center;
@@ -63,6 +63,10 @@
           .playlist__name {
             font-size: 24px;
             margin-left: 30px;
+
+            @media screen and (min-width: 920px) and (max-width: 1279.99px) {
+              font-size: 17px;
+            }
           }
         }
 
@@ -194,38 +198,24 @@
         overflow: auto;
         padding: 20px 5px 20px 20px;
         width: 450px;
-        height: 230px;
-        //width: 30%;
+        height: 240px;
         border-radius: 7px;
         position: relative;
+      }
 
-        .info-close {
-          display: none;
-
-          //@media (max-width: 500px) {
-          //  display: block;
-          //  position: absolute;
-          //  top: 0;
-          //  right: 5px;
-          //  padding: 10px 5px 10px 10px;
-          //  font-size: 20px;
-          //}
-        }
-
-        //@media (max-width: 560px) {
-        //  width: 90%;
-        //}
-        //
-        //@media (max-width: 500px) {
-        //  width: 100%;
-        //  padding: 15px 0;
-        //}
+      &__title {
+        font-weight: bold;
       }
 
       &-inputs {
         display: flex;
         flex-direction: column;
         width: 300px;
+        margin: 5px;
+
+        &__name {
+          margin-bottom: 5px;
+        }
       }
 
       &__edite-playlist {
@@ -242,7 +232,24 @@
       &__control {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-end;
+
+        button {
+          margin: 5px;
+        }
+      }
+
+      &__content::-webkit-scrollbar {
+        width: 7px;
+      }
+      &__content::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: rgb(182 107 107 / 0.45);
+      }
+      &__content::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+        border-radius: 10px;
+        background-color: #f9f9fd;
       }
     }
   }
