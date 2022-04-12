@@ -2,7 +2,7 @@
   <hb-loader *ngIf="isLoading"></hb-loader>
   <div *ngIf="playlists.length && !isLoading" class="playlists">
     <div class="playlist__list">
-      <div class="playlist__add">
+      <div class="playlist__add" (click)="changeVisible()">
         <div class="playlist__image" [style.background-image]="'url(./assets/image/new-playlist-image.png)'"
         ></div>
         <p class="playlist__name">Создать новый плейлист</p>
@@ -45,5 +45,39 @@
       <p class="playlist-waiting__text">Здесь будет отображаться выбранный плейлист.</p>
     </div>
   </div>
-
+  <ng-container *ngIf="isVisible">
+    <div class="modal" (click)="handleCancel()">
+      <div class="modal__content" (click)="$event.stopPropagation()" [ngStyle]="{'background' : switchMode()}">
+        <div>Редактирование плейлиста</div>
+        <div class="modal__edite-playlist">
+          <nz-upload
+            class="avatar-uploader"
+            nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            nzName="avatar"
+            nzListType="picture-card"
+            [nzShowUploadList]="false"
+            [nzBeforeUpload]="beforeUpload"
+            (nzChange)="handleChange($event)"
+          >
+            <ng-container *ngIf="!avatarUrl" [ngStyle]="{'width' : '0'}">
+              <div class="ant-upload-text">Обложка</div>
+            </ng-container>
+            <img *ngIf="avatarUrl" [src]="avatarUrl" style="width: 100%" alt="Обложка плейлиста" />
+          </nz-upload>
+          <div class="modal-inputs">
+            <input nz-input placeholder="Basic usage" [(ngModel)]="value" />
+            <textarea
+              nz-input
+              placeholder="Autosize height with minimum and maximum number of lines"
+              [nzAutosize]="{ minRows: 2, maxRows: 4 }"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal__control">
+          <button nz-button nzType="default" (click)="handleCancel()">Отмена</button>
+          <button nz-button nzType="primary">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>
