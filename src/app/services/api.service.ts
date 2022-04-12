@@ -132,9 +132,14 @@ export class ApiService {
     );
   }
 
-  getArtistsAlbums(artistId: string): Observable<ArtistsModel> {
+  getArtistsAlbums(
+    artistId: string,
+    includes = "album,single,compilation,appears_on",
+    offset = 0,
+    limit = 10
+  ): Observable<ArtistsModel> {
     return this.http.get<ArtistsModel>(
-      "https://api.spotify.com/v1/artists/" + artistId + "/albums",
+      `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=${includes}&market=RU&limit=${limit}&offset=${offset}`,
       {
         headers: this.headers
       }
@@ -187,13 +192,11 @@ export class ApiService {
     );
   }
 
-  getUsersSavedTracks(): Observable<ItemsTrackModel> {
-    return this.http.get<ItemsTrackModel>(
-      "https://api.spotify.com/v1/me/tracks",
-      {
-        headers: this.headers
-      }
-    );
+  getUsersSavedTracks(offset = 0, limit = 27): Observable<ItemsTrackModel> {
+    const url = `https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=${limit}`;
+    return this.http.get<ItemsTrackModel>(url, {
+      headers: this.headers
+    });
   }
 
   putSaveTracksForCurrentUser(ids: string): Observable<void> {
@@ -223,11 +226,16 @@ export class ApiService {
     );
   }
 
-  getPlaylistTracks(playlistId: string): Observable<ItemsTrackModel> {
+  getPlaylistTracks(
+    playlistId: string,
+    limit = 10,
+    offset = 0
+  ): Observable<ItemsTrackModel> {
     return this.http.get<ItemsTrackModel>(
       "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks",
       {
-        headers: this.headers
+        headers: this.headers,
+        params: { limit, offset }
       }
     );
   }
@@ -315,16 +323,14 @@ export class ApiService {
   }
 
   getCategoriesPlaylists(
-    categoryId: string
+    categoryId: string,
+    offset = 0,
+    limit = 10
   ): Observable<CategoriesPlaylistsModel> {
-    return this.http.get<CategoriesPlaylistsModel>(
-      "https://api.spotify.com/v1/browse/categories/" +
-        categoryId +
-        "/playlists",
-      {
-        headers: this.headers
-      }
-    );
+    const url = `https://api.spotify.com/v1/browse/categories/${categoryId}/playlists?offset=${offset}&limit=${limit}`;
+    return this.http.get<CategoriesPlaylistsModel>(url, {
+      headers: this.headers
+    });
   }
 
   getFeaturedPlaylists(): Observable<CategoriesPlaylistsModel> {
@@ -415,10 +421,14 @@ export class ApiService {
     });
   }
 
-  searchForItem(keyword: string): Observable<SearchModel> {
+  searchForItem(
+    keyword: string,
+    limit = 2,
+    offset = 0
+  ): Observable<SearchModel> {
     return this.http.get<SearchModel>("https://api.spotify.com/v1/search", {
       headers: this.headers,
-      params: { q: keyword, type: "artist,track" }
+      params: { q: keyword, type: "artist,track", limit, offset }
     });
   }
 }

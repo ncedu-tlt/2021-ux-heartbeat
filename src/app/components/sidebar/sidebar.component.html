@@ -1,5 +1,5 @@
 <!-- Обертка  -->
-<div class="navigation">
+<div [ngClass]="{ 'navigation' : !this.themeStateService.getIsDarkTheme() , 'navigation-dark' : this.themeStateService.getIsDarkTheme()  }">
     <!-- Контент  -->
 
     <div class="logo">
@@ -11,35 +11,37 @@
     <nav class="menu">
         <ul class="menu__list">
             <li>
-                <a routerLink="/home">
+                <a routerLink="/home" [routerLinkActive]="['active']">
                   <div class="menu__list-icon-homepage"></div>
                     <span class="menu__list-link">Главная страница</span>
                 </a>
             </li>
             <li>
-                <a routerLink="/favorite">
+                <a routerLink="/favorite" [routerLinkActive]="['active']">
                     <div class="menu__list-icon-favorites"></div>
                     <span class="menu__list-link">Избранное</span>
                 </a>
             </li>
             <li>
-                <a routerLink="/playlists">
+                <a routerLink="/playlists" [routerLinkActive]="['active']">
                   <div class="menu__list-icon-playlist"></div>
                     <span class="menu__list-link">Плейлисты</span>
                 </a>
             </li>
             <li>
-                <a routerLink="/albums">
+                <a routerLink="/albums" [routerLinkActive]="['active']">
                   <div class="menu__list-icon-album"></div>
                     <span class="menu__list-link">Альбомы</span>
                 </a>
             </li>
             <li>
-                <a routerLink="/artists">
+                <a routerLink="/artists" [routerLinkActive]="['active']">
                     <div class="menu__list-icon-singer"></div>
                     <span class="menu__list-link">Исполнители</span>
                 </a>
             </li>
         </ul>
     </nav>
+
+    <div class="dark-theme" (click)="changeTheme()"></div>
 </div>

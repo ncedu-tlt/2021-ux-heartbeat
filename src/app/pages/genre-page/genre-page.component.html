@@ -1,1 +1,14 @@
-<hb-playlist-card></hb-playlist-card>
+<div [ngClass]="{ 'playlists-container' : !this.themeStateService.getIsDarkTheme() , 'playlists-container-dark' : this.themeStateService.getIsDarkTheme() }">
+    <div class="title">
+        <h2>Плейлисты</h2>
+        <div class="title__line"></div>
+    </div>
+    <nz-result *ngIf="!playlists.length && !isLoading" nzStatus="404" nzSubTitle="Пересобираем плейлисты для этой категории жанров, зайдите позже."></nz-result>
+    <hb-loader class="loader" *ngIf="isLoading"></hb-loader>
+    <div class="wrapper" *ngIf="playlists.length && !isLoading">
+        <div class="playlist" *ngFor="let playlist of playlists">
+            <hb-playlist-card [playlist]="playlist"></hb-playlist-card>
+        </div>
+    </div>
+    <button (click)="showMore()" *ngIf="!isDisabled" class="addItem">ЕЩЕ</button>
+</div>

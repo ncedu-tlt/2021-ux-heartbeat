@@ -1,5 +1,11 @@
-import { Component } from "@angular/core";
-import { Playlist } from "src/app/models/playlist-card.model";
+import { Component, Input } from "@angular/core";
+import { ItemUserPlaylistModel } from "src/app/models/new-api-models/current-users-playlist.model";
+import { ThemeStateService } from "src/app/services/theme-state.service";
+import { ApiService } from "../../services/api.service";
+import { catchError, Subscription, throwError } from "rxjs";
+import { PlayerService } from "../../services/player.service";
+import { ErrorFromSpotifyModel } from "../../models/error.model";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 
 @Component({
   selector: "hb-playlist-card",
@@ -7,98 +13,62 @@ import { Playlist } from "src/app/models/playlist-card.model";
   styleUrls: ["./playlist-card.component.less"]
 })
 export class PlaylistCardComponent {
-  public playlist: Playlist[] = [
-    {
-      id: "37i9dQZF1DX4uWsCu3SlsH",
-      images: {
-        url: "https://i.scdn.co/image/ab67706f000000039313c4e5a157a54d555efb88"
-      },
-      name: "Рок сегодня"
-    },
-    {
-      id: "37i9dQZF1DX129cp9QPsuV",
-      images: {
-        url: "https://i.scdn.co/image/ab67706f000000039b5ed18482bad1126af888e6"
-      },
-      name: "Хиты русского рока"
-    },
-    {
-      id: "37i9dQZF1DX2v8iwakkTNa",
-      images: {
-        url: "https://i.scdn.co/image/ab67706f000000038084b6ac5df76b1b2b73ba47"
-      },
-      name: "Новинки русского рока"
-    },
-    {
-      id: "37i9dQZF1DX3QObnPJR0AP",
-      images: {
-        url: "https://i.scdn.co/image/ab67706f0000000329c87acaf559092a3480853e"
-      },
-      name: "Русский панк-рок"
-    },
-    {
-      id: "37i9dQZF1DX4uWsCu3SlsH",
-      images: {
-        url: "https://i.scdn.co/image/ab67706f000000039313c4e5a157a54d555efb88"
-      },
-      name: "Рок сегодня"
-    },
-    {
-      id: "37i9dQZF1DX129cp9QPsuV",
-      images: {
-        url: "https://i.scdn.co/image/ab67706f000000039b5ed18482bad1126af888e6"
-      },
-      name: "Хиты русского рока"
-    },
-    {
-      id: "37i9dQZF1DX2v8iwakkTNa",
-      images: {
-        url: "https://i.scdn.co/image/ab67706f000000038084b6ac5df76b1b2b73ba47"
-      },
-      name: "Новинки русского рока"
-    },
-    {
-      id: "37i9dQZF1DX3QObnPJR0AP",
-      images: {
-        url: "https://i.scdn.co/image/ab67706f0000000329c87acaf559092a3480853e"
-      },
-      name: "Русский панк-рок"
-    },
-    {
-      id: "37i9dQZF1DX2v8iwakkTNa",
-      images: {
-        url: "https://i.scdn.co/image/ab67706f000000038084b6ac5df76b1b2b73ba47"
-      },
-      name: "Новинки русского рока"
-    },
-    {
-      id: "37i9dQZF1DX3QObnPJR0AP",
-      images: {
-        url: "https://i.scdn.co/image/ab67706f0000000329c87acaf559092a3480853e"
-      },
-      name: "Русский панк-рок"
-    },
-    {
-      id: "37i9dQZF1DX2v8iwakkTNa",
-      images: {
-        url: "https://i.scdn.co/image/ab67706f000000038084b6ac5df76b1b2b73ba47"
-      },
-      name: "Новинки русского рока"
-    }
-  ];
-  public newPlaylist: any[] = [];
-  public isShowMore = false;
+  @Input() public playlist!: ItemUserPlaylistModel;
+  public die$ = new Subscription();
+  public isActive = false;
 
-  ngOnInit() {
-    this.newPlaylist = this.playlist.slice(0, 8);
+  constructor(
+    public themeStateService: ThemeStateService,
+    private api: ApiService,
+    public playerService: PlayerService,
+    private notificationService: NzNotificationService
+  ) {}
+
+  ngOnInit(): void {
+    this.playerService.trackContext$.subscribe(value => {
+      this.isActive = this.playlist.id === value;
+    });
   }
 
-  showMore(): void {
-    if (!this.isShowMore) {
-      this.newPlaylist = this.playlist.slice();
-    } else {
-      this.newPlaylist = this.playlist.slice(0, 8);
+  playPlaylist(id: string): void {
+    this.die$ = this.api
+      .getPlaylistTracks(id, 50)
+      .pipe(
+        catchError((error: ErrorFromSpotifyModel) => {
+          if (error.status === 401) {
+            this.notificationService.error(
+              "Ошибка авторизации",
+              "Вам необходимо пройти авторизацию заново",
+              { nzDuration: 0 }
+            );
+          }
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(allPlaylist => {
+        const idx = allPlaylist.items.findIndex(
+          el => el.track.preview_url !== null
+        );
+        if (this.playerService.trackContext$.getValue() === id) {
+          this.playerService.switchPlayerAction();
+        } else {
+          this.playerService.currentTrackInfo$.next(
+            allPlaylist.items[idx].track
+          );
+          this.playerService.trackList$.next(allPlaylist);
+          this.playerService.trackContext$.next(id);
+          this.playerService.switchPlayerAction();
+        }
+      });
+  }
+
+  stopPlaylist(): void {
+    if (this.playerService.trackContext$) {
+      this.playerService.switchPlayerAction();
     }
-    this.isShowMore = !this.isShowMore;
+  }
+
+  ngOnDestroy(): void {
+    this.die$.unsubscribe();
   }
 }

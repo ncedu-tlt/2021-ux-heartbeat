@@ -1,12 +1,12 @@
-<p class="user-menu__profile-name">{{userName}}</p>
+<p [ngClass]="{ 'user-menu__profile-name' : !this.themeStateService.getIsDarkTheme() , 'user-menu__profile-name-dark' : this.themeStateService.getIsDarkTheme()  }" > {{userName}}</p>
 <div *ngIf="imageUrl" [ngStyle]="{'background-image': 'url(' + imageUrl + ')','background-position': 'center', 'background-size': 'cover'}" class="user-menu__profile-image"></div>
-<i *ngIf="!imageUrl" class="user-menu__profile-null-image" nz-icon nzType="user" nzTheme="outline"></i>
-<a class="user-menu__dropdown" nzTrigger="click" nz-dropdown [nzDropdownMenu]="menu">
+<i *ngIf="!imageUrl" [ngClass]="{ 'user-menu__profile-null-image' : !this.themeStateService.getIsDarkTheme() , 'user-menu__profile-null-image-dark' : this.themeStateService.getIsDarkTheme() }" nz-icon nzType="user" nzTheme="outline"></i>
+<a [ngClass]="{ 'user-menu__dropdown' : !this.themeStateService.getIsDarkTheme() , 'user-menu__dropdown-dark' : this.themeStateService.getIsDarkTheme() }" nzTrigger="click" nz-dropdown [nzDropdownMenu]="menu">
   <i nz-icon nzType="down"></i>
 </a>
 <nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu>
     <li nz-menu-item routerLink="/user">Мой профиль</li>
-    <li nz-menu-item routerLink="/" (click)="authService.signOutOfSpotify()">Выйти</li>
+    <li nz-menu-item routerLink="/auth" (click)="authService.signOutOfSpotify()">Выйти</li>
   </ul>
 </nz-dropdown-menu>

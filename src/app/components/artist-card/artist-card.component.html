@@ -1,20 +1,20 @@
-<div class="artist-card">
-  <button nz-button nzType="default"
+<div [ngClass]="{ 'artist-card' : !this.themeStateService.getIsDarkTheme() , 'artist-card-dark' : this.themeStateService.getIsDarkTheme()  }">
+  <button (click)="subscription ? unsubscribeArtist() : subscribeArtist()" nz-button nzType="default"
           nzSize="default"
           nzShape="round"
           class="artist-card__follow">
-    Подписаться
+    {{subscription ? "Отписаться" : "Подписаться"}}
   </button>
   <div class="artist-card__img"
        [ngStyle]="
-       {'background-image': 'url(' + artistInfo.images[0].url + ')'}">
+       {'background-image': artistInfo.images[0]?.url ? 'url(' + artistInfo.images[0].url + ')' : 'url(../../../assets/image/default-artist-image.png)'}">
   </div>
   <p class="artist-card__name">{{artistInfo.name}}</p>
   <p class="artist-card__followers">{{artistInfo.followers.total}} подписчиков</p>
-  <p class="artist-card__genres">{{artistInfo.genres}}</p>
-  <div class="artist-card__top-tracks">
-    <div *ngFor="let track of topTracks.tracks">
-      <hb-track  [track]="track" [isCard]="isCard"></hb-track>
+  <p [ngStyle]="{'padding-bottom': changeTopTracks !== undefined && !changeTopTracks.items.length ? '70px' : '0px'}"  class="artist-card__genres">{{artistInfo.genres.length >= 1 ? artistInfo.genres : "Улыбнись :)"}}</p>
+  <div *ngIf="changeTopTracks" class="artist-card__top-tracks">
+    <div *ngFor="let track of changeTopTracks.items">
+      <hb-track (playTrack)="setListTrackIntoPlayer()" [trackContext]="trackContext" [track]="track.track" [isCard]="isCard"></hb-track>
     </div>
   </div>
   <button nz-button nzType="default"

@@ -1,10 +1,12 @@
-.artist-card {
+@import '../../../assets/styles/colors.less';
+
+.artist-card, .artist-card-dark {
   display: flex;
   margin: 10px 15px;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   justify-content: center;
-  border: 1px solid black;
+  border: 1px solid @black;
   border-radius: 15px;
   padding: 20px;
   max-width: 300px;
@@ -38,6 +40,10 @@
 
   p {
     margin: 0;
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__top-tracks {
@@ -45,10 +51,26 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    max-width: 260px;
+    max-width: 250px;
   }
 
   &__more-information {
     margin: auto;
   }
+}
+
+.artist-card-dark {
+  border: 1px solid @white;
+  * {
+    color: @white;
+  }
+  .ant-btn {
+    background: none;
+    border: 1px solid @white;
+    &:hover {
+      background-color: @active-button;
+      color: @black;
+    }
+  }
+
 }

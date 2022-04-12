@@ -1,20 +1,10 @@
-<div class="container">
-    <div class="title">
-        <h2>Плейлисты</h2>
-        <div class="title__line"></div>
-    </div>
-    <div class="playlist">
-        <div class="card" *ngFor="let item of newPlaylist">
-            <div class="card__bg" [ngStyle]="
-                {'background-image' : 'url(' + item.images.url + ')'}">
-                <div class="card__bg-playCard">
-                    <div class="card__bg-img"></div>
-                </div>
-            </div>
-            <div class="card__descr">
-                <div class="card__descr-title">{{item.name}}</div>
-            </div>
+<div [ngClass]="{ 'playlist' : !this.themeStateService.getIsDarkTheme() , 'playlist-dark' : this.themeStateService.getIsDarkTheme() }">
+    <div class="card" (click)="playPlaylist(playlist.id)" [ngStyle]="{'background' : isActive ? 'rgb(247, 249, 254)' : 'none'}">
+        <div class="card__bg" [ngStyle]="
+            {'background-image' : 'url(' + playlist.images[0].url + ')'}">
+        </div>
+        <div class="card__descr">
+            <div class="card__descr-title">{{playlist.name}}</div>
         </div>
     </div>
-    <button (click)="showMore()" class="addItem">Показать все</button>    
 </div>

@@ -1,95 +1,98 @@
-import { Component } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChildren
+} from "@angular/core";
 import { ItemsTrackModel } from "../../models/new-api-models/top-tracks-artist-by-id.model";
+import {
+  CurrentUsersPlaylistModel,
+  ItemUserPlaylistModel
+} from "../../models/new-api-models/current-users-playlist.model";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { ApiService } from "../../services/api.service";
+import { ThemeStateService } from "src/app/services/theme-state.service";
 
 @Component({
   selector: "hb-playlists-page",
   templateUrl: "./playlists-page.component.html",
   styleUrls: ["./playlists-page.component.less"]
 })
-export class PlaylistsPageComponent {
-  public playlist: ItemsTrackModel = {
-    items: [
-      {
-        track: {
-          id: "7uQ7e7nzbtyX87eIYHpj6Z",
-          name: "De Diepte",
-          preview_url:
-            "https://p.scdn.co/mp3-preview/1da2f7a06427f83820ef811485ded6423ac13b8a?cid=774b29d4f13844c495f206cafdad9c86",
-          track_number: 1,
-          album: {
-            id: "6XAKVt3CT7r1Zf0uiMWt7o",
-            artists: [],
-            images: [
-              {
-                url: "https://i.scdn.co/image/ab67616d0000b273518255a11ce96cc8de864f39"
-              }
-            ],
-            name: "De Diepte",
-            release_date: "2022-03-03",
-            total_tracks: 1
-          },
-          artists: [
-            {
-              id: "1zT9SWCzN45r7oVhy0VYLK",
-              name: "S10"
-            }
-          ]
-        }
-      },
-      {
-        track: {
-          id: "1HhNoOuqm1a5MXYEgAFl8o",
-          name: "Enemy",
-          preview_url:
-            "https://p.scdn.co/mp3-preview/bd0eaa32cd545406bc958e1a220fc36551e72cb0?cid=774b29d4f13844c495f206cafdad9c86",
-          track_number: 1,
-          album: {
-            id: "4fZIyJn2wKb51QPNnWYnqt",
-            artists: [],
-            images: [
-              {
-                url: "https://i.scdn.co/image/ab67616d0000b273d9b35d1c4d15c9de88b754a7"
-              }
-            ],
-            name: "De Diepte",
-            release_date: "2022-03-03",
-            total_tracks: 1
-          },
-          artists: [
-            {
-              id: "53XhwfbYqKCa1cC15pYq2q",
-              name: "Imagine Dragons"
-            }
-          ]
-        }
-      },
-      {
-        track: {
-          id: "1zB4vmk8tFRmM9UULNzbLBrrY",
-          name: "Thunder",
-          preview_url:
-            "https://p.scdn.co/mp3-preview/07e14c4e821174295fe50f03b33d98387570d1db?cid=774b29d4f13844c495f206cafdad9c86",
-          track_number: 1,
-          album: {
-            id: "4fZIyJn2wKb51QPNnWYnqt",
-            artists: [],
-            images: [
-              {
-                url: "https://i.scdn.co/image/ab67616d0000b2735675e83f707f1d7271e5cf8a"
-              }
-            ],
-            name: "Thunder",
-            release_date: "2022-03-03",
-            total_tracks: 1
-          },
-          artists: [
-            {
-              id: "1zT9SWCzN45r7oVhy0VYLK",
-              name: "Imagine Dragons"
-            }
-          ]
-        }
-      }
-    ]
-  };
+export class PlaylistsPageComponent implements OnInit, OnDestroy {
+  public playlists: ItemUserPlaylistModel[] = [];
+  public playlist!: ItemUserPlaylistModel;
+  public tracks!: ItemsTrackModel;
+  public isLoading = true;
+  public isOpen = false;
+  private die$ = new Subject<void>();
+
+  @ViewChildren("playlist")
+  private children!: QueryList<ElementRef<HTMLDivElement>>;
+
+  private oldSelected = "";
+  private selectedId = "";
+
+  constructor(
+    private apiService: ApiService,
+    public themeStateService: ThemeStateService
+  ) {}
+
+  loadPlaylists(): void {
+    this.apiService
+      .getCurrentUsersPlaylists()
+      .pipe(takeUntil(this.die$))
+      .subscribe((playlistList: CurrentUsersPlaylistModel) => {
+        this.playlists = playlistList.items;
+        this.isLoading = false;
+      });
+  }
+
+  openPlaylist(playlist: ItemUserPlaylistModel): void {
+    this.apiService
+      .getPlaylistTracks(playlist.id)
+      .pipe(takeUntil(this.die$))
+      .subscribe((playlistTracks: ItemsTrackModel) => {
+        this.tracks = playlistTracks;
+      });
+    this.playlist = playlist;
+    this.isOpen = true;
+    this.selectPlaylist(playlist.id);
+  }
+
+  public selectPlaylist(id: string): void {
+    if (!this.selectedId) {
+      this.selectedId = id;
+    } else {
+      this.oldSelected = this.selectedId;
+      this.selectedId = id;
+    }
+
+    const currentPlaylist = this.children.find(
+      item => item.nativeElement.id == id
+    );
+    const oldPlaylist = this.children.find(
+      item => item.nativeElement.id == this.oldSelected
+    );
+
+    if (!currentPlaylist) {
+      return;
+    }
+    currentPlaylist.nativeElement.classList.toggle("active");
+
+    if (!oldPlaylist) {
+      return;
+    }
+    oldPlaylist.nativeElement.classList.toggle("active");
+  }
+
+  ngOnInit(): void {
+    this.loadPlaylists();
+  }
+
+  ngOnDestroy(): void {
+    this.die$.next();
+  }
 }
