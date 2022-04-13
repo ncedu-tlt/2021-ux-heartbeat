@@ -1,16 +1,13 @@
 import { Component, Input, ViewEncapsulation } from "@angular/core";
 import { catchError, Subject, takeUntil, throwError } from "rxjs";
 import { ItemUserPlaylistModel } from "src/app/models/new-api-models/current-users-playlist.model";
-import {
-  ItemsTrackModel,
-  PlaylistTrackModel
-} from "src/app/models/new-api-models/top-tracks-artist-by-id.model";
-import { TrackLaunchContextEnum } from "src/app/models/track-launch-context.enum";
+import { ItemsTrackModel } from "src/app/models/new-api-models/top-tracks-artist-by-id.model";
 import { ApiService } from "src/app/services/api.service";
 import { PlayerService } from "src/app/services/player.service";
 import { ThemeStateService } from "src/app/services/theme-state.service";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
+import { ConverterService } from "../../services/converter.service";
 
 @Component({
   selector: "hb-recommendation-card",
@@ -19,9 +16,8 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
   encapsulation: ViewEncapsulation.None
 })
 export class RecommendationCardComponent {
-  public trackInfo!: PlaylistTrackModel[];
+  public trackInfo!: ItemsTrackModel;
   public allPlaylist!: ItemsTrackModel;
-  public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
   public trackTime = 30;
   public offset = 0;
   public isCard = true;
@@ -36,28 +32,13 @@ export class RecommendationCardComponent {
     public apiService: ApiService,
     private playerService: PlayerService,
     public themeStateService: ThemeStateService,
-    private notificationService: NzNotificationService
+    private notificationService: NzNotificationService,
+    public convert: ConverterService
   ) {}
 
   ngOnInit(): void {
     this.apiService
       .getPlaylistTracks(this.recommendation.id)
-      .pipe(takeUntil(this.die$))
-      .subscribe(topTracks => {
-        this.trackInfo = topTracks.items.filter(el => el.track).slice(0, 4);
-        this.isLoading = false;
-        this.isLoadingAllPlaylist = false;
-      });
-  }
-
-  setListTrackIntoPlayer(): void {
-    this.playerService.trackList$.next(null);
-  }
-
-  getAllPlaylist(id: string): void {
-    this.isLoadingAllPlaylist = true;
-    this.apiService
-      .getPlaylistTracks(id)
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
           if (error.status === 401) {
@@ -71,13 +52,16 @@ export class RecommendationCardComponent {
         }),
         takeUntil(this.die$)
       )
-      .subscribe(allPlaylist => {
-        this.allPlaylist = allPlaylist;
-        this.allPlaylist.items.filter(el => el.track);
-        this.isVisible = true;
+      .subscribe(topTracks => {
+        this.trackInfo = topTracks;
+        this.trackInfo.items.filter(el => el.track);
+        this.isLoading = false;
         this.isLoadingAllPlaylist = false;
-        document.body.style.overflow = "hidden";
       });
+  }
+
+  setListTrackIntoPlayer(): void {
+    this.playerService.trackList$.next(this.trackInfo);
   }
 
   showMore(id: string): void {
@@ -99,12 +83,17 @@ export class RecommendationCardComponent {
         takeUntil(this.die$)
       )
       .subscribe(moreTracks => {
-        this.allPlaylist.items.push(...moreTracks.items);
+        this.trackInfo.items.push(...moreTracks.items);
         if (moreTracks.items.length < 10) {
           this.isDisabled = false;
         }
         this.isLoadingAllPlaylist = false;
       });
+  }
+
+  openAllPlaylist(): void {
+    this.isVisible = true;
+    document.body.style.overflow = "hidden";
   }
 
   handleCancel(): void {
