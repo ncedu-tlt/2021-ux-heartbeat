@@ -17,7 +17,7 @@
           <p class="playlist__name">{{playlist.name}}</p>
           <p class="playlist__owner">{{playlist.owner.display_name}}</p>
           <div class="playlist__control" *ngIf="playlist.owner.display_name === this.userName">
-            <p class="playlist__edit" (click)="changeVisible(modalStates.EDIT, playlist.name, playlist.description, playlist.id)">Редактировать</p>
+            <p class="playlist__edit" (click)="changeVisible(modalStates.EDIT, playlist.name, playlist.description, playlist.id, playlist.images[0]?.url)">Редактировать</p>
             <p class="playlist__delete" (click)="deletePlaylist(playlist.id, playlist.name)">Удалить</p>
           </div>
         </div>
@@ -52,12 +52,14 @@
   <ng-container *ngIf="isVisible">
     <div class="modal" (click)="handleCancel()">
       <div class="modal__content" (click)="$event.stopPropagation()" [ngStyle]="{'background' : switchMode()}">
-        <div class="modal__title">Редактирование плейлиста</div>
+        <div class="modal__title">{{this.modalState === modalStates.CREATE ? "Создание плейлиста" : "Редактирование плейлиста"}}</div>
         <div class="modal__edite-playlist">
           <div class="modal__image" *ngIf="modalState === modalStates.EDIT">
             <label for="playlistImage" class="modal__label">Загрузить обложку</label>
             <input type="file" id="playlistImage" (change)="handleFileInput($event)"/>
-            <span *ngIf="fileToUpload">Выбрано: {{fileToUpload.name}}</span>
+            <img *ngIf="!fileToUpload" [src]="this.playlistImg ? this.playlistImg : '/assets/image/undefined_album_image.jpg'" alt="Обложка"/>
+            <img *ngIf="fileToUpload" [src]="imgURL | safeResourceUrl" alt="Обложка"/>
+<!--            <div [ngStyle]=""></div>-->
           </div>
           <div class="modal-inputs">
             <input class="modal-inputs__name" nz-input placeholder="Название плейлиста" [(ngModel)]="playlistName" />

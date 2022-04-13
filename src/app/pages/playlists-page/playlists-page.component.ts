@@ -43,7 +43,9 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
 
   // public loadingImg = false;
   // public avatarUrl!: string;
-  public fileToUpload: File | null | undefined = null;
+  public fileToUpload!: File | null;
+  public imgURL: any;
+  public playlistImg!: string;
   public playlistName!: string;
   public playlistDescription!: string;
 
@@ -121,12 +123,14 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     state: PlaylistModalStateEnum,
     name = "",
     description = "",
-    id = ""
+    id = "",
+    img = ""
   ): void {
     this.modalState = state;
     this.playlistName = name;
     this.modalPlaylistId = id;
     this.playlistDescription = description;
+    this.playlistImg = img;
     this.isVisible = true;
     document.body.style.overflow = "hidden";
   }
@@ -168,18 +172,23 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     // this.fileToUpload = event.target.files.item(0);
     // console.log((event.target as HTMLInputElement).files);
     const inputFile = event.target as HTMLInputElement;
-    this.fileToUpload = inputFile?.files?.item(0);
+    this.fileToUpload = (inputFile.files as FileList).item(0);
+    this.imgURL = URL.createObjectURL(this.fileToUpload);
+    this.getBase64(this.fileToUpload as File, (img: string) => {
+      // this.loadingImg = false;
+      this.imgURL = img;
+    });
   }
-  //
-  // private getBase64(img: File, callback: (img: string) => void): void {
-  //   const reader = new FileReader();
-  //   const result: string | ArrayBuffer | null = reader.result;
-  //
-  //   if (result) {
-  //     reader.addEventListener("load", () => callback(result.toString()));
-  //     reader.readAsDataURL(img);
-  //   }
-  // }
+
+  private getBase64(img: File, callback: (img: string) => void): void {
+    const reader = new FileReader();
+    const result: string | ArrayBuffer | null = reader.result;
+
+    if (result) {
+      reader.addEventListener("load", () => callback(result.toString()));
+      reader.readAsDataURL(img);
+    }
+  }
 
   // handleChange(info: { file: NzUploadFile }): void {
   //   const { originFileObj } = info.file;

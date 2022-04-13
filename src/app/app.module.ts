@@ -57,6 +57,7 @@ import { NzMessageModule } from "ng-zorro-antd/message";
 import { AlbumCardComponent } from "./components/album-card/album-card.component";
 import { NzUploadModule } from "ng-zorro-antd/upload";
 import { NzInputModule } from "ng-zorro-antd/input";
+import { SafeUrlPipe } from "./pipes/safe-src-url.pipe";
 
 registerLocaleData(ru);
 
@@ -93,7 +94,8 @@ registerLocaleData(ru);
     GenreCardComponent,
     PlaylistCardComponent,
     RecommendationCardComponent,
-    AlbumCardComponent
+    AlbumCardComponent,
+    SafeUrlPipe
   ],
   imports: [
     BrowserModule,
