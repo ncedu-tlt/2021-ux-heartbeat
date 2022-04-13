@@ -80,7 +80,15 @@
               nzPlacement="topCenter"
               class="player__add-track">
       </button>
-      <div class="player__music-list"></div>
+      <div class="player__music-list" (click)="modalVisible ? handleCancel() : handleOpen()"></div>
+      <ng-container *ngIf="modalVisible">
+        <div class="modal" (click)="handleCancel()" style="z-index: -1">
+          <div class="modal__content" (click)="$event.stopPropagation()" [ngStyle]="{'background' : switchMode()}">
+            <p class="modal-close" (click)="handleCancel()">x</p>
+            <hb-track-list [trackContext]="trackContext" [trackList]="trackList"></hb-track-list>
+          </div>
+        </div>
+      </ng-container>
     </div>
     <nz-dropdown-menu #menu="nzDropdownMenu">
       <ul nz-menu>
@@ -178,7 +186,15 @@
                   (click)="removeTrackFromFavoriteList(player.track!.id)">
                   <div class="mobile-player-contain__delete-track"></div>
           </button>
-          <div class="mobile-player-contain__music-list"></div>
+          <div class="mobile-player-contain__music-list" (click)="handleOpen()"></div>
+            <ng-container *ngIf="modalVisible">
+              <div class="modal" (click)="handleCancel()">
+                <div class="modal__content" (click)="$event.stopPropagation()" [ngStyle]="{'background' : switchMode(), 'height': '90%'}">
+                  <p class="modal-close" (click)="handleCancel()">x</p>
+                  <hb-track-list [trackContext]="trackContext" [trackList]="trackList"></hb-track-list>
+                </div>
+              </div>
+            </ng-container>
         </div>
       </ng-container>
     </nz-drawer>

@@ -20,6 +20,18 @@ import { ThemeStateService } from "src/app/services/theme-state.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { interval, Observable, Subject, takeUntil } from "rxjs";
 import { RepeatStateEnum } from "../../models/repeat-state.enum";
+import {
+  ItemsTrackModel,
+  NewTopArtistTracks
+} from "../../models/new-api-models/top-tracks-artist-by-id.model";
+import { AlbumTracksModel } from "../../models/new-api-models/album-by-id.model";
+import { NewSearchModel } from "../../models/new-api-models/search.model";
+
+type TrackList =
+  | ItemsTrackModel
+  | AlbumTracksModel
+  | NewSearchModel
+  | NewTopArtistTracks;
 
 @Component({
   selector: "hb-player",
@@ -36,7 +48,10 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   public drawerVisible = false;
   public actions = SwitchPlayerActionEnum;
   public userPlaylists: ItemUserPlaylistModel[] = [];
+  public trackContext!: string;
+  public trackList!: TrackList;
   public isFavorite = false;
+  public modalVisible = false;
   public artistsNames: string | undefined = "";
   public repeatState = RepeatStateEnum;
 
@@ -218,6 +233,36 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.movingLineEdge = false;
       }
     });
+  }
+
+  handleOpen(): void {
+    this.playerService.isShuffle$.subscribe(bool => {
+      if (
+        this.playerService.trackContext$.getValue() &&
+        this.playerService.trackList$.getValue()
+      ) {
+        this.trackContext =
+          this.playerService.trackContext$.getValue() as string;
+        this.trackList = bool
+          ? this.playerService.shuffleTrackList
+          : (this.playerService.trackList$.getValue() as TrackList);
+        this.modalVisible = true;
+      } else {
+        this.modalVisible = false;
+      }
+    });
+    document.body.style.overflow = "hidden";
+  }
+
+  handleCancel(): void {
+    this.modalVisible = false;
+    document.body.style.overflow = "visible";
+  }
+
+  switchMode(): string {
+    return !this.themeStateService.getIsDarkTheme()
+      ? "#FFFFFF"
+      : "linear-gradient(252.82deg, rgba(54, 66, 109) 72.05%, rgba(12, 14, 24, 0.7) 100%) no-repeat fixed";
   }
 
   ngOnDestroy(): void {

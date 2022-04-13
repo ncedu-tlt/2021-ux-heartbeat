@@ -50,7 +50,7 @@ export class PlayerService {
   public currentTrackInfo$ = new BehaviorSubject<Track | null>(null);
   private currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<TrackList | null>(null);
-  private shuffleTrackList!: TrackList;
+  public shuffleTrackList!: TrackList;
   public trackContext$ = new BehaviorSubject<
     string | TrackLaunchContextEnum | null | undefined
   >(null);
