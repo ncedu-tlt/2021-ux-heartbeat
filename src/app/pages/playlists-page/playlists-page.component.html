@@ -59,7 +59,6 @@
             <input type="file" id="playlistImage" (change)="handleFileInput($event)"/>
             <img *ngIf="!fileToUpload" [src]="this.playlistImg ? this.playlistImg : '/assets/image/undefined_album_image.jpg'" alt="Обложка"/>
             <img *ngIf="fileToUpload" [src]="imgURL | safeResourceUrl" alt="Обложка"/>
-<!--            <div [ngStyle]=""></div>-->
           </div>
           <div class="modal-inputs">
             <input class="modal-inputs__name" nz-input placeholder="Название плейлиста" [(ngModel)]="playlistName" />
@@ -68,7 +67,7 @@
               [(ngModel)]="playlistDescription"
               nz-input
               placeholder="Описание плейлиста"
-              [nzAutosize]="{ minRows: 2, maxRows: 4 }"
+              [nzAutosize]="{ minRows: 3, maxRows: 4 }"
             ></textarea>
             <span class="modal-inputs__warning" *ngIf="modalWarning">Введены не все поля!</span>
           </div>
