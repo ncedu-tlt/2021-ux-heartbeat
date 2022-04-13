@@ -13,6 +13,10 @@
     width: 85vw;
   }
 
+  @media screen and ( max-width: 345px ) {
+    justify-content: flex-start;
+  }
+
   .search-bar {
     width: 408px;
     height: 50px;
@@ -23,6 +27,9 @@
     @media screen and (max-width: 600px) {
       width: 200px;
     }
+    @media screen and (max-width: 345px) {
+      margin-right: 8px;
+    }
   }
 
   .user-menu {
@@ -32,6 +39,12 @@
 
     @media screen and (max-width: 850px) {
       min-width: 200px;
+    }
+    @media screen and ( max-width: 445px ) {
+      min-width: 100px;
+    }
+    @media screen and ( max-width: 345px ) {
+      min-width: 0;
     }
   }
 }
