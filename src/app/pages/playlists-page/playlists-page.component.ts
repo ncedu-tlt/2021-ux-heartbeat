@@ -44,7 +44,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   // public loadingImg = false;
   // public avatarUrl!: string;
   public fileToUpload!: File | null;
-  public imgURL: any;
+  public imgURL!: string;
   public playlistImg!: string;
   public playlistName!: string;
   public playlistDescription!: string;
@@ -288,6 +288,9 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
         );
         this.handleCancel();
       });
+    if (this.imgURL) {
+      this.changePlaylistImage(id, this.imgURL);
+    }
   }
 
   deletePlaylist(id: string, name: string): void {
@@ -312,5 +315,18 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
           1
         );
       });
+  }
+
+  changePlaylistImage(playlistId: string, playlistImage: string) {
+    this.apiService
+      .addPlaylistImage(playlistId, playlistImage)
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.notificationService.error("Ошибка", error.error.error.message);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe();
   }
 }
