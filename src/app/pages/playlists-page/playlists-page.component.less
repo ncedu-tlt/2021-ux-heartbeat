@@ -224,6 +224,36 @@
         font-weight: bold;
       }
 
+      &__image {
+        input {
+          width: 0.1px;
+          height: 0.1px;
+          opacity: 0;
+          overflow: hidden;
+          position: absolute;
+          z-index: -1;
+        }
+
+        .modal__label {
+          width: 150px;
+          height: 30px;
+          text-align: center;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.18s ease-in-out;
+          border-radius: 5px;
+          background-color: #1890ff;
+          color: #ffffff;
+
+          &:hover {
+            color: #ffffff;
+            background-color: #40a9ff;
+          }
+        }
+      }
+
       &-inputs {
         display: flex;
         flex-direction: column;

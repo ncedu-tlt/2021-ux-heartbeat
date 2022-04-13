@@ -11,12 +11,11 @@ import {
   CurrentUsersPlaylistModel,
   ItemUserPlaylistModel
 } from "../../models/new-api-models/current-users-playlist.model";
-import { catchError, Observable, Observer, Subject, throwError } from "rxjs";
+import { catchError, Subject, throwError } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ApiService } from "../../services/api.service";
 import { ThemeStateService } from "src/app/services/theme-state.service";
 import { NzMessageService } from "ng-zorro-antd/message";
-import { NzUploadFile } from "ng-zorro-antd/upload";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { PlaylistModalStateEnum } from "../../models/playlist-modal-state.enum";
@@ -42,8 +41,9 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   public userId!: string;
   public userName!: string;
 
-  public loadingImg = false;
-  public avatarUrl!: string;
+  // public loadingImg = false;
+  // public avatarUrl!: string;
+  public fileToUpload: File | null | undefined = null;
   public playlistName!: string;
   public playlistDescription!: string;
 
@@ -145,56 +145,63 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       : "linear-gradient(252.82deg, rgba(54, 66, 109) 72.05%, rgba(12, 14, 24, 0.7) 100%) no-repeat fixed";
   }
 
-  beforeUpload = (file: NzUploadFile): Observable<boolean> =>
-    new Observable((observer: Observer<boolean>) => {
-      const isJpgOrPng =
-        file.type === "image/jpeg" || file.type === "image/png";
-      if (!isJpgOrPng) {
-        this.msg.error("You can only upload JPG file!");
-        observer.complete();
-        return;
-      }
-      const isLt2M = (file.size as number) / 1024 / 1024 < 2;
-      if (!isLt2M) {
-        this.msg.error("Image must smaller than 2MB!");
-        observer.complete();
-        return;
-      }
-      observer.next(isJpgOrPng && isLt2M);
-      observer.complete();
-    });
+  // beforeUpload = (file: NzUploadFile): Observable<boolean> =>
+  //   new Observable((observer: Observer<boolean>) => {
+  //     const isJpgOrPng =
+  //       file.type === "image/jpeg" || file.type === "image/png";
+  //     if (!isJpgOrPng) {
+  //       this.msg.error("You can only upload JPG file!");
+  //       observer.complete();
+  //       return;
+  //     }
+  //     const isLt2M = (file.size as number) / 1024 / 1024 < 2;
+  //     if (!isLt2M) {
+  //       this.msg.error("Image must smaller than 2MB!");
+  //       observer.complete();
+  //       return;
+  //     }
+  //     observer.next(isJpgOrPng && isLt2M);
+  //     observer.complete();
+  //   });
 
-  private getBase64(img: File, callback: (img: string) => void): void {
-    const reader = new FileReader();
-    const result: string | ArrayBuffer | null = reader.result;
-
-    if (result) {
-      reader.addEventListener("load", () => callback(result.toString()));
-      reader.readAsDataURL(img);
-    }
+  handleFileInput(event: Event) {
+    // this.fileToUpload = event.target.files.item(0);
+    // console.log((event.target as HTMLInputElement).files);
+    const inputFile = event.target as HTMLInputElement;
+    this.fileToUpload = inputFile?.files?.item(0);
   }
+  //
+  // private getBase64(img: File, callback: (img: string) => void): void {
+  //   const reader = new FileReader();
+  //   const result: string | ArrayBuffer | null = reader.result;
+  //
+  //   if (result) {
+  //     reader.addEventListener("load", () => callback(result.toString()));
+  //     reader.readAsDataURL(img);
+  //   }
+  // }
 
-  handleChange(info: { file: NzUploadFile }): void {
-    const { originFileObj } = info.file;
-
-    switch (info.file.status) {
-      case "uploading":
-        this.loadingImg = true;
-        break;
-      case "done":
-        if (originFileObj) {
-          this.getBase64(originFileObj, (img: string) => {
-            this.loadingImg = false;
-            this.avatarUrl = img;
-          });
-        }
-        break;
-      case "error":
-        this.msg.error("Network error");
-        this.loadingImg = false;
-        break;
-    }
-  }
+  // handleChange(info: { file: NzUploadFile }): void {
+  //   const { originFileObj } = info.file;
+  //
+  //   switch (info.file.status) {
+  //     case "uploading":
+  //       this.loadingImg = true;
+  //       break;
+  //     case "done":
+  //       if (originFileObj) {
+  //         this.getBase64(originFileObj, (img: string) => {
+  //           this.loadingImg = false;
+  //           this.avatarUrl = img;
+  //         });
+  //       }
+  //       break;
+  //     case "error":
+  //       this.msg.error("Network error");
+  //       this.loadingImg = false;
+  //       break;
+  //   }
+  // }
 
   getUserId(): void {
     this.apiService

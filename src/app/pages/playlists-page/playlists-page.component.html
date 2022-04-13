@@ -54,20 +54,11 @@
       <div class="modal__content" (click)="$event.stopPropagation()" [ngStyle]="{'background' : switchMode()}">
         <div class="modal__title">Редактирование плейлиста</div>
         <div class="modal__edite-playlist">
-          <nz-upload
-            class="avatar-uploader"
-            nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            nzName="avatar"
-            nzListType="picture-card"
-            [nzShowUploadList]="false"
-            [nzBeforeUpload]="beforeUpload"
-            (nzChange)="handleChange($event)"
-          >
-            <ng-container *ngIf="!avatarUrl" [ngStyle]="{'width' : '0'}">
-              <div class="ant-upload-text">Обложка</div>
-            </ng-container>
-            <img *ngIf="avatarUrl" [src]="avatarUrl" style="width: 100%" alt="Обложка плейлиста" />
-          </nz-upload>
+          <div class="modal__image" *ngIf="modalState === modalStates.EDIT">
+            <label for="playlistImage" class="modal__label">Загрузить обложку</label>
+            <input type="file" id="playlistImage" (change)="handleFileInput($event)"/>
+            <span *ngIf="fileToUpload">Выбрано: {{fileToUpload.name}}</span>
+          </div>
           <div class="modal-inputs">
             <input class="modal-inputs__name" nz-input placeholder="Название плейлиста" [(ngModel)]="playlistName" />
             <textarea
@@ -80,7 +71,7 @@
             <span class="modal-inputs__warning" *ngIf="modalWarning">Введены не все поля!</span>
           </div>
         </div>
-        <div class="modal__control">
+        <div class="modal__control" [ngStyle]="{'justifyContent' : modalState === modalStates.CREATE ? 'center' : 'flex-end'}">
           <button nz-button nzType="default" (click)="handleCancel()">Отмена</button>
           <button nz-button nzType="primary" (click)="modalState === modalStates.CREATE ? createNewPlaylist() : changePlaylistInformation(modalPlaylistId)">Сохранить</button>
         </div>
