@@ -47,7 +47,7 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
       .subscribe(topTracks => {
         this.changeTopTracks =
           this.convert.convertTopArtistTracksToNewTopArtistTracks(
-            topTracks.tracks.slice(0, 4)
+            topTracks.tracks
           );
         this.followedArtistsId.forEach(element => {
           if (element === this.artistInfo.id) {
