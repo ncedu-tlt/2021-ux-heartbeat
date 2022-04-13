@@ -139,7 +139,7 @@ export class ApiService {
     limit = 10
   ): Observable<ArtistsModel> {
     return this.http.get<ArtistsModel>(
-      `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=${includes}&market=RU&limit=${limit}&offset=${offset}`,
+      `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=${includes}&market=US&limit=${limit}&offset=${offset}`,
       {
         headers: this.headers
       }
@@ -161,7 +161,7 @@ export class ApiService {
       "https://api.spotify.com/v1/artists/" + artistId + "/top-tracks",
       {
         headers: this.headers,
-        params: { market: "RU" }
+        params: { market: "US" }
       }
     );
   }
@@ -308,7 +308,7 @@ export class ApiService {
       "https://api.spotify.com/v1/browse/categories",
       {
         headers: this.headers,
-        params: { country: "RU", locale: "ru_RU", limit: 50 }
+        params: { country: "US", locale: "en_US", limit: 50 }
       }
     );
   }
