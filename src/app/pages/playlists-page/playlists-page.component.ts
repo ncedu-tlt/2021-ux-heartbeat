@@ -43,7 +43,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   public userName!: string;
 
   public fileToUpload!: File | null;
-  public imgURL!: string;
+  public imgURL!: string | null;
   public imgForSpotify!: string;
   public playlistImg!: string;
   public playlistName!: string;
@@ -155,7 +155,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
 
   checkUploadImage(file: File): boolean {
     if (!(file.type === "image/jpeg" || file.type === "image/png")) {
-      this.fileWarning = "Файл должен иметь формат jpeg|png";
+      this.fileWarning = "Файл должен иметь формат jpeg | png";
       return false;
     }
     if (file.size / 1000 > 150) {
@@ -166,6 +166,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   }
 
   handleFileInput(event: Event) {
+    this.fileWarning = "";
     const inputFile = event.target as HTMLInputElement;
     this.fileToUpload = (inputFile.files as FileList).item(0);
     const checkUploadWarning = this.checkUploadImage(this.fileToUpload as File);
@@ -174,6 +175,8 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       this.getBase64(this.fileToUpload as File, (img: string) => {
         this.imgForSpotify = img.replace("data:image/jpeg;base64,", "");
       });
+    } else {
+      this.imgURL = null;
     }
   }
 
@@ -233,6 +236,9 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   changePlaylistInformation(id: string): void {
     if (!this.playlistDescription || !this.playlistName) {
       this.modalWarning = true;
+      return;
+    }
+    if (this.fileWarning) {
       return;
     }
     this.apiService
@@ -305,7 +311,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
           this.playlists.findIndex(playlist => {
             return playlist.id === playlistId;
           })
-        ].images[0].url = this.imgURL;
+        ].images[0].url = this.imgURL as string;
       });
   }
 }
