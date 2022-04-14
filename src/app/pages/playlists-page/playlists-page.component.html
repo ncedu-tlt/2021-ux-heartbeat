@@ -52,9 +52,9 @@
   <ng-container *ngIf="isVisible">
     <div class="modal" (click)="handleCancel()">
       <div class="modal__content" (click)="$event.stopPropagation()" [ngStyle]="{'background' : switchMode()}">
-        <div class="modal__title">{{this.modalState === modalStates.CREATE ? "Создание плейлиста" : "Редактирование плейлиста"}}</div>
+        <div class="modal__title">{{this.modalCurrentState === modalStates.CREATE ? "Создание плейлиста" : "Редактирование плейлиста"}}</div>
         <div class="modal__edite-playlist">
-          <div class="modal__image" *ngIf="modalState === modalStates.EDIT">
+          <div class="modal__image" *ngIf="modalCurrentState === modalStates.EDIT">
             <label for="playlistImage" class="modal__label">Загрузить обложку</label>
             <input type="file" id="playlistImage" (change)="handleFileInput($event)"/>
             <img *ngIf="!fileToUpload" [src]="this.playlistImg ? this.playlistImg : '/assets/image/undefined_album_image.jpg'" alt="Обложка"/>
@@ -75,9 +75,9 @@
           <span class="modal__inputs-warning" *ngIf="modalWarning">Введены не все поля!</span>
           <span class="modal__file-warning">{{fileWarning}}</span>
         </div>
-        <div class="modal__control" [ngStyle]="{'justifyContent' : modalState === modalStates.CREATE ? 'center' : 'flex-end'}">
+        <div class="modal__control" [ngStyle]="{'justifyContent' : modalCurrentState === modalStates.CREATE ? 'center' : 'flex-end'}">
           <button nz-button nzType="default" (click)="handleCancel()">Отмена</button>
-          <button nz-button nzType="primary" (click)="modalState === modalStates.CREATE ? createNewPlaylist() : changePlaylistInformation(modalPlaylistId)">Сохранить</button>
+          <button nz-button nzType="primary" (click)="modalCurrentState === modalStates.CREATE ? createNewPlaylist() : changePlaylistInformation(modalPlaylistId)">Сохранить</button>
         </div>
       </div>
     </div>

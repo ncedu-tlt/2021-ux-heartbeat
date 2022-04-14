@@ -35,16 +35,19 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
 
   public isVisible = false;
   public modalStates = PlaylistModalStateEnum;
-  public modalState!: PlaylistModalStateEnum;
+  public modalCurrentState!: PlaylistModalStateEnum;
   public modalPlaylistId!: string;
+
   public modalWarning = false;
   public fileWarning = "";
+
   public userId!: string;
   public userName!: string;
 
   public fileToUpload!: File | null;
   public imgURL!: string | null;
   public imgForSpotify!: string;
+
   public playlistImg!: string;
   public playlistName!: string;
   public playlistDescription!: string;
@@ -128,7 +131,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     img = ""
   ): void {
     event.stopPropagation();
-    this.modalState = state;
+    this.modalCurrentState = state;
     this.playlistName = name;
     this.modalPlaylistId = id;
     this.playlistDescription = description;
@@ -165,7 +168,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  handleFileInput(event: Event) {
+  handleFileInput(event: Event): void {
     this.fileWarning = "";
     const inputFile = event.target as HTMLInputElement;
     this.fileToUpload = (inputFile.files as FileList).item(0);
@@ -296,7 +299,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  changePlaylistImage(playlistId: string, playlistImage: string) {
+  changePlaylistImage(playlistId: string, playlistImage: string): void {
     this.apiService
       .addPlaylistImage(playlistId, playlistImage)
       .pipe(
