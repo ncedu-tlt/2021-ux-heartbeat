@@ -324,6 +324,12 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
           return throwError(() => new Error(error.error.error.message));
         })
       )
-      .subscribe();
+      .subscribe(() => {
+        this.playlists[
+          this.playlists.findIndex(playlist => {
+            return playlist.id === playlistId;
+          })
+        ].images[0].url = this.imgURL;
+      });
   }
 }
