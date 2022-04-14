@@ -438,7 +438,7 @@ export class ApiService {
   ): Observable<void> {
     return this.http.put<void>(
       "https://api.spotify.com/v1/playlists/" + playlistId + "/images",
-      { playlistImage },
+      playlistImage,
       {
         headers: this.headers
       }

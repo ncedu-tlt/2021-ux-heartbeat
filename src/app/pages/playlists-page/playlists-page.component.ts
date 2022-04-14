@@ -45,6 +45,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   // public avatarUrl!: string;
   public fileToUpload!: File | null;
   public imgURL!: string;
+  public imgForSpotify!: string;
   public playlistImg!: string;
   public playlistName!: string;
   public playlistDescription!: string;
@@ -169,25 +170,21 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   //   });
 
   handleFileInput(event: Event) {
-    // this.fileToUpload = event.target.files.item(0);
-    // console.log((event.target as HTMLInputElement).files);
     const inputFile = event.target as HTMLInputElement;
     this.fileToUpload = (inputFile.files as FileList).item(0);
     this.imgURL = URL.createObjectURL(this.fileToUpload);
     this.getBase64(this.fileToUpload as File, (img: string) => {
       // this.loadingImg = false;
-      this.imgURL = img;
+      this.imgForSpotify = img.replace("data:image/jpeg;base64,", "");
     });
   }
 
   private getBase64(img: File, callback: (img: string) => void): void {
     const reader = new FileReader();
-    const result: string | ArrayBuffer | null = reader.result;
-
-    if (result) {
-      reader.addEventListener("load", () => callback(result.toString()));
-      reader.readAsDataURL(img);
-    }
+    reader.addEventListener("load", () =>
+      callback((reader.result as ArrayBuffer).toString())
+    );
+    reader.readAsDataURL(img);
   }
 
   // handleChange(info: { file: NzUploadFile }): void {
@@ -288,8 +285,8 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
         );
         this.handleCancel();
       });
-    if (this.imgURL) {
-      this.changePlaylistImage(id, this.imgURL);
+    if (this.imgForSpotify) {
+      this.changePlaylistImage(id, this.imgForSpotify);
     }
   }
 

@@ -58,7 +58,7 @@
             <label for="playlistImage" class="modal__label">Загрузить обложку</label>
             <input type="file" id="playlistImage" (change)="handleFileInput($event)"/>
             <img *ngIf="!fileToUpload" [src]="this.playlistImg ? this.playlistImg : '/assets/image/undefined_album_image.jpg'" alt="Обложка"/>
-            <img *ngIf="fileToUpload" [src]="imgURL | safeResourceUrl" alt="Обложка"/>
+            <img *ngIf="fileToUpload" crossorigin="anonymous" [src]="imgURL | safeResourceUrl" alt="Обложка"/>
           </div>
           <div class="modal-inputs">
             <input class="modal-inputs__name" nz-input placeholder="Название плейлиста" [(ngModel)]="playlistName" />
