@@ -169,14 +169,28 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   //     observer.complete();
   //   });
 
+  checkUploadImage(file: File): boolean {
+    if (!(file.type === "image/jpeg" || file.type === "image/png")) {
+      this.modalWarning = true;
+      return false;
+    }
+    if (file.size / 1000 > 150) {
+      this.modalWarning = true;
+      return false;
+    }
+    return true;
+  }
+
   handleFileInput(event: Event) {
     const inputFile = event.target as HTMLInputElement;
     this.fileToUpload = (inputFile.files as FileList).item(0);
-    this.imgURL = URL.createObjectURL(this.fileToUpload);
-    this.getBase64(this.fileToUpload as File, (img: string) => {
-      // this.loadingImg = false;
-      this.imgForSpotify = img.replace("data:image/jpeg;base64,", "");
-    });
+    const checkUploadWarning = this.checkUploadImage(this.fileToUpload as File);
+    if (checkUploadWarning) {
+      this.imgURL = URL.createObjectURL(this.fileToUpload);
+      this.getBase64(this.fileToUpload as File, (img: string) => {
+        this.imgForSpotify = img.replace("data:image/jpeg;base64,", "");
+      });
+    }
   }
 
   private getBase64(img: File, callback: (img: string) => void): void {
