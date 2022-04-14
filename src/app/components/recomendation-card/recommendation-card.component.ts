@@ -17,7 +17,6 @@ import { ConverterService } from "../../services/converter.service";
 })
 export class RecommendationCardComponent {
   public trackInfo!: ItemsTrackModel;
-  public allPlaylist!: ItemsTrackModel;
   public trackTime = 30;
   public offset = 0;
   public isCard = true;

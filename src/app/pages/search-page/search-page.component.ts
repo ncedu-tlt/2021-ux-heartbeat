@@ -16,11 +16,11 @@ import {
   NewSearchModel,
   SearchModel
 } from "../../models/new-api-models/search.model";
-import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ThemeStateService } from "src/app/services/theme-state.service";
 import { FollowedArtistModel } from "../../models/new-api-models/followed-artist.model";
+import { PlayerService } from "../../services/player.service";
 
 @Component({
   selector: "hb-search-page",
@@ -31,7 +31,6 @@ export class SearchPageComponent {
   public key!: string;
   public artists: ArtistByIdModel[] = [];
   public changeTrackList!: NewSearchModel;
-  public trackContext = TrackLaunchContextEnum.SEARCH_TRACKS;
   public isDisabledShowMoreArtists = false;
   public isDisabledShowMoreTracks = false;
   public isLoading = true;
@@ -43,6 +42,7 @@ export class SearchPageComponent {
     private activatedRoute: ActivatedRoute,
     private api: ApiService,
     private searchStateService: SearchStateService,
+    public playerService: PlayerService,
     private convert: ConverterService,
     private notificationService: NzNotificationService,
     public themeStateService: ThemeStateService
@@ -62,6 +62,10 @@ export class SearchPageComponent {
     this.isLoading = true;
     this.key = <string>this.activatedRoute.snapshot.queryParams["keyword"];
     this.resolveSearchResult();
+  }
+
+  setListTrackIntoPlayer(): void {
+    this.playerService.trackList$.next(this.changeTrackList);
   }
 
   getSearchResultByArtists(): Observable<SearchModel> {

@@ -3,7 +3,7 @@
   <div class="img" [ngStyle]="
     {'background-image' : 'url(' + recommendation.images[0].url + ')'}"></div>
   <hb-loader class="loader" *ngIf="isLoading || isLoadingAllPlaylist"></hb-loader>
-  <div class="tracks" *ngIf="trackInfo.items?.length && !isLoading">
+  <div class="tracks" *ngIf="!isLoading">
     <div *ngFor="let track of trackInfo.items; let i = index">
       <hb-track *ngIf="i < 4" class="tracks__track-container"
                 (playTrack)="setListTrackIntoPlayer()"
