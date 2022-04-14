@@ -2,7 +2,7 @@
   <hb-loader *ngIf="isLoading"></hb-loader>
   <div *ngIf="playlists.length && !isLoading" class="playlists">
     <div class="playlist__list">
-      <div class="playlist__add" (click)="changeVisible(modalStates.CREATE)">
+      <div class="playlist__add" (click)="changeVisible($event, modalStates.CREATE)">
         <div class="playlist__image" [style.background-image]="'url(./assets/image/new-playlist-image.png)'"
         ></div>
         <p class="playlist__name">Создать новый плейлист</p>
@@ -17,7 +17,7 @@
           <p class="playlist__name">{{playlist.name}}</p>
           <p class="playlist__owner">{{playlist.owner.display_name}}</p>
           <div class="playlist__control" *ngIf="playlist.owner.display_name === this.userName">
-            <p class="playlist__edit" (click)="changeVisible(modalStates.EDIT, playlist.name, playlist.description, playlist.id, playlist.images[0]?.url)">Редактировать</p>
+            <p class="playlist__edit" (click)="changeVisible($event, modalStates.EDIT, playlist.name, playlist.description, playlist.id, playlist.images[0]?.url)">Редактировать</p>
             <p class="playlist__delete" (click)="deletePlaylist(playlist.id, playlist.name)">Удалить</p>
           </div>
         </div>
@@ -69,8 +69,11 @@
               placeholder="Описание плейлиста"
               [nzAutosize]="{ minRows: 3, maxRows: 4 }"
             ></textarea>
-            <span class="modal-inputs__warning" *ngIf="modalWarning">Введены не все поля!</span>
           </div>
+        </div>
+        <div class="modal__warning">
+          <span class="modal__inputs-warning" *ngIf="modalWarning">Введены не все поля!</span>
+          <span class="modal__file-warning">{{fileWarning}}</span>
         </div>
         <div class="modal__control" [ngStyle]="{'justifyContent' : modalState === modalStates.CREATE ? 'center' : 'flex-end'}">
           <button nz-button nzType="default" (click)="handleCancel()">Отмена</button>

@@ -38,11 +38,10 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   public modalState!: PlaylistModalStateEnum;
   public modalPlaylistId!: string;
   public modalWarning = false;
+  public fileWarning = "";
   public userId!: string;
   public userName!: string;
 
-  // public loadingImg = false;
-  // public avatarUrl!: string;
   public fileToUpload!: File | null;
   public imgURL!: string;
   public imgForSpotify!: string;
@@ -121,12 +120,14 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   }
 
   changeVisible(
+    event: Event,
     state: PlaylistModalStateEnum,
     name = "",
     description = "",
     id = "",
     img = ""
   ): void {
+    event.stopPropagation();
     this.modalState = state;
     this.playlistName = name;
     this.modalPlaylistId = id;
@@ -142,6 +143,8 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     this.playlistName = "";
     this.playlistDescription = "";
     this.modalWarning = false;
+    this.fileWarning = "";
+    this.fileToUpload = null;
   }
 
   switchMode(): string {
@@ -150,32 +153,13 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       : "linear-gradient(252.82deg, rgba(54, 66, 109) 72.05%, rgba(12, 14, 24, 0.7) 100%) no-repeat fixed";
   }
 
-  // beforeUpload = (file: NzUploadFile): Observable<boolean> =>
-  //   new Observable((observer: Observer<boolean>) => {
-  //     const isJpgOrPng =
-  //       file.type === "image/jpeg" || file.type === "image/png";
-  //     if (!isJpgOrPng) {
-  //       this.msg.error("You can only upload JPG file!");
-  //       observer.complete();
-  //       return;
-  //     }
-  //     const isLt2M = (file.size as number) / 1024 / 1024 < 2;
-  //     if (!isLt2M) {
-  //       this.msg.error("Image must smaller than 2MB!");
-  //       observer.complete();
-  //       return;
-  //     }
-  //     observer.next(isJpgOrPng && isLt2M);
-  //     observer.complete();
-  //   });
-
   checkUploadImage(file: File): boolean {
     if (!(file.type === "image/jpeg" || file.type === "image/png")) {
-      this.modalWarning = true;
+      this.fileWarning = "Файл должен иметь формат jpeg|png";
       return false;
     }
     if (file.size / 1000 > 150) {
-      this.modalWarning = true;
+      this.fileWarning = "Размер файла не должен превышать 150КБ";
       return false;
     }
     return true;
@@ -193,35 +177,13 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getBase64(img: File, callback: (img: string) => void): void {
+  getBase64(img: File, callback: (img: string) => void): void {
     const reader = new FileReader();
     reader.addEventListener("load", () =>
       callback((reader.result as ArrayBuffer).toString())
     );
     reader.readAsDataURL(img);
   }
-
-  // handleChange(info: { file: NzUploadFile }): void {
-  //   const { originFileObj } = info.file;
-  //
-  //   switch (info.file.status) {
-  //     case "uploading":
-  //       this.loadingImg = true;
-  //       break;
-  //     case "done":
-  //       if (originFileObj) {
-  //         this.getBase64(originFileObj, (img: string) => {
-  //           this.loadingImg = false;
-  //           this.avatarUrl = img;
-  //         });
-  //       }
-  //       break;
-  //     case "error":
-  //       this.msg.error("Network error");
-  //       this.loadingImg = false;
-  //       break;
-  //   }
-  // }
 
   getUserId(): void {
     this.apiService
