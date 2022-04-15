@@ -76,8 +76,8 @@
           <span class="modal__file-warning">{{fileWarning}}</span>
         </div>
         <div class="modal__control" [ngStyle]="{'justifyContent' : modalCurrentState === modalStates.CREATE ? 'center' : 'flex-end'}">
-          <button nz-button nzType="default" (click)="handleCancel()">Отмена</button>
-          <button nz-button nzType="primary" (click)="modalCurrentState === modalStates.CREATE ? createNewPlaylist() : changePlaylistInformation(modalPlaylistId)">Сохранить</button>
+          <button class="modal__cancel" nz-button nzType="default" (click)="handleCancel()">Отмена</button>
+          <button class="modal__accept" nz-button nzType="primary" (click)="modalCurrentState === modalStates.CREATE ? createNewPlaylist() : changePlaylistInformation(modalPlaylistId)">Сохранить</button>
         </div>
       </div>
     </div>
