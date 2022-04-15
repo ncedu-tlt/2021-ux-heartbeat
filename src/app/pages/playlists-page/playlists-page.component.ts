@@ -176,10 +176,12 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   checkUploadImage(file: File): boolean {
     if (!(file.type === "image/jpeg" || file.type === "image/png")) {
       this.fileWarning = "Файл должен иметь формат jpeg | png";
+      this.imgURL = "assets/image/undefined_album_image.jpg";
       return false;
     }
     if (file.size / 1000 > 150) {
       this.fileWarning = "Размер файла не должен превышать 150КБ";
+      this.imgURL = URL.createObjectURL(file);
       return false;
     }
     return true;
@@ -190,8 +192,8 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     const inputFile = event.target as HTMLInputElement;
     this.imgToUpload = (inputFile.files as FileList).item(0);
     const checkUploadWarning = this.checkUploadImage(this.imgToUpload as File);
-    this.imgURL = URL.createObjectURL(this.imgToUpload);
     if (checkUploadWarning) {
+      this.imgURL = URL.createObjectURL(this.imgToUpload);
       this.getBase64(this.imgToUpload as File, (img: string) => {
         this.imgForSpotify = img.replace("data:image/jpeg;base64,", "");
       });
