@@ -46,13 +46,13 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   public modalCurrentState!: PlaylistModalStateEnum;
   public modalPlaylistId!: string;
 
-  public modalWarning = false;
+  public inputWarning = false;
   public fileWarning = "";
 
   public userId!: string;
   public userName!: string;
 
-  public fileToUpload!: File | null;
+  public imgToUpload!: File | null;
   public imgURL!: string | null;
   public imgForSpotify!: string;
 
@@ -133,17 +133,29 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   changeVisible(
     event: Event,
     state: PlaylistModalStateEnum,
-    name = "",
-    description = "",
-    id = "",
-    img = ""
+    playlist?: ItemUserPlaylistModel
   ): void {
     event.stopPropagation();
     this.modalCurrentState = state;
-    this.playlistName = name;
-    this.modalPlaylistId = id;
-    this.playlistDescription = description;
-    this.playlistImg = img;
+    if (playlist) {
+      [
+        this.playlistName,
+        this.playlistDescription,
+        this.playlistImg,
+        this.modalPlaylistId
+      ] = [
+        playlist.name,
+        playlist.description,
+        playlist.images[0].url,
+        playlist.id
+      ];
+    } else {
+      this.playlistName =
+        this.playlistDescription =
+        this.playlistImg =
+        this.modalPlaylistId =
+          "";
+    }
     this.isVisible = true;
     document.body.style.overflow = "hidden";
   }
@@ -151,11 +163,9 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   handleCancel(): void {
     this.isVisible = false;
     document.body.style.overflow = "visible";
-    this.playlistName = "";
-    this.playlistDescription = "";
-    this.modalWarning = false;
-    this.fileWarning = "";
-    this.fileToUpload = null;
+    this.playlistName = this.playlistDescription = this.fileWarning = "";
+    this.inputWarning = false;
+    this.imgToUpload = null;
   }
 
   switchMode(): string {
@@ -179,11 +189,11 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   handleFileInput(event: Event): void {
     this.fileWarning = "";
     const inputFile = event.target as HTMLInputElement;
-    this.fileToUpload = (inputFile.files as FileList).item(0);
-    const checkUploadWarning = this.checkUploadImage(this.fileToUpload as File);
+    this.imgToUpload = (inputFile.files as FileList).item(0);
+    const checkUploadWarning = this.checkUploadImage(this.imgToUpload as File);
     if (checkUploadWarning) {
-      this.imgURL = URL.createObjectURL(this.fileToUpload);
-      this.getBase64(this.fileToUpload as File, (img: string) => {
+      this.imgURL = URL.createObjectURL(this.imgToUpload);
+      this.getBase64(this.imgToUpload as File, (img: string) => {
         this.imgForSpotify = img.replace("data:image/jpeg;base64,", "");
       });
     } else {
@@ -217,7 +227,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
 
   createNewPlaylist(): void {
     if (!this.playlistName) {
-      this.modalWarning = true;
+      this.inputWarning = true;
       return;
     }
     this.apiService
@@ -246,7 +256,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
 
   changePlaylistInformation(id: string): void {
     if (!this.playlistDescription || !this.playlistName) {
-      this.modalWarning = true;
+      this.inputWarning = true;
       return;
     }
     if (this.fileWarning) {

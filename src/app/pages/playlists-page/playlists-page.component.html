@@ -17,7 +17,7 @@
           <p class="playlist__name">{{playlist.name}}</p>
           <p class="playlist__owner">{{playlist.owner.display_name}}</p>
           <div class="playlist__control" *ngIf="playlist.owner.display_name === this.userName">
-            <p class="playlist__edit" (click)="changeVisible($event, modalStates.EDIT, playlist.name, playlist.description, playlist.id, playlist.images[0]?.url)">Редактировать</p>
+            <p class="playlist__edit" (click)="changeVisible($event, modalStates.EDIT, playlist)">Редактировать</p>
             <p class="playlist__delete" (click)="deletePlaylist(playlist.id, playlist.name)">Удалить</p>
           </div>
         </div>
@@ -57,8 +57,8 @@
           <div class="modal__image" *ngIf="modalCurrentState === modalStates.EDIT">
             <label for="playlistImage" class="modal__label">Загрузить обложку</label>
             <input type="file" id="playlistImage" (change)="handleFileInput($event)"/>
-            <img *ngIf="!fileToUpload" [src]="this.playlistImg ? this.playlistImg : '/assets/image/undefined_album_image.jpg'" alt="Обложка"/>
-            <img *ngIf="fileToUpload" crossorigin="anonymous" [src]="imgURL | safeResourceUrl" alt="Обложка"/>
+            <img *ngIf="!imgToUpload" [src]="this.playlistImg ? this.playlistImg : '/assets/image/undefined_album_image.jpg'" alt="Обложка"/>
+            <img *ngIf="imgToUpload" [src]="imgURL | safeResourceUrl" alt="Обложка"/>
           </div>
           <div class="modal-inputs">
             <input class="modal-inputs__name" nz-input placeholder="Название плейлиста" [(ngModel)]="playlistName" />
@@ -72,7 +72,7 @@
           </div>
         </div>
         <div class="modal__warning">
-          <span class="modal__inputs-warning" *ngIf="modalWarning">Введены не все поля!</span>
+          <span class="modal__inputs-warning" *ngIf="inputWarning">Введены не все поля!</span>
           <span class="modal__file-warning">{{fileWarning}}</span>
         </div>
         <div class="modal__control" [ngStyle]="{'justifyContent' : modalCurrentState === modalStates.CREATE ? 'center' : 'flex-end'}">
