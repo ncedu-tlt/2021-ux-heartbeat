@@ -11,7 +11,15 @@ import {
   CurrentUsersPlaylistModel,
   ItemUserPlaylistModel
 } from "../../models/new-api-models/current-users-playlist.model";
-import { catchError, Subject, throwError } from "rxjs";
+import {
+  catchError,
+  Observable,
+  of,
+  Subject,
+  throwError,
+  combineLatest,
+  switchMap
+} from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ApiService } from "../../services/api.service";
 import { ThemeStateService } from "src/app/services/theme-state.service";
@@ -244,35 +252,39 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     if (this.fileWarning) {
       return;
     }
-    this.apiService
-      .changePlaylistDetails(
+    this.isLoading = true;
+    combineLatest(
+      this.apiService.changePlaylistDetails(
         id,
         this.playlistName,
         this.playlistDescription,
         false
-      )
+      ),
+      this.changePlaylistImage(id, this.imgForSpotify)
+    )
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
           this.notificationService.error("Ошибка", error.error.error.message);
           return throwError(() => new Error(error.error.error.message));
+        }),
+        switchMap(() => {
+          return this.apiService.getPlaylistById(id);
         })
       )
-      .subscribe(() => {
-        const playlistIndex = this.playlists.findIndex(playlist => {
-          return playlist.id === id;
-        });
-        this.playlists[playlistIndex].name = this.playlistName;
-        this.playlists[playlistIndex].description = this.playlistDescription;
+      .subscribe(newPlaylist => {
+        this.playlists[
+          this.playlists.findIndex(playlist => {
+            return playlist.id === newPlaylist.id;
+          })
+        ] = newPlaylist;
+        this.isLoading = false;
         this.notificationService.blank(
           "Изменение плейлиста",
           `Вы успешно изменили плейлист ${this.playlistName}`
         );
         this.handleCancel();
       });
-    if (this.imgForSpotify) {
-      this.changePlaylistImage(id, this.imgForSpotify);
-    }
   }
 
   deletePlaylist(id: string, name: string): void {
@@ -299,22 +311,20 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  changePlaylistImage(playlistId: string, playlistImage: string): void {
-    this.apiService
-      .addPlaylistImage(playlistId, playlistImage)
-      .pipe(
+  changePlaylistImage(
+    playlistId: string,
+    playlistImage: string
+  ): Observable<void> {
+    if (playlistImage) {
+      return this.apiService.addPlaylistImage(playlistId, playlistImage).pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
           this.notificationService.error("Ошибка", error.error.error.message);
           return throwError(() => new Error(error.error.error.message));
         })
-      )
-      .subscribe(() => {
-        this.playlists[
-          this.playlists.findIndex(playlist => {
-            return playlist.id === playlistId;
-          })
-        ].images[0].url = this.imgURL as string;
-      });
+      );
+    } else {
+      return of();
+    }
   }
 }
