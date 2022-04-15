@@ -163,7 +163,6 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   handleCancel(): void {
     this.isVisible = false;
     document.body.style.overflow = "visible";
-    this.playlistName = this.playlistDescription = this.fileWarning = "";
     this.inputWarning = false;
     this.imgToUpload = null;
   }
@@ -253,13 +252,14 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   }
 
   changePlaylistInformation(id: string): void {
-    if (!this.playlistDescription || !this.playlistName) {
+    if (!(this.playlistDescription && this.playlistName)) {
       this.inputWarning = true;
       return;
     }
     if (this.fileWarning) {
       return;
     }
+    this.handleCancel();
     this.isLoading = true;
     combineLatest(
       this.apiService.changePlaylistDetails(
@@ -291,7 +291,6 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
           "Изменение плейлиста",
           `Вы успешно изменили плейлист ${this.playlistName}`
         );
-        this.handleCancel();
       });
   }
 
@@ -322,7 +321,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   changePlaylistImage(
     playlistId: string,
     playlistImage: string
-  ): Observable<void> {
+  ): Observable<void | null> {
     if (playlistImage) {
       return this.apiService.addPlaylistImage(playlistId, playlistImage).pipe(
         takeUntil(this.die$),
@@ -332,7 +331,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
         })
       );
     } else {
-      return of();
+      return of(null);
     }
   }
 }
