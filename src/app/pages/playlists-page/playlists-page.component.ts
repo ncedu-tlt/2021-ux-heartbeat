@@ -261,7 +261,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     }
     this.handleCancel();
     this.isLoading = true;
-    combineLatest(
+    combineLatest([
       this.apiService.changePlaylistDetails(
         id,
         this.playlistName,
@@ -269,7 +269,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
         false
       ),
       this.changePlaylistImage(id, this.imgForSpotify)
-    )
+    ])
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
