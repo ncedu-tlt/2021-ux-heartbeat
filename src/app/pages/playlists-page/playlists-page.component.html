@@ -55,10 +55,10 @@
         <div class="modal__title">{{this.modalCurrentState === modalStates.CREATE ? "Создание плейлиста" : "Редактирование плейлиста"}}</div>
         <div class="modal__edite-playlist">
           <div class="modal__image" *ngIf="modalCurrentState === modalStates.EDIT">
-            <label for="playlistImage" class="modal__label">Загрузить обложку</label>
+            <label for="playlistImage" class="modal__label" [ngStyle]="{'background-image' : this.imgURL ? 'url(' + this.imgURL + ')' : 'url(' + this.playlistImg + ')'}">
+              <div class="modal__opacity"></div>
+            </label>
             <input type="file" id="playlistImage" (change)="handleFileInput($event)"/>
-            <img *ngIf="!imgToUpload" [src]="this.playlistImg ? this.playlistImg : '/assets/image/undefined_album_image.jpg'" alt="Обложка"/>
-            <img *ngIf="imgToUpload" [src]="imgURL | safeResourceUrl" alt="Обложка"/>
           </div>
           <div class="modal-inputs">
             <input class="modal-inputs__name" nz-input placeholder="Название плейлиста" [(ngModel)]="playlistName" />

@@ -44,7 +44,6 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   public isVisible = false;
   public modalStates = PlaylistModalStateEnum;
   public modalCurrentState!: PlaylistModalStateEnum;
-  public modalPlaylistId!: string;
 
   public inputWarning = false;
   public fileWarning = "";
@@ -56,6 +55,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   public imgURL!: string | null;
   public imgForSpotify!: string;
 
+  public modalPlaylistId!: string;
   public playlistImg!: string;
   public playlistName!: string;
   public playlistDescription!: string;
@@ -146,7 +146,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       ] = [
         playlist.name,
         playlist.description,
-        playlist.images[0].url,
+        playlist.images[0].url || "/assets/image/undefined_album_image.jpg",
         playlist.id
       ];
     } else {
@@ -191,13 +191,11 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     const inputFile = event.target as HTMLInputElement;
     this.imgToUpload = (inputFile.files as FileList).item(0);
     const checkUploadWarning = this.checkUploadImage(this.imgToUpload as File);
+    this.imgURL = URL.createObjectURL(this.imgToUpload);
     if (checkUploadWarning) {
-      this.imgURL = URL.createObjectURL(this.imgToUpload);
       this.getBase64(this.imgToUpload as File, (img: string) => {
         this.imgForSpotify = img.replace("data:image/jpeg;base64,", "");
       });
-    } else {
-      this.imgURL = null;
     }
   }
 

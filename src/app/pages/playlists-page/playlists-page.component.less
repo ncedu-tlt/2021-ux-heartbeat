@@ -246,22 +246,47 @@
         }
 
         .modal__label {
-          width: 140px;
-          height: 30px;
+          width: 120px;
+          height: 120px;
+          background-size: cover;
           text-align: center;
           cursor: pointer;
           display: flex;
-          margin-bottom: 10px;
           align-items: center;
           justify-content: center;
           transition: all 0.18s ease-in-out;
           border-radius: 5px;
-          background-color: #1890ff;
+          background-position: center;
+          position: relative;
           color: #ffffff;
 
-          &:hover {
-            color: #ffffff;
-            background-color: #40a9ff;
+          .modal__opacity {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+
+            &:hover {
+              background-color: black;
+              opacity: 0.6;
+            }
+          }
+
+          img {
+            display: none;
+          }
+
+          &:hover img {
+            display: block;
+          }
+
+          &:hover::before {
+            content: ' ';
+            background: url('src/assets/image/icon-upload-white.png');
+            background-size:contain;
+            width: 80px;
+            height: 80px;
+            z-index: 1000;
+            pointer-events: none;
           }
         }
       }
