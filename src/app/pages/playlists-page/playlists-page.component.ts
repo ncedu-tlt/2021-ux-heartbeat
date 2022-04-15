@@ -146,7 +146,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       ] = [
         playlist.name,
         playlist.description,
-        playlist.images[0].url || "/assets/image/undefined_album_image.jpg",
+        playlist.images[0]?.url || "assets/image/undefined_album_image.jpg",
         playlist.id
       ];
     } else {
