@@ -4,7 +4,6 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
-  ViewChild,
   ViewChildren
 } from "@angular/core";
 import { ItemsTrackModel } from "../../models/new-api-models/top-tracks-artist-by-id.model";
@@ -63,7 +62,6 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
 
   @ViewChildren("playlist")
   private children!: QueryList<ElementRef<HTMLDivElement>>;
-  @ViewChild("fileInput") fileInput!: ElementRef<HTMLInputElement>;
 
   private oldSelected = "";
   private selectedId = "";
