@@ -271,12 +271,23 @@
             }
           }
 
-          img {
+          button {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 23px;
             display: none;
+            height: 23px;
+            border: none;
+            border-radius: 50%;
+            background-color: black;
+            opacity: 0.6;
+            color: white;
           }
 
-          &:hover img {
+          &:hover button {
             display: block;
+            cursor: pointer;
           }
 
           &:hover::before {

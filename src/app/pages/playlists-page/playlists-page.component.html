@@ -57,8 +57,9 @@
           <div class="modal__image" *ngIf="modalCurrentState === modalStates.EDIT">
             <label for="playlistImage" class="modal__label" [ngStyle]="{'background-image' : this.imgURL ? 'url(' + this.imgURL + ')' : 'url(' + this.playlistImg + ')'}">
               <div class="modal__opacity"></div>
+              <button (click)="removePlaylistImg()">x</button>
             </label>
-            <input type="file" id="playlistImage" (change)="handleFileInput($event)"/>
+            <input type="file" id="playlistImage" #fileInput (change)="handleFileInput($event)"/>
           </div>
           <div class="modal-inputs">
             <input class="modal-inputs__name" nz-input placeholder="Название плейлиста" [(ngModel)]="playlistName" />
