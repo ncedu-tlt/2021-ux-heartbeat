@@ -301,6 +301,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   removePlaylistImg() {
     this.imgURL = this.playlistImg;
     this.imgForSpotify = "";
+    this.fileWarning = "";
   }
 
   deletePlaylist(id: string, name: string): void {
