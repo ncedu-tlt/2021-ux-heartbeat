@@ -19,6 +19,9 @@
     flex-direction: row;
     flex-wrap: wrap;
     margin-top: 15px;
+    @media screen and ( max-width: 1793px ) {
+      justify-content: center;
+    }
     &__list {
       display: flex;
       align-items: center;
@@ -81,13 +84,13 @@
             &__artist {
               width: 220px;
               @media screen and ( max-width: 509px ) {
-                width: 180px;
+                width: 150px;
               }
             }
             &__name {
               width: 220px;
               @media screen and ( max-width: 509px ) {
-                width: 180px;
+                width: 150px;
               }
             }
           }
