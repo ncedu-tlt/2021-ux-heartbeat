@@ -1,1 +1,145 @@
+@import "../../../assets/styles/colors";
 
+:host {
+
+  .user-profile__wrapper-dark {
+    color: @white;
+  }
+
+  .user-info {
+    margin-top: 44px;
+    width: 601px;
+    height: 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .user-info__img {
+      width: 120px;
+      height: 120px;
+      background-position: center;
+      background-size: cover;
+      border-radius: 90px;
+    }
+
+    .user-info__profile-null-image {
+      background-color: @background-color-dark;
+      border-radius: 90px;
+      font-size: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 120px;
+      height: 120px;
+    }
+
+    .user-info__profile-null-image-dark {
+      color: @black;
+      background-color: @white;
+      border-radius: 90px;
+      font-size: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 120px;
+      height: 120px;
+    }
+
+    .user-info__profile {
+      max-width: 185px;
+      height: 56px;
+
+      .user-info__profile-text {
+        line-height: 1.15em;
+        margin: 0;
+        font-weight: 100;
+        font-size: 12px;
+      }
+
+      .user-info__profile-name {
+        margin: 0;
+        font-size: 36px;
+        line-height: 1.15em;
+      }
+    }
+
+    .user-info__subscriptions {
+      width: 62px;
+      height: 46px;
+
+      .user-info__subscriptions-count {
+        margin: 0;
+        font-size: 24px;
+        line-height: 1.15em;
+      }
+
+      .user-info__subscriptions-text {
+        line-height: 1.15em;
+        margin: 0;
+        font-weight: 100;
+        font-size: 13px;
+      }
+    }
+
+    .user-info__status {
+      max-width: 125px;
+      height: 46px;
+
+      .user-info__status-text {
+        line-height: 1.15em;
+        margin: 0;
+        font-weight: 100;
+        font-size: 13px;
+      }
+
+      .user-info__status-state {
+        margin: 0;
+        font-size: 24px;
+        line-height: 1.15em;
+      }
+    }
+  }
+
+  .top-artists {
+    margin: 59px 0 59px 0;
+    .top-artists__title {
+      display: flex;
+      width: 365px;
+      height: 21px;
+
+      .top-artists__title-text {
+        font-size: 18px;
+        margin-right: 7px;
+      }
+
+      .title__line {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODYiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCA4NiAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTAgMTBIMTQuNUwyNSAxTDMzIDEwSDQ3LjVMNjAgMTYuNUw2OC41IDEwSDg1LjUiIHN0cm9rZT0idXJsKCNwYWludDBfbGluZWFyXzgzN182NzYpIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXJfODM3XzY3NiIgeDE9IjQyLjc1IiB5MT0iMSIgeDI9IjQyLjc1IiB5Mj0iMTYuNSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjRkYxMTExIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0EwMUJDRiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPgo=");
+        background-repeat: no-repeat;
+        width: 90px;
+        height: inherit;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  .top-tracks {
+    .top-tracks__title {
+      display: flex;
+      width: 365px;
+      height: 21px;
+
+      .top-tracks__title-text {
+        font-size: 18px;
+        margin-right: 7px;
+      }
+
+      .title__line {
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODYiIGhlaWdodD0iMTgiIHZpZXdCb3g9IjAgMCA4NiAxOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTAgMTBIMTQuNUwyNSAxTDMzIDEwSDQ3LjVMNjAgMTYuNUw2OC41IDEwSDg1LjUiIHN0cm9rZT0idXJsKCNwYWludDBfbGluZWFyXzgzN182NzYpIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXJfODM3XzY3NiIgeDE9IjQyLjc1IiB5MT0iMSIgeDI9IjQyLjc1IiB5Mj0iMTYuNSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8c3RvcCBzdG9wLWNvbG9yPSIjRkYxMTExIi8+CjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0EwMUJDRiIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+Cjwvc3ZnPgo=");
+        background-repeat: no-repeat;
+        width: 90px;
+        height: inherit;
+        margin-top: 4px;
+      }
+    }
+  }
+}

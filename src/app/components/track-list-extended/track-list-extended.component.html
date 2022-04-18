@@ -1,0 +1,7 @@
+<div class="track-list" *ngFor="let track of trackList?.items">
+  <hb-track-extended
+    (playTrack)="setListTrackIntoPlayer()"
+    [track]="track.track"
+    [trackContext]="trackContext"
+  ></hb-track-extended>
+</div>

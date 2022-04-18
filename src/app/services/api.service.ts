@@ -416,6 +416,24 @@ export class ApiService {
     });
   }
 
+  getUserTopArtists(): Observable<ItemsAlbumModel> {
+    return this.http.get<ItemsAlbumModel>(
+      "https://api.spotify.com/v1/me/top/artists",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
+  getUserTopTracks(): Observable<ItemsTrackModel> {
+    return this.http.get<ItemsTrackModel>(
+      "https://api.spotify.com/v1/me/top/tracks",
+      {
+        headers: this.headers
+      }
+    );
+  }
+
   searchForItem(
     keyword: string,
     limit = 2,
