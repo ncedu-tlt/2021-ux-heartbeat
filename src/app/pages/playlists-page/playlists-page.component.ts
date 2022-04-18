@@ -174,7 +174,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   }
 
   checkUploadImage(file: File): boolean {
-    if (!(file.type === "image/jpeg" || file.type === "image/png")) {
+    if (file.type !== "image/jpeg" && file.type !== "image/png") {
       this.fileWarning = "Файл должен иметь формат jpeg | png";
       this.imgURL = "assets/image/undefined_album_image.jpg";
       return false;
@@ -296,7 +296,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  removePlaylistImg() {
+  removePlaylistImg(): void {
     this.imgURL = this.playlistImg;
     this.imgForSpotify = "";
     this.fileWarning = "";
@@ -330,16 +330,15 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     playlistId: string,
     playlistImage: string
   ): Observable<void | null> {
-    if (playlistImage) {
-      return this.apiService.addPlaylistImage(playlistId, playlistImage).pipe(
-        takeUntil(this.die$),
-        catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
-          return throwError(() => new Error(error.error.error.message));
-        })
-      );
-    } else {
+    if (!playlistImage) {
       return of(null);
     }
+    return this.apiService.addPlaylistImage(playlistId, playlistImage).pipe(
+      takeUntil(this.die$),
+      catchError((error: ErrorFromSpotifyModel) => {
+        this.notificationService.error("Ошибка", error.error.error.message);
+        return throwError(() => new Error(error.error.error.message));
+      })
+    );
   }
 }
