@@ -19,14 +19,21 @@
     flex-direction: row;
     flex-wrap: wrap;
     margin-top: 15px;
+    @media screen and ( max-width: 1793px ) {
+      justify-content: center;
+    }
     &__list {
       display: flex;
       align-items: center;
       margin-right: 30px;
+      @media screen and ( max-width: 420px ) {
+        margin-right: 0;
+      }
 
       button {
         background-color: @transparent;
         border: none;
+        padding: 2px;
       }
 
       &-delete {
@@ -37,6 +44,12 @@
         height: 25px;
         cursor: pointer;
         margin: 0 20px;
+        @media screen and ( max-width: 420px )  {
+          width: 20px;
+          height: 20px;
+          margin: 0;
+          margin-right: 5px;
+        }
       }
 
       &-add {
@@ -46,6 +59,10 @@
         width: 25px;
         height: 25px;
         cursor: pointer;
+        @media screen and ( max-width: 420px ) {
+          width: 20px;
+          height: 20px;
+        }
       }
     }
 
@@ -53,12 +70,28 @@
       .track {
         &-contain {
           width: 330px;
+          @media screen and ( max-width: 509px ) {
+            width: 300px;
+          }
+          @media screen and ( max-width: 420px ) {
+            width: 230px;
+          }
+          &__img {
+            min-height: 40px;
+            min-width: 40px;
+          }
           &-info{
             &__artist {
               width: 220px;
+              @media screen and ( max-width: 509px ) {
+                width: 150px;
+              }
             }
             &__name {
               width: 220px;
+              @media screen and ( max-width: 509px ) {
+                width: 150px;
+              }
             }
           }
         }
@@ -103,5 +136,11 @@
   .addItem {
     background: none;
     border: 1px solid @white;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .favorites {
+    justify-content: center;
   }
 }

@@ -58,6 +58,7 @@ import { NzMessageModule } from "ng-zorro-antd/message";
 import { AlbumCardComponent } from "./components/album-card/album-card.component";
 import { NzUploadModule } from "ng-zorro-antd/upload";
 import { NzInputModule } from "ng-zorro-antd/input";
+import { NzBackTopModule } from "ng-zorro-antd/back-top";
 
 registerLocaleData(ru);
 
@@ -116,7 +117,8 @@ registerLocaleData(ru);
     NzEmptyModule,
     NzResultModule,
     NzUploadModule,
-    NzInputModule
+    NzInputModule,
+    NzBackTopModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },
