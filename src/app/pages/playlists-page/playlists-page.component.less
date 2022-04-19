@@ -38,7 +38,7 @@
       }
 
       .playlist__image {
-        width: 150px;
+        min-width: 150px;
         height: 150px;
         border-radius: 5px;
         background-position: center;
@@ -48,6 +48,29 @@
       .playlist__list {
         .active {
           background-color: @album-playlist-background;
+        }
+
+        .playlist__add {
+          display: flex;
+          flex-direction: row;
+          margin-bottom: 50px;
+          border-radius: 5px;
+          padding: 23px 0 23px 14px;
+
+          &:hover {
+            cursor: pointer;
+            background-color: @album-playlist-background;
+
+          }
+
+          .playlist__name {
+            font-size: 24px;
+            margin-left: 30px;
+
+            @media screen and (min-width: 920px) and (max-width: 1279.99px) {
+              font-size: 17px;
+            }
+          }
         }
 
         .playlist {
@@ -68,6 +91,25 @@
           .playlist__info {
             margin-left: 30px;
 
+            .playlist__control {
+              display: flex;
+              margin-bottom: 0;
+
+              .playlist__edit {
+                margin-right: 8px;
+
+                &:hover {
+                  cursor: pointer;
+                  color: @active-link;
+                }
+              }
+
+              .playlist__delete:hover {
+                cursor: pointer;
+                color: @active-link;
+              }
+            }
+
             .playlist__name {
               margin: 0;
               font-size: 24px;
@@ -79,7 +121,9 @@
 
             .playlist__owner {
               font-size: 14px;
-              font-weight: 100;
+              font-weight: 200;
+              margin-top: 3px;
+              margin-bottom: 12px;
             }
           }
         }
@@ -105,7 +149,7 @@
             flex-direction: column;
             align-items: center;
           }
-          
+
           .playlist-tracks__avatar {
 
             .playlist-tracks__image {
@@ -192,11 +236,179 @@
         }
       }
     }
+
+    .modal {
+      position: fixed;
+      display: flex;
+      justify-content: center;
+      z-index: 10;
+      padding-top: 50px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+
+      &__content {
+        z-index: 2;
+        overflow: auto;
+        padding: 20px 10px 20px 15px;
+        width: 450px;
+        height: 260px;
+        border-radius: 7px;
+        position: relative;
+      }
+
+      &__title {
+        font-weight: bold;
+      }
+
+      &__image {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        input {
+          width: 0.1px;
+          height: 0.1px;
+          opacity: 0;
+          overflow: hidden;
+          position: absolute;
+          z-index: -1;
+        }
+
+        img {
+          width: 80px;
+          height: 80px;
+          object-fit: cover;
+        }
+
+        .modal__label {
+          width: 120px;
+          height: 120px;
+          background-size: cover;
+          text-align: center;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.18s ease-in-out;
+          border-radius: 5px;
+          background-position: center;
+          position: relative;
+          color: #ffffff;
+
+          .modal__opacity {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+
+            &:hover {
+              background-color: black;
+              opacity: 0.6;
+            }
+          }
+
+          button {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            width: 23px;
+            display: none;
+            height: 23px;
+            border: none;
+            border-radius: 50%;
+            background-color: black;
+            opacity: 0.6;
+            color: white;
+          }
+
+          &:hover button {
+            display: block;
+            cursor: pointer;
+          }
+
+          &:hover::before {
+            content: ' ';
+            background: url('src/assets/image/icon-upload-white.png');
+            background-size:contain;
+            width: 80px;
+            height: 80px;
+            z-index: 1000;
+            pointer-events: none;
+          }
+        }
+      }
+
+      &-inputs {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        margin: 5px;
+
+        &__name {
+          margin-bottom: 10px;
+        }
+      }
+
+      &__edite-playlist {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin-top: 15px;
+      }
+
+      &__warning {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        span {
+          color: red;
+        }
+      }
+
+      &__control {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        margin-top: 5px;
+
+        button {
+          margin: 5px;
+        }
+      }
+
+      &__content::-webkit-scrollbar {
+        width: 7px;
+      }
+      &__content::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: rgb(182 107 107 / 0.45);
+      }
+      &__content::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+        border-radius: 10px;
+        background-color: #f9f9fd;
+      }
+    }
   }
 
   .playlists-wrapper-dark {
     * {
       color: @white;
+    }
+    input {
+      color: black;
+    }
+    textarea {
+      color: black;
+    }
+    .modal__cancel {
+      color: black;
     }
     .playlists {
       .playlists__hr {

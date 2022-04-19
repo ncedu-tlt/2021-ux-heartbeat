@@ -273,7 +273,7 @@ export class ApiService {
     isPublic: boolean
   ): Observable<void> {
     return this.http.put<void>(
-      "https://api.spotify.com/v1/playlists" + playlistId,
+      "https://api.spotify.com/v1/playlists/" + playlistId,
       {
         name,
         description,
@@ -430,5 +430,18 @@ export class ApiService {
       headers: this.headers,
       params: { q: keyword, type: "artist,track", limit, offset }
     });
+  }
+
+  addPlaylistImage(
+    playlistId: string,
+    playlistImage: string
+  ): Observable<void> {
+    return this.http.put<void>(
+      "https://api.spotify.com/v1/playlists/" + playlistId + "/images",
+      playlistImage,
+      {
+        headers: this.headers
+      }
+    );
   }
 }

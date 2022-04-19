@@ -2,7 +2,13 @@
   <hb-loader *ngIf="isLoading"></hb-loader>
   <div *ngIf="playlists.length && !isLoading" class="playlists">
     <div class="playlist__list">
-      <div *ngFor="let playlist of playlists" #playlist id="{{playlist.id}}" (click)="openPlaylist(playlist)" class="playlist">
+      <div class="playlist__add" (click)="changeVisible($event, modalStates.CREATE)">
+        <div class="playlist__image" [style.background-image]="'url(./assets/image/new-playlist-image.png)'"
+        ></div>
+        <p class="playlist__name">Создать новый плейлист</p>
+      </div>
+      <div *ngFor="let playlist of playlists" #playlist id="{{playlist.id}}" (click)="openPlaylist(playlist)"
+           class="playlist">
         <div class="playlist__image" [style.background-image]="this.playlist.images[0]
                                                                ? 'url(' + playlist.images[0].url + ')'
                                                                : 'url(./assets/image/undefined_album_image.jpg)'"
@@ -10,6 +16,10 @@
         <div class="playlist__info">
           <p class="playlist__name">{{playlist.name}}</p>
           <p class="playlist__owner">{{playlist.owner.display_name}}</p>
+          <div class="playlist__control" *ngIf="playlist.owner.display_name === this.userName">
+            <p class="playlist__edit" (click)="changeVisible($event, modalStates.EDIT, playlist)">Редактировать</p>
+            <p class="playlist__delete" (click)="deletePlaylist(playlist.id, playlist.name)">Удалить</p>
+          </div>
         </div>
       </div>
     </div>
@@ -28,15 +38,50 @@
           <p class="playlist-tracks__author">{{this.playlist.owner.display_name}}</p>
         </div>
       </div>
-      <hb-track-list *ngIf="this.playlist.images[0]" [trackContext]="this.playlist.id" [trackList]="tracks" class="tracklist"></hb-track-list>
+      <hb-track-list *ngIf="this.playlist.images[0]" [trackContext]="this.playlist.id" [trackList]="tracks"
+                     class="tracklist"></hb-track-list>
       <div *ngIf="!this.playlist.images[0]">
         <p>Выбранный вами плейлист пуст.</p>
       </div>
     </div>
     <div *ngIf="!isOpen" class="playlist__waiting">
-      <img class="playlist-waiting__img" src="assets/image/vinyl-record.png" alt="vinyl icon"/>
+      <img class="playlist-waiting__img" src="assets/image/vinyl-record.png" alt="vinyl icon" />
       <p class="playlist-waiting__text">Здесь будет отображаться выбранный плейлист.</p>
     </div>
   </div>
+  <ng-container *ngIf="isVisible">
+    <div class="modal" (click)="handleCancel()">
+      <div class="modal__content" (click)="$event.stopPropagation()" [ngStyle]="{'background' : switchMode()}">
+        <div class="modal__title">{{this.modalCurrentState === modalStates.CREATE ? "Создание плейлиста" : "Редактирование плейлиста"}}</div>
+        <div class="modal__edite-playlist">
+          <div class="modal__image" *ngIf="modalCurrentState === modalStates.EDIT">
+            <label for="playlistImage" class="modal__label" [ngStyle]="{'background-image' : this.imgURL ? 'url(' + this.imgURL + ')' : 'url(' + this.playlistImg + ')'}">
+              <div class="modal__opacity"></div>
+              <button (click)="removePlaylistImg()">x</button>
+            </label>
+            <input type="file" id="playlistImage" #fileInput (change)="handleFileInput($event)"/>
+          </div>
+          <div class="modal-inputs">
+            <input class="modal-inputs__name" nz-input placeholder="Название плейлиста" [(ngModel)]="playlistName" />
+            <textarea
+              class="modal-inputs__description"
+              [(ngModel)]="playlistDescription"
+              nz-input
+              placeholder="Описание плейлиста"
+              [nzAutosize]="{ minRows: 3, maxRows: 4 }"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal__warning">
+          <span class="modal__inputs-warning" *ngIf="inputWarning">Введены не все поля!</span>
+          <span class="modal__file-warning">{{fileWarning}}</span>
+        </div>
+        <div class="modal__control" [ngStyle]="{'justifyContent' : modalCurrentState === modalStates.CREATE ? 'center' : 'flex-end'}">
+          <button class="modal__cancel" nz-button nzType="default" (click)="handleCancel()">Отмена</button>
+          <button class="modal__accept" [disabled]="inputWarning || !!fileWarning" nz-button nzType="primary" (click)="modalCurrentState === modalStates.CREATE ? createNewPlaylist() : changePlaylistInformation(modalPlaylistId)">Сохранить</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
   <nz-back-top></nz-back-top>
 </div>
