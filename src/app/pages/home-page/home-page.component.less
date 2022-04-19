@@ -5,6 +5,12 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  @media (max-width: 1040px) {
+    justify-content: center;
+  }
+  @media screen and ( max-width: 420px ) {
+    justify-content: flex-start;
+  }
 
   h1 {
     font-weight: 400;
@@ -14,6 +20,10 @@
     margin-right: 55px;
     &:hover {
       cursor: pointer;
+    }
+    @media screen and ( max-width: 420px ) {
+      margin-right: 15px;
+      font-size: 27px;
     }
   }
   .active {

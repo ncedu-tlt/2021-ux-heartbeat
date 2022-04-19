@@ -4,12 +4,16 @@
   display:flex;
   justify-content: space-around;
   align-items: center;
+  
 
   .user-menu__profile-name, .user-menu__profile-name-dark {
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
     color: @black;
     margin: 0;
+    @media screen and ( max-width: 445px ) {
+      display: none;
+    }
   }
 
   .user-menu__profile-name-dark {
@@ -35,17 +39,12 @@
     @media screen and ( max-width: 850px ) {
       font-size: 24px;
     }
+    @media screen and ( max-width: 345px ) {
+      margin-right: 3px;
+    }
   }
 
   .user-menu__profile-null-image-dark {
     background-color: @white;
-  }
-
-  .user-menu__dropdown {
-    color: black;
-  }
-
-  .user-menu__dropdown-dark {
-    color: @white;
   }
 }

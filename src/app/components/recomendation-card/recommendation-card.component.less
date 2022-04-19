@@ -12,9 +12,14 @@
   border: 1px solid @recomendation-border;
   box-sizing: border-box;
   border-radius: 20px;
-  margin-right: 30px;
+  margin-right: 20px;
   margin-bottom: 32px;
   padding: 15px 30px;
+  @media screen and ( max-width: 420px ) {
+    width: 319px;
+    margin-right: 0;
+    padding: 15px 0;
+  }
   .title {
     text-align: center;
     font-weight: 400;

@@ -14,7 +14,7 @@
       </div>
     </div>
     <hr class="playlists__hr">
-    <div *ngIf="isOpen" class="playlists__tracks">
+    <div #openedPlaylist *ngIf="isOpen" class="playlists__tracks">
       <div class="playlists-tracks__playlist">
         <div class="playlist-tracks__avatar">
           <img src="/assets/image/vinyl-record.png" alt="vinyl icon" class="playlist-tracks__vinyl"/>
@@ -38,4 +38,5 @@
       <p class="playlist-waiting__text">Здесь будет отображаться выбранный плейлист.</p>
     </div>
   </div>
+  <nz-back-top></nz-back-top>
 </div>

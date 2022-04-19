@@ -56,6 +56,7 @@ import { RecommendationCardComponent } from "src/app/components/recomendation-ca
 import { NzResultModule } from "ng-zorro-antd/result";
 import { NzMessageModule } from "ng-zorro-antd/message";
 import { AlbumCardComponent } from "./components/album-card/album-card.component";
+import { NzBackTopModule } from "ng-zorro-antd/back-top";
 
 registerLocaleData(ru);
 
@@ -112,7 +113,8 @@ registerLocaleData(ru);
     NzButtonModule,
     NzDropDownModule,
     NzEmptyModule,
-    NzResultModule
+    NzResultModule,
+    NzBackTopModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },

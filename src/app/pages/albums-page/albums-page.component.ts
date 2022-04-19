@@ -4,6 +4,7 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
+  ViewChild,
   ViewChildren
 } from "@angular/core";
 import { ApiService } from "../../services/api.service";
@@ -37,6 +38,9 @@ export class AlbumsPageComponent implements OnInit, OnDestroy {
   private oldSelected = "";
   private selectedId = "";
 
+  @ViewChild("openedAlbum")
+  private openedAlbum!: ElementRef<HTMLDivElement>;
+
   constructor(
     private apiService: ApiService,
     private convertService: ConverterService,
@@ -67,6 +71,7 @@ export class AlbumsPageComponent implements OnInit, OnDestroy {
     this.album = album;
     this.selectAlbum(album.album.id);
     this.isOpen = true;
+    setTimeout(() => this.openedAlbum.nativeElement.scrollIntoView(true), 0);
   }
 
   public selectAlbum(id: string): void {

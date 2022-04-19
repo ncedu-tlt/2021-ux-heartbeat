@@ -1,24 +1,26 @@
-img {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  right: 50%;
-  bottom: 50%;
-  width: 60%;
-  margin: auto;
-  animation: heartbeat 1.5s infinite;
-  max-width: 70px;
-  z-index: 1000;
-}
+.loader__container {
+  display: flex;
+  justify-content: center;
 
-@keyframes heartbeat {
-  0% {
-    transform: scale(1)
+  img {
+    position: fixed;
+    top: 50%;
+    bottom: 50%;
+    margin: 0 auto;
+    animation: heartbeat 1.5s infinite;
+    max-width: 70px;
+    z-index: 1000;
   }
-  20% {
-    transform: scale(1.25)
-  }
-  40% {
-    transform: scale(1.5)
+  
+  @keyframes heartbeat {
+    0% {
+      transform: scale(1)
+    }
+    20% {
+      transform: scale(1.25)
+    }
+    40% {
+      transform: scale(1.5)
+    }
   }
 }

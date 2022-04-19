@@ -15,7 +15,20 @@ hb-player {
 }
 
 .wrap {
-  max-width: 1536px;
+  max-width: 1540px;
   margin-left: 140px;
+  margin-right: 140px;
+  @media screen and ( max-width: 710px ) {
+    margin-right: 10px;
+  }
+  @media screen and ( max-width: 650px ) {
+    margin-left: 105px;
+  }
+  @media screen and ( max-width: 579px ) {
+    margin-left: 10px;
+  }
+  @media screen and ( max-width: 479px ) {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
-

@@ -4,6 +4,7 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
+  ViewChild,
   ViewChildren
 } from "@angular/core";
 import { ItemsTrackModel } from "../../models/new-api-models/top-tracks-artist-by-id.model";
@@ -35,6 +36,9 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   private oldSelected = "";
   private selectedId = "";
 
+  @ViewChild("openedPlaylist")
+  private openedPlaylist!: ElementRef<HTMLDivElement>;
+
   constructor(
     private apiService: ApiService,
     public themeStateService: ThemeStateService
@@ -60,6 +64,10 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     this.playlist = playlist;
     this.isOpen = true;
     this.selectPlaylist(playlist.id);
+    setTimeout(
+      () => this.openedPlaylist.nativeElement.scrollIntoView(true),
+      150
+    );
   }
 
   public selectPlaylist(id: string): void {
