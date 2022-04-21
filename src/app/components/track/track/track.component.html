@@ -1,4 +1,4 @@
-<div [ngClass]="{ 'track' : !this.themeStateService.getIsDarkTheme() , 'track-dark' : this.themeStateService.getIsDarkTheme()  }" [ngStyle]="{'min-width': isCard ? '60px' : '280px'}">
+<div [ngClass]="{ 'track' : !this.themeStateService.getIsDarkTheme() , 'track-dark' : this.themeStateService.getIsDarkTheme()  }" [ngStyle]="{'min-width': isCard ? '60px' : '270px'}">
   <div class="track-contain">
     <div [ngStyle]="{'background-image': 'url(' + (_track?.preview_url ? _track?.album!.images[0].url : '../../../assets/image/default-artist-image.png') + ')',
                       'margin': isCard ? '10px 8px' : '10px 20px'}"

@@ -51,10 +51,14 @@ import { RoundArtistCardComponent } from "./components/round-artist-card/round-a
 import { GenreCardComponent } from "./components/genre-card/genre-card.component";
 import { PlaylistCardComponent } from "./components/playlist-card/playlist-card.component";
 import { NzEmptyModule } from "ng-zorro-antd/empty";
+import { PulselineComponent } from "./components/pulseline/pulseline.component";
 import { RecommendationCardComponent } from "src/app/components/recomendation-card/recommendation-card.component";
 import { NzResultModule } from "ng-zorro-antd/result";
 import { NzMessageModule } from "ng-zorro-antd/message";
 import { AlbumCardComponent } from "./components/album-card/album-card.component";
+import { NzUploadModule } from "ng-zorro-antd/upload";
+import { NzInputModule } from "ng-zorro-antd/input";
+import { NzBackTopModule } from "ng-zorro-antd/back-top";
 
 registerLocaleData(ru);
 
@@ -90,6 +94,7 @@ registerLocaleData(ru);
     ArtistCardComponent,
     GenreCardComponent,
     PlaylistCardComponent,
+    PulselineComponent,
     RecommendationCardComponent,
     AlbumCardComponent
   ],
@@ -110,7 +115,10 @@ registerLocaleData(ru);
     NzButtonModule,
     NzDropDownModule,
     NzEmptyModule,
-    NzResultModule
+    NzResultModule,
+    NzUploadModule,
+    NzInputModule,
+    NzBackTopModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },

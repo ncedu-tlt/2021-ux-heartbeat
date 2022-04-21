@@ -62,10 +62,11 @@
                    class="player__volume-bar"
                    (click)="playerService.changeMusicVolume($event)">
       </nz-progress>
-      <div class="player__mixing" *ngIf="!player.isShuffle"
-              (click)="playerService.isShuffle$.next(true)"></div>
-      <div class="player__mixing-active" *ngIf="player.isShuffle"
-              (click)="playerService.isShuffle$.next(false)"></div>
+      <div (click)="playerService.isShuffle$.next(!player.isShuffle)" [ngClass]="{
+                            'player__mixing' : !player.isShuffle,
+                            'player__mixing-active' : player.isShuffle
+                           }">
+      </div>
       <div class="player__no-repeat" *ngIf="playerService.isRepeat === repeatState.NO_REPEAT"
               (click)="playerService.putOnRepeat()">
       </div>
@@ -165,11 +166,13 @@
                (click)="this.playerService.switchTrack(actions.SWITCH_NEXT)"></div>
         </div>
         <div class="mobile-player-contain__extra-control">
-          <div class="mobile-player-contain__mixing">
+          <div (click)="playerService.isShuffle$.next(!player.isShuffle)" [ngClass]="{
+                            'mobile-player-contain__mixing' : !player.isShuffle,
+                            'mobile-player-contain__mixing-active' : player.isShuffle
+                           }">
           </div>
           <div class="mobile-player-contain__no-repeat" *ngIf="playerService.isRepeat === repeatState.NO_REPEAT"
-                  (click)="playerService.putOnRepeat()">
-          </div>
+                  (click)="playerService.putOnRepeat()"></div>
           <div class="mobile-player-contain__repeat-playlist" *ngIf="playerService.isRepeat === repeatState.PLAYLIST_REPEAT"
                   (click)="playerService.putOnRepeat()"></div>
           <div class="mobile-player-contain__repeat" *ngIf="playerService.isRepeat === repeatState.TRACK_REPEAT"

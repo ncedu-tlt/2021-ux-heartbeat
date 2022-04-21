@@ -46,20 +46,20 @@ export class FavoriteTracksPageComponent {
       .subscribe(favoriteTrack => {
         this.favorites = favoriteTrack;
         this.isLoading = false;
-        if (favoriteTrack.items.length < 27) {
+        if (favoriteTrack.items.length < 24) {
           this.isDisabled = true;
         }
       });
   }
 
   showMore(): void {
-    this.offset += 27;
+    this.offset += 24;
     this.apiService
       .getUsersSavedTracks(this.offset)
       .subscribe(favoriteTrack => {
         this.favorites.items.push(...favoriteTrack.items);
         this.isLoading = false;
-        if (favoriteTrack.items.length < 27) {
+        if (favoriteTrack.items.length < 24) {
           this.isDisabled = true;
         }
       });

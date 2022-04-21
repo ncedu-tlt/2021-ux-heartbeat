@@ -1,9 +1,12 @@
 @import "../../../assets/styles/colors";
 
 .artist {
-  margin-top: 15px;
+  margin-top: 50px;
   padding-bottom: 100px;
   padding-right: 30px;
+  @media screen and (max-width: 587px) {
+    padding-right: 0;
+  }
 
   &__info {
     display: flex;

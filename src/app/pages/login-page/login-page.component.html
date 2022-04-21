@@ -1,21 +1,19 @@
-<nz-layout>
-  <nz-header>
-    <button class="white" nz-button nzType="default">О проекте</button>
-  </nz-header>
-  <nz-content>
-      <ul>
-        <li><h1>HeartBeat</h1></li>
-        <li><h2>Музыка нашего сердцебиения</h2></li>
-        <li>
-          <button nz-button nzType="primary" (click)="authService.signInWithSpotify()">
-            <span>Авторизуйтесь через Spotify</span>
-            <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
-          </button>
-        </li>
-      </ul>
-      <img src="../../../assets/image/logo.svg" alt="logo">
-  </nz-content>
-</nz-layout>
+<div [ngClass]="{ 'login-wrapper' : !this.themeStateService.getIsDarkTheme() , 'login-wrapper-dark' : this.themeStateService.getIsDarkTheme() }">
+  <div class="header">
+    <button class="white">О проекте</button>
+  </div>
+  <div class="content">
+    <div class="logo"></div>
+    <div class="content-text">
+      <h1>HeartBeat</h1>
+      <h2>Музыка нашего сердцебиения</h2>
+      <button (click)="authService.signInWithSpotify()">
+        <span>Авторизуйтесь через Spotify</span>
+        <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+      </button>
+    </div>
+  </div>
+</div>
 
 
 
