@@ -251,7 +251,9 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.modalVisible = false;
       }
     });
-    document.body.style.overflow = "hidden";
+    if (this.playerService.currentTrackInfo$.value !== null) {
+      document.body.style.overflow = "hidden";
+    }
   }
 
   handleCancel(): void {
