@@ -10,7 +10,12 @@
   </div>
   <div [ngStyle]="{'display': changeTrackList && !changeTrackList.items.length ? 'none' : 'inline'}">
     <h2 class="title">Треки</h2>
-    <hb-track-list [trackList]="changeTrackList" [trackContext]="trackContext"></hb-track-list>
+    <div class="track-list" *ngFor="let track of changeTrackList?.items">
+      <hb-track [isCard]="false" [track]="track.track"
+                [trackContext]="track.track.id"
+                (playTrack)="setListTrackIntoPlayer()">
+      </hb-track>
+    </div>
     <button class="addItem" (click)="showMoreTracks()" *ngIf="!isDisabledShowMoreTracks">ЕЩЕ</button>
   </div>
 </div>

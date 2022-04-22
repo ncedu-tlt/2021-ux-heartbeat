@@ -3,17 +3,17 @@
   <div class="img" [ngStyle]="
     {'background-image' : 'url(' + recommendation.images[0].url + ')'}"></div>
   <hb-loader class="loader" *ngIf="isLoading || isLoadingAllPlaylist"></hb-loader>
-  <div class="tracks" *ngIf="trackInfo?.length && !isLoading">
-    <div *ngFor="let track of trackInfo">
-      <hb-track class="tracks__track-container"
+  <div class="tracks" *ngIf="!isLoading">
+    <div *ngFor="let track of trackInfo.items; let i = index">
+      <hb-track *ngIf="i < 4" class="tracks__track-container"
                 (playTrack)="setListTrackIntoPlayer()"
-                [trackContext]="trackContext"
+                [trackContext]="recommendation.id"
                 [track]="track.track"
                 [isCard]="!isCard">
       </hb-track>
     </div>
   </div>
-  <button class="btn" (click)="getAllPlaylist(recommendation.id)">Весь плейлист</button>
+  <button class="btn" (click)="openAllPlaylist()">Весь плейлист</button>
   <ng-container *ngIf="isVisible">
     <div class="modal" (click)="handleCancel()">
       <div class="modal__content" (click)="$event.stopPropagation()" [ngStyle]="{'background' : switchMode()}">
@@ -25,7 +25,7 @@
           </div>
           <p class="playlist-info__name">{{recommendation.name}}</p>
         </div>
-        <hb-track-list [trackContext]="recommendation.id" [trackList]="allPlaylist"></hb-track-list>
+        <hb-track-list [trackContext]="recommendation.id" [trackList]="trackInfo"></hb-track-list>
         <button class="addItem" *ngIf="isDisabled" (click)="showMore(recommendation.id)">ЕЩЕ</button>
       </div>
     </div>

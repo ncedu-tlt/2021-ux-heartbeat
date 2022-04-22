@@ -50,7 +50,7 @@ export class PlayerService {
   public currentTrackInfo$ = new BehaviorSubject<Track | null>(null);
   private currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<TrackList | null>(null);
-  private shuffleTrackList!: TrackList;
+  public shuffleTrackList!: TrackList;
   public trackContext$ = new BehaviorSubject<
     string | TrackLaunchContextEnum | null | undefined
   >(null);
@@ -101,6 +101,9 @@ export class PlayerService {
         });
       this.isShuffle$.pipe(takeUntil(this.die$)).subscribe(isShuffle => {
         if (isShuffle && this.trackList$.getValue()) {
+          this.shuffleTrackList = JSON.parse(
+            JSON.stringify(this.trackList$.getValue())
+          ) as TrackList;
           this.mixCurrentTrackList();
         }
         if (!isShuffle && this.trackList$.getValue()?.items) {
@@ -252,7 +255,7 @@ export class PlayerService {
       this.shuffleTrackList.items[0].track
     ] = [
       this.shuffleTrackList.items[0].track,
-      this.currentTrackInfo$.getValue() as Track
+      this.shuffleTrackList.items[this.currentTrackNumber].track
     ];
     this.currentTrackNumber = 0;
     for (let i = this.shuffleTrackList.items.length - 1; i > 1; i--) {

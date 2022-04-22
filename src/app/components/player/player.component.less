@@ -494,3 +494,66 @@
     }
   }
 }
+
+.modal {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+
+  &__content {
+    overflow: auto;
+    padding: 20px 5px 20px 20px;
+    max-width: 600px;
+    height: 85%;
+    width: 80%;
+    border-radius: 7px;
+    position: relative;
+
+    .modal-close {
+      display: none;
+      z-index: 1;
+      cursor: pointer;
+
+      @media (max-width: 500px) {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 5px;
+        padding: 10px 5px 10px 10px;
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      width: 90%;
+    }
+
+    @media (max-width: 500px) {
+      width: 100%;
+      padding: 25px 0;
+    }
+  }
+
+    &__content::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    &__content::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background-color: rgb(182 107 107 / 0.45);
+    }
+
+    &__content::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      background-color: #f9f9fd;
+    }
+
+}
+

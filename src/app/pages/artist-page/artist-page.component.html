@@ -13,9 +13,10 @@
       <div class="top-tracks">
         <h2 class="top-tracks__title">Популярные треки</h2>
         <div class="top-tracks__list">
-          <div class="top-tracks__item" *ngFor="let track of artistTopTracks.tracks">
-            <hb-track (playTrack)="setListTrackIntoPlayer()" [isCard]="false" [track]="track"
-                      [trackContext]="trackContext">
+          <div class="top-tracks__item" *ngFor="let track of artistTopTracks.items">
+            <hb-track [isCard]="false" [track]="track.track"
+                      [trackContext]="trackContext"
+                      (playTrack)="setListTrackIntoPlayer()">
             </hb-track>
           </div>
         </div>

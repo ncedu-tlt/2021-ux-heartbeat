@@ -1,5 +1,5 @@
 <div [ngClass]="{ 'playlist' : !this.themeStateService.getIsDarkTheme() , 'playlist-dark' : this.themeStateService.getIsDarkTheme() }">
-    <div class="card" (click)="playPlaylist(playlist.id)" [ngStyle]="{'background' : isActive ? 'rgb(247, 249, 254)' : 'none'}">
+    <div class="card" (click)="playPlaylist(playlist.id)" [ngStyle]="{'background' : isActive ? '#C4C4C430' : 'none'}">
         <div class="card__bg" [ngStyle]="
             {'background-image' : 'url(' + playlist.images[0].url + ')'}">
         </div>
