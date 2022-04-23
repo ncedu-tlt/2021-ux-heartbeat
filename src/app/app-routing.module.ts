@@ -10,7 +10,6 @@ import { HomePageComponent } from "./pages/home-page/home-page.component";
 import { GenresCollectionPageComponent } from "./pages/genres-collection-page/genres-collection-page.component";
 import { RecommendationPageComponent } from "./pages/recommendation-page/recommendation-page.component";
 import { SearchPageComponent } from "./pages/search-page/search-page.component";
-import { AlbumPageComponent } from "./pages/album-page/album-page.component";
 import { ArtistPageComponent } from "./pages/artist-page/artist-page.component";
 import { PlaylistsPageComponent } from "./pages/playlists-page/playlists-page.component";
 import { FavoriteTracksPageComponent } from "./pages/favorite-tracks-page/favorite-tracks-page.component";
@@ -39,10 +38,6 @@ const routes: Routes = [
       {
         path: "albums",
         component: AlbumsPageComponent
-      },
-      {
-        path: "album/:id",
-        component: AlbumPageComponent
       },
       {
         path: "favorite",
