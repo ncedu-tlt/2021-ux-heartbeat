@@ -26,4 +26,107 @@
     white-space: nowrap;
     font-weight: bold;
   }
+
+}
+.modal {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+  padding-top: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+
+  &__content {
+    z-index: 2;
+    overflow: auto;
+    padding: 20px 5px 20px 20px;
+    max-width: 600px;
+    height: 85%;
+    width: 80%;
+    border-radius: 7px;
+    position: relative;
+
+    .info-close {
+      display: none;
+
+      @media (max-width: 500px) {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 5px;
+        padding: 10px 5px 10px 10px;
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      width: 90%;
+    }
+
+    @media (max-width: 500px) {
+      width: 100%;
+      padding: 15px 0;
+    }
+
+    .info {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      margin-bottom: 15px;
+
+      .playlist-info {
+        display: flex;
+        position: relative;
+        justify-content: center;
+        margin: 10px;
+
+        @media (max-width: 400px) {
+          margin: 0;
+        }
+        &__img {
+          width: 150px;
+          height: 150px;
+          border-radius: 5px;
+          background-size: cover;
+          margin-left: -75px;
+
+          @media (max-width: 400px) {
+            width: 125px;
+            height: 125px;
+          }
+        }
+        &__vinyl {
+          position: absolute;
+          left: 36%;
+          z-index: -1;
+          height: 150px;
+          @media (max-width: 400px) {
+            height: 125px;
+          }
+        }
+        &__name {
+          text-align: center;
+          font-size: 24px;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  &__content::-webkit-scrollbar {
+    width: 7px;
+  }
+  &__content::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: rgb(182 107 107 / 0.45);
+  }
+  &__content::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    background-color: #f9f9fd;
+  }
 }

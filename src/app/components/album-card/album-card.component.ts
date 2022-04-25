@@ -8,6 +8,12 @@ import {
 import { catchError, Subject, takeUntil, throwError } from "rxjs";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
+import { ThemeStateService } from "../../services/theme-state.service";
+import {
+  AlbumTracksModel,
+  TracksModel
+} from "../../models/new-api-models/album-by-id.model";
+import { ConverterService } from "../../services/converter.service";
 
 @Component({
   selector: "hb-album-card",
@@ -16,11 +22,15 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 })
 export class AlbumCardComponent implements OnInit, OnDestroy {
   @Input() album!: ItemsArtistModel;
+  public trackList!: AlbumTracksModel;
   public isFollow!: boolean;
+  public isVisible = false;
   private die$ = new Subject<void>();
 
   constructor(
     public apiService: ApiService,
+    public themeStateService: ThemeStateService,
+    public convertService: ConverterService,
     private nzContextMenuService: NzContextMenuService,
     private notificationService: NzNotificationService
   ) {}
@@ -84,6 +94,33 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
           `Альбом ${this.album.name} успешно удален`
         );
       });
+  }
+
+  openAllPlaylist(album: ItemsArtistModel): void {
+    this.isVisible = true;
+    this.apiService
+      .getAlbumsTracksById(this.album.id)
+      .pipe(takeUntil(this.die$))
+      .subscribe((trackList: TracksModel) => {
+        this.trackList =
+          this.convertService.convertAlbumModelsToNewTracksModels(
+            trackList,
+            album.id,
+            album.images
+          );
+      });
+    document.body.style.overflow = "hidden";
+  }
+
+  handleCancel(): void {
+    this.isVisible = false;
+    document.body.style.overflow = "visible";
+  }
+
+  switchMode(): string {
+    return !this.themeStateService.getIsDarkTheme()
+      ? "#FFFFFF"
+      : "linear-gradient(252.82deg, rgba(54, 66, 109) 72.05%, rgba(12, 14, 24, 0.7) 100%) no-repeat fixed";
   }
 
   ngOnDestroy(): void {
