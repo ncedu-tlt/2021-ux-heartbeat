@@ -34,7 +34,7 @@ export class GenrePageComponent {
       .getCategoriesPlaylists(this.genre)
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           if (
             error.status === 404 &&
             error.error.error.message === "Specified id doesn't exist"
@@ -57,7 +57,7 @@ export class GenrePageComponent {
       .getCategoriesPlaylists(this.genre, this.offset)
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )

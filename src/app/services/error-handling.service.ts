@@ -8,7 +8,7 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 export class ErrorHandlingService {
   constructor(public notificationService: NzNotificationService) {}
 
-  errorInvalidAccessToken(error: ErrorFromSpotifyModel) {
+  showErrorNotification(error: ErrorFromSpotifyModel) {
     if (error.status === 401) {
       this.notificationService.error(
         "Ошибка авторизации",

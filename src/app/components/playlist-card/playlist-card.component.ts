@@ -35,7 +35,7 @@ export class PlaylistCardComponent {
       .getPlaylistTracks(id, 50)
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )

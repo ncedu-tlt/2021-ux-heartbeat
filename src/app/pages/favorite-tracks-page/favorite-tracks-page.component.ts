@@ -47,7 +47,7 @@ export class FavoriteTracksPageComponent {
       .getUsersSavedTracks()
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -66,7 +66,7 @@ export class FavoriteTracksPageComponent {
       .getUsersSavedTracks(this.offset)
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -89,7 +89,7 @@ export class FavoriteTracksPageComponent {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -107,7 +107,7 @@ export class FavoriteTracksPageComponent {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -130,7 +130,7 @@ export class FavoriteTracksPageComponent {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )

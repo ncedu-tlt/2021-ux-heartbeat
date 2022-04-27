@@ -25,7 +25,7 @@ export class GenresCollectionPageComponent {
       .getListCategories()
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )

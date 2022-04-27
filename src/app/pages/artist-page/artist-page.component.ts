@@ -58,7 +58,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -89,7 +89,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -108,7 +108,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -132,7 +132,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.error.errorInvalidAccessToken(error);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
