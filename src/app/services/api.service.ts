@@ -12,12 +12,14 @@ import {
 import {
   ArtistByIdModel,
   ArtistsByIdsModel,
-  ArtistsModel
+  ArtistsModel,
+  TopArtistsModel
 } from "../models/new-api-models/artist-by-id.model";
 import { GenresModel } from "../models/new-api-models/genres.model";
 import { FollowedArtistModel } from "../models/new-api-models/followed-artist.model";
 import {
   ItemsTrackModel,
+  NewUserTopTracksModel,
   TopTracksArtistByIdModel
 } from "../models/new-api-models/top-tracks-artist-by-id.model";
 import { PlaylistByIdModel } from "../models/new-api-models/playlist-by-id.model";
@@ -416,8 +418,8 @@ export class ApiService {
     });
   }
 
-  getUserTopArtists(): Observable<ItemsAlbumModel> {
-    return this.http.get<ItemsAlbumModel>(
+  getUserTopArtists(): Observable<TopArtistsModel> {
+    return this.http.get<TopArtistsModel>(
       "https://api.spotify.com/v1/me/top/artists",
       {
         headers: this.headers
@@ -425,8 +427,8 @@ export class ApiService {
     );
   }
 
-  getUserTopTracks(): Observable<ItemsTrackModel> {
-    return this.http.get<ItemsTrackModel>(
+  getUserTopTracks(): Observable<NewUserTopTracksModel> {
+    return this.http.get<NewUserTopTracksModel>(
       "https://api.spotify.com/v1/me/top/tracks",
       {
         headers: this.headers

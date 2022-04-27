@@ -21,14 +21,21 @@
       <p class="top-artists__title-text">Топ исполнителей этого месяца</p>
       <div class="title__line"></div>
     </div>
-    <div class="top-artists__list"></div>
+    <div class="top-artists__list">
+      <div *ngFor="let artist of artists" class="top-artists__item">
+        <div class="top-artists__img" [routerLink]="['/artist', artist.id]" [style.background-image]="this.artist.images[0]
+                                                               ? 'url(' + artist.images[0].url + ')'
+                                                               : 'url(./assets/image/undefined_album_image.jpg)'"></div>
+        <p class="top-artists__name">{{artist.name}}</p>
+      </div>
+    </div>
   </div>
   <div class="top-tracks">
     <div class="top-tracks__title">
       <p class="top-tracks__title-text">Топ треков этого месяца</p>
       <div class="title__line"></div>
     </div>
-    <hb-track-list-extended *ngIf="!tracks" [trackList]="tracks" [trackContext]="trackContext"></hb-track-list-extended>
+    <hb-track-list-extended *ngIf="tracks" [trackList]="tracks" [trackContext]="trackContext"></hb-track-list-extended>
   </div>
 </div>
 <hb-loader *ngIf="isLoading"></hb-loader>

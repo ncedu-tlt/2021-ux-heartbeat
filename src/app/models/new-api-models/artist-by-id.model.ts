@@ -8,6 +8,10 @@ export interface ArtistsByIdsModel {
   artists: ArtistByIdModel[];
 }
 
+export interface TopArtistsModel {
+  items: ArtistByIdModel[];
+}
+
 export interface ArtistByIdModel extends CommonInfoAboutArtist {
   followers: Followers;
   genres: string[];

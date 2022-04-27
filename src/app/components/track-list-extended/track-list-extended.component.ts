@@ -1,7 +1,8 @@
 import { Component, Input } from "@angular/core";
 import {
   ItemsTrackModel,
-  NewTopArtistTracks
+  NewTopArtistTracks,
+  NewUserTopTracksItemsModel
 } from "../../models/new-api-models/top-tracks-artist-by-id.model";
 import { AlbumTracksModel } from "../../models/new-api-models/album-by-id.model";
 import { NewSearchModel } from "../../models/new-api-models/search.model";
@@ -18,7 +19,8 @@ export class TrackListExtendedComponent {
     | ItemsTrackModel
     | AlbumTracksModel
     | NewSearchModel
-    | NewTopArtistTracks;
+    | NewTopArtistTracks
+    | NewUserTopTracksItemsModel;
   @Input() public trackContext!: string | TrackLaunchContextEnum;
 
   constructor(private playerService: PlayerService) {}

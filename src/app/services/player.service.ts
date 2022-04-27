@@ -10,6 +10,7 @@ import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
 import {
   ItemsTrackModel,
   NewTopArtistTracks,
+  NewUserTopTracksItemsModel,
   TopTracksModel
 } from "../models/new-api-models/top-tracks-artist-by-id.model";
 import { SwitchPlayerActionEnum } from "../models/switch-player-action.enum";
@@ -27,7 +28,8 @@ type TrackList =
   | ItemsTrackModel
   | AlbumTracksModel
   | NewSearchModel
-  | NewTopArtistTracks;
+  | NewTopArtistTracks
+  | NewUserTopTracksItemsModel;
 
 type Track = TrackById | NewAlbumTracksModel | TopTracksModel;
 
