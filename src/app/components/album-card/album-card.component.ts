@@ -14,6 +14,7 @@ import {
   TracksModel
 } from "../../models/new-api-models/album-by-id.model";
 import { ConverterService } from "../../services/converter.service";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 @Component({
   selector: "hb-album-card",
@@ -32,7 +33,8 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     public themeStateService: ThemeStateService,
     public convertService: ConverterService,
     private nzContextMenuService: NzContextMenuService,
-    private notificationService: NzNotificationService
+    private notificationService: NzNotificationService,
+    public error: ErrorHandlingService
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +51,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.errorInvalidAccessToken(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -64,7 +66,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.errorInvalidAccessToken(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -83,7 +85,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.errorInvalidAccessToken(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -100,7 +102,13 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
     this.isVisible = true;
     this.apiService
       .getAlbumsTracksById(this.album.id)
-      .pipe(takeUntil(this.die$))
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.errorInvalidAccessToken(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
       .subscribe((trackList: TracksModel) => {
         this.trackList =
           this.convertService.convertAlbumModelsToNewTracksModels(

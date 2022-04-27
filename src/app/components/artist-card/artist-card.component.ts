@@ -10,6 +10,7 @@ import { ThemeStateService } from "src/app/services/theme-state.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { NzMessageService } from "ng-zorro-antd/message";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 @Component({
   selector: "hb-artist-card",
@@ -33,6 +34,7 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
     private convert: ConverterService,
     public themeStateService: ThemeStateService,
     private notificationService: NzNotificationService,
+    public error: ErrorHandlingService,
     private message: NzMessageService
   ) {}
 
@@ -43,7 +45,13 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.api
       .getArtistsTopTracks(this.artistInfo.id)
-      .pipe(takeUntil(this.die$))
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.errorInvalidAccessToken(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
       .subscribe(topTracks => {
         this.changeTopTracks =
           this.convert.convertTopArtistTracksToNewTopArtistTracks(

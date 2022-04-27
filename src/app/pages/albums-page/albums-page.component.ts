@@ -8,7 +8,7 @@ import {
   ViewChildren
 } from "@angular/core";
 import { ApiService } from "../../services/api.service";
-import { Subject } from "rxjs";
+import { catchError, Subject, throwError } from "rxjs";
 import {
   AlbumItemModel,
   AlbumTracksModel,
@@ -18,6 +18,8 @@ import {
 import { takeUntil } from "rxjs/operators";
 import { ConverterService } from "../../services/converter.service";
 import { ThemeStateService } from "src/app/services/theme-state.service";
+import { ErrorHandlingService } from "../../services/error-handling.service";
+import { ErrorFromSpotifyModel } from "../../models/error.model";
 
 @Component({
   selector: "hb-albums-page",
@@ -44,13 +46,20 @@ export class AlbumsPageComponent implements OnInit, OnDestroy {
   constructor(
     private apiService: ApiService,
     private convertService: ConverterService,
-    public themeStateService: ThemeStateService
+    public themeStateService: ThemeStateService,
+    public error: ErrorHandlingService
   ) {}
 
   public loadAlbums(): void {
     this.apiService
       .getSavedAlbums()
-      .pipe(takeUntil(this.die$))
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.errorInvalidAccessToken(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
       .subscribe((albumList: ItemsAlbumModel) => {
         this.albums = albumList.items;
         this.isLoading = false;
@@ -60,7 +69,13 @@ export class AlbumsPageComponent implements OnInit, OnDestroy {
   public openAlbum(album: AlbumItemModel): void {
     this.apiService
       .getAlbumsTracksById(album.album.id)
-      .pipe(takeUntil(this.die$))
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.errorInvalidAccessToken(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
       .subscribe((trackList: TracksModel) => {
         this.tracks = this.convertService.convertAlbumModelsToNewTracksModels(
           trackList,

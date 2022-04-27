@@ -28,6 +28,7 @@ import {
   ItemUserPlaylistModel
 } from "src/app/models/new-api-models/current-users-playlist.model";
 import { ErrorFromSpotifyModel } from "src/app/models/error.model";
+import { ErrorHandlingService } from "../../../services/error-handling.service";
 
 @Component({
   selector: "hb-track",
@@ -60,6 +61,7 @@ export class TrackComponent implements OnInit, OnDestroy {
     public apiService: ApiService,
     public notification: NzNotificationService,
     public authService: AuthService,
+    public error: ErrorHandlingService,
     public themeStateService: ThemeStateService
   ) {}
 
@@ -124,7 +126,7 @@ export class TrackComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notification.error("Ошибка", error.error.error.message);
+          this.error.errorInvalidAccessToken(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -144,30 +146,32 @@ export class TrackComponent implements OnInit, OnDestroy {
   addTrackIntoFavoriteList(id: string): void {
     this.apiService
       .putSaveTracksForCurrentUser(id)
-      .pipe(takeUntil(this.die$))
-      .subscribe(
-        () => {
-          this.isFavorite = true;
-          this.notification.blank("Добавление трека", "Трек успешно добавлен");
-        },
-        (e: ErrorFromSpotifyModel) => {
-          this.notification.blank("Ошибка", e.error.error.message);
-        }
-      );
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.errorInvalidAccessToken(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(() => {
+        this.isFavorite = true;
+        this.notification.blank("Добавление трека", "Трек успешно добавлен");
+      });
   }
 
   removeTrackFromFavoriteList(id: string): void {
     this.apiService
       .deleteTracksForCurrentUser(id)
-      .pipe(takeUntil(this.die$))
-      .subscribe(
-        () => {
-          this.isFavorite = false;
-          this.notification.blank("Удаление трека", "Трек успешно удален");
-        },
-        (e: ErrorFromSpotifyModel) => {
-          this.notification.blank("Ошибка", e.error.error.message);
-        }
-      );
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.errorInvalidAccessToken(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(() => {
+        this.isFavorite = false;
+        this.notification.blank("Удаление трека", "Трек успешно удален");
+      });
   }
 }

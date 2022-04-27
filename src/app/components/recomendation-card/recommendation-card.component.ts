@@ -6,8 +6,8 @@ import { ApiService } from "src/app/services/api.service";
 import { PlayerService } from "src/app/services/player.service";
 import { ThemeStateService } from "src/app/services/theme-state.service";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
-import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ConverterService } from "../../services/converter.service";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 @Component({
   selector: "hb-recommendation-card",
@@ -31,7 +31,7 @@ export class RecommendationCardComponent {
     public apiService: ApiService,
     private playerService: PlayerService,
     public themeStateService: ThemeStateService,
-    private notificationService: NzNotificationService,
+    public error: ErrorHandlingService,
     public convert: ConverterService
   ) {}
 
@@ -39,17 +39,11 @@ export class RecommendationCardComponent {
     this.apiService
       .getPlaylistTracks(this.recommendation.id)
       .pipe(
+        takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          if (error.status === 401) {
-            this.notificationService.error(
-              "Ошибка авторизации",
-              "Вам необходимо пройти авторизацию заново",
-              { nzDuration: 0 }
-            );
-          }
+          this.error.errorInvalidAccessToken(error);
           return throwError(() => new Error(error.error.error.message));
-        }),
-        takeUntil(this.die$)
+        })
       )
       .subscribe(topTracks => {
         this.trackInfo = topTracks;
@@ -69,17 +63,11 @@ export class RecommendationCardComponent {
     this.apiService
       .getPlaylistTracks(id, 10, this.offset)
       .pipe(
+        takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          if (error.status === 401) {
-            this.notificationService.error(
-              "Ошибка авторизации",
-              "Вам необходимо пройти авторизацию заново",
-              { nzDuration: 0 }
-            );
-          }
+          this.error.errorInvalidAccessToken(error);
           return throwError(() => new Error(error.error.error.message));
-        }),
-        takeUntil(this.die$)
+        })
       )
       .subscribe(moreTracks => {
         this.trackInfo.items.push(...moreTracks.items);

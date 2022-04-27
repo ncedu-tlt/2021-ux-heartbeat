@@ -5,7 +5,7 @@ import { ItemUserPlaylistModel } from "src/app/models/new-api-models/current-use
 import { ApiService } from "src/app/services/api.service";
 import { ThemeStateService } from "src/app/services/theme-state.service";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
-import { NzNotificationService } from "ng-zorro-antd/notification";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 @Component({
   selector: "hb-genre-page",
@@ -24,7 +24,7 @@ export class GenrePageComponent {
     public apiService: ApiService,
     public activatedRoute: ActivatedRoute,
     public themeStateService: ThemeStateService,
-    public notificationService: NzNotificationService
+    public error: ErrorHandlingService
   ) {
     this.genre = String(this.activatedRoute.snapshot.paramMap.get("genre"));
   }
@@ -34,14 +34,7 @@ export class GenrePageComponent {
       .getCategoriesPlaylists(this.genre)
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
-          if (error.status === 401) {
-            this.notificationService.error(
-              "Ошибка авторизации",
-              "Вам необходимо пройти авторизацию заново",
-              { nzDuration: 0 }
-            );
-            this.isDisabled = true;
-          }
+          this.error.errorInvalidAccessToken(error);
           if (
             error.status === 404 &&
             error.error.error.message === "Specified id doesn't exist"
@@ -64,13 +57,7 @@ export class GenrePageComponent {
       .getCategoriesPlaylists(this.genre, this.offset)
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
-          if (error.status === 401) {
-            this.notificationService.error(
-              "Ошибка авторизации",
-              "Вам необходимо пройти авторизацию заново",
-              { nzDuration: 0 }
-            );
-          }
+          this.error.errorInvalidAccessToken(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )

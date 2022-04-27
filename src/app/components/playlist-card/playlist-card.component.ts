@@ -5,7 +5,7 @@ import { ApiService } from "../../services/api.service";
 import { catchError, Subscription, throwError } from "rxjs";
 import { PlayerService } from "../../services/player.service";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
-import { NzNotificationService } from "ng-zorro-antd/notification";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 @Component({
   selector: "hb-playlist-card",
@@ -21,7 +21,7 @@ export class PlaylistCardComponent {
     public themeStateService: ThemeStateService,
     private api: ApiService,
     public playerService: PlayerService,
-    private notificationService: NzNotificationService
+    public error: ErrorHandlingService
   ) {}
 
   ngOnInit(): void {
@@ -35,13 +35,7 @@ export class PlaylistCardComponent {
       .getPlaylistTracks(id, 50)
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
-          if (error.status === 401) {
-            this.notificationService.error(
-              "Ошибка авторизации",
-              "Вам необходимо пройти авторизацию заново",
-              { nzDuration: 0 }
-            );
-          }
+          this.error.errorInvalidAccessToken(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
