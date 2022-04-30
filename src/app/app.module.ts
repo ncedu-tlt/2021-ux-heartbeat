@@ -43,7 +43,6 @@ import { FollowedArtistPageComponent } from "./pages/followed-artist-page/follow
 import { GenrePageComponent } from "./pages/genre-page/genre-page.component";
 import { HomePageComponent } from "./pages/home-page/home-page.component";
 import { GenresCollectionPageComponent } from "./pages/genres-collection-page/genres-collection-page.component";
-import { AlbumPageComponent } from "./pages/album-page/album-page.component";
 import { FavoriteTracksPageComponent } from "./pages/favorite-tracks-page/favorite-tracks-page.component";
 import { NotFoundPageComponent } from "./pages/not-found-page/not-found-page.component";
 import { ArtistCardComponent } from "./components/artist-card/artist-card.component";
@@ -86,7 +85,6 @@ registerLocaleData(ru);
     GenrePageComponent,
     HomePageComponent,
     GenresCollectionPageComponent,
-    AlbumPageComponent,
     FavoriteTracksPageComponent,
     NotFoundPageComponent,
     ArtistCardComponent,

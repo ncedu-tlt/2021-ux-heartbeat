@@ -28,6 +28,7 @@ import { NzMessageService } from "ng-zorro-antd/message";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { PlaylistModalStateEnum } from "../../models/playlist-modal-state.enum";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 @Component({
   selector: "hb-playlists-page",
@@ -74,13 +75,20 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     public themeStateService: ThemeStateService,
     private msg: NzMessageService,
-    private notificationService: NzNotificationService
+    private notificationService: NzNotificationService,
+    public error: ErrorHandlingService
   ) {}
 
   loadPlaylists(): void {
     this.apiService
       .getCurrentUsersPlaylists()
-      .pipe(takeUntil(this.die$))
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
       .subscribe((playlistList: CurrentUsersPlaylistModel) => {
         this.playlists = playlistList.items;
         this.isLoading = false;
@@ -90,7 +98,13 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   openPlaylist(playlist: ItemUserPlaylistModel): void {
     this.apiService
       .getPlaylistTracks(playlist.id)
-      .pipe(takeUntil(this.die$))
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
       .subscribe((playlistTracks: ItemsTrackModel) => {
         this.tracks = playlistTracks;
       });
@@ -222,7 +236,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -247,7 +261,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -283,7 +297,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         }),
         switchMap(() => {
