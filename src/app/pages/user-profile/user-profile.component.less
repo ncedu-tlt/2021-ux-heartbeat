@@ -123,13 +123,18 @@
 
     .top-artists__list {
       margin-top: 20px;
-      width: 1300px;
+      max-width: 1300px;
       display: flex;
+
+      @media screen and ( min-width: 920px ) and ( max-width: 1279.99px ) {
+        max-width: 900px;
+      }
 
       .top-artists__item {
         cursor: pointer;
         width: 85px;
         height: 111px;
+        margin-right: 50px;
 
         .top-artists__img {
           border-radius: 5px;
@@ -152,6 +157,7 @@
       display: flex;
       width: 365px;
       height: 21px;
+      margin-bottom: 20px;
 
       .top-tracks__title-text {
         font-size: 18px;
@@ -164,6 +170,16 @@
         width: 90px;
         height: inherit;
         margin-top: 4px;
+      }
+    }
+
+    hb-track-list-extended {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 1346px;
+
+      @media screen and ( min-width: 920px ) and (max-width: 1279.99px) {
+        max-width: 900px;
       }
     }
   }

@@ -52,7 +52,6 @@ export class TrackExtendedComponent implements OnDestroy, OnInit {
       return `${prev}${!index ? "" : ","} ${cur.name}`;
     }, "");
   }
-  @Input() public isCard = false;
   @Input() public trackContext!: string | TrackLaunchContextEnum;
 
   @Output() playTrack = new EventEmitter<void>();
@@ -96,6 +95,12 @@ export class TrackExtendedComponent implements OnDestroy, OnInit {
     this.playerService.currentTrackInfo$.next(this._track);
     this.playerService.trackContext$.next(this.trackContext);
     this.playTrack.emit();
+  }
+
+  hasAlbumName(
+    track: TrackById | NewAlbumTracksModel | TopTracksModel
+  ): track is TrackById {
+    return (track as TrackById).album.name !== undefined;
   }
 
   controlPlayerCurrentTrack(): void {
