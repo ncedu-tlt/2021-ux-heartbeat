@@ -16,11 +16,12 @@ import {
   NewSearchModel,
   SearchModel
 } from "../../models/new-api-models/search.model";
-import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ThemeStateService } from "src/app/services/theme-state.service";
 import { FollowedArtistModel } from "../../models/new-api-models/followed-artist.model";
+import { PlayerService } from "../../services/player.service";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 @Component({
   selector: "hb-search-page",
@@ -31,7 +32,6 @@ export class SearchPageComponent {
   public key!: string;
   public artists: ArtistByIdModel[] = [];
   public changeTrackList!: NewSearchModel;
-  public trackContext = TrackLaunchContextEnum.SEARCH_TRACKS;
   public isDisabledShowMoreArtists = false;
   public isDisabledShowMoreTracks = false;
   public isLoading = true;
@@ -43,9 +43,11 @@ export class SearchPageComponent {
     private activatedRoute: ActivatedRoute,
     private api: ApiService,
     private searchStateService: SearchStateService,
+    public playerService: PlayerService,
     private convert: ConverterService,
     private notificationService: NzNotificationService,
-    public themeStateService: ThemeStateService
+    public themeStateService: ThemeStateService,
+    public error: ErrorHandlingService
   ) {
     this.searchStateService
       .getSearchState()
@@ -62,6 +64,10 @@ export class SearchPageComponent {
     this.isLoading = true;
     this.key = <string>this.activatedRoute.snapshot.queryParams["keyword"];
     this.resolveSearchResult();
+  }
+
+  setListTrackIntoPlayer(): void {
+    this.playerService.trackList$.next(this.changeTrackList);
   }
 
   getSearchResultByArtists(): Observable<SearchModel> {
@@ -82,17 +88,11 @@ export class SearchPageComponent {
     this.api
       .searchForItem(this.key, 2, this.offset)
       .pipe(
+        takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          if (error.status === 401) {
-            this.notificationService.error(
-              "Ошибка авторизации",
-              "Вам необходимо пройти авторизацию заново",
-              { nzDuration: 0 }
-            );
-          }
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
-        }),
-        takeUntil(this.die$)
+        })
       )
       .subscribe(itemsToArtists => {
         this.artists.push(...itemsToArtists.artists.items);
@@ -109,17 +109,11 @@ export class SearchPageComponent {
     this.api
       .searchForItem(this.key, 6, this.offset)
       .pipe(
+        takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          if (error.status === 401) {
-            this.notificationService.error(
-              "Ошибка авторизации",
-              "Вам необходимо пройти авторизацию заново",
-              { nzDuration: 0 }
-            );
-          }
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
-        }),
-        takeUntil(this.die$)
+        })
       )
       .subscribe(itemsToTracks => {
         const itemsForConvert =
@@ -142,13 +136,7 @@ export class SearchPageComponent {
     ])
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
-          if (error.status === 401) {
-            this.notificationService.error(
-              "Ошибка авторизации",
-              "Вам необходимо пройти авторизацию заново",
-              { nzDuration: 0 }
-            );
-          }
+          this.error.showErrorNotification(error);
           if (
             error.status === 400 &&
             error.error.error.message === "No search query"
@@ -167,11 +155,17 @@ export class SearchPageComponent {
       )
       .subscribe(([itemsToArtists, tracksSearchResult, artistList]) => {
         this.artists = itemsToArtists.artists.items;
+        if (this.artists.length < 2) {
+          this.isDisabledShowMoreArtists = true;
+        }
 
         this.changeTrackList =
           this.convert.convertTrackSearchModelToNewSearchModel(
             tracksSearchResult.tracks.items
           );
+        if (this.changeTrackList.items.length < 6) {
+          this.isDisabledShowMoreTracks = true;
+        }
 
         for (const artistsId of artistList.artists.items) {
           this.followedArtistsId.push(artistsId.id);

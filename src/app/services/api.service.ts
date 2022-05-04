@@ -141,7 +141,7 @@ export class ApiService {
     limit = 10
   ): Observable<ArtistsModel> {
     return this.http.get<ArtistsModel>(
-      `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=${includes}&market=RU&limit=${limit}&offset=${offset}`,
+      `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=${includes}&market=US&limit=${limit}&offset=${offset}`,
       {
         headers: this.headers
       }
@@ -163,7 +163,7 @@ export class ApiService {
       "https://api.spotify.com/v1/artists/" + artistId + "/top-tracks",
       {
         headers: this.headers,
-        params: { market: "RU" }
+        params: { market: "US" }
       }
     );
   }
@@ -194,7 +194,7 @@ export class ApiService {
     );
   }
 
-  getUsersSavedTracks(offset = 0, limit = 27): Observable<ItemsTrackModel> {
+  getUsersSavedTracks(offset = 0, limit = 24): Observable<ItemsTrackModel> {
     const url = `https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=${limit}`;
     return this.http.get<ItemsTrackModel>(url, {
       headers: this.headers
@@ -228,11 +228,16 @@ export class ApiService {
     );
   }
 
-  getPlaylistTracks(playlistId: string): Observable<ItemsTrackModel> {
+  getPlaylistTracks(
+    playlistId: string,
+    limit = 10,
+    offset = 0
+  ): Observable<ItemsTrackModel> {
     return this.http.get<ItemsTrackModel>(
       "https://api.spotify.com/v1/playlists/" + playlistId + "/tracks",
       {
-        headers: this.headers
+        headers: this.headers,
+        params: { limit, offset }
       }
     );
   }
@@ -270,7 +275,7 @@ export class ApiService {
     isPublic: boolean
   ): Observable<void> {
     return this.http.put<void>(
-      "https://api.spotify.com/v1/playlists" + playlistId,
+      "https://api.spotify.com/v1/playlists/" + playlistId,
       {
         name,
         description,
@@ -305,7 +310,7 @@ export class ApiService {
       "https://api.spotify.com/v1/browse/categories",
       {
         headers: this.headers,
-        params: { country: "RU", locale: "ru_RU", limit: 50 }
+        params: { country: "US", locale: "en_US", limit: 50 }
       }
     );
   }
@@ -445,5 +450,18 @@ export class ApiService {
       headers: this.headers,
       params: { q: keyword, type: "artist,track", limit, offset }
     });
+  }
+
+  addPlaylistImage(
+    playlistId: string,
+    playlistImage: string
+  ): Observable<void> {
+    return this.http.put<void>(
+      "https://api.spotify.com/v1/playlists/" + playlistId + "/images",
+      playlistImage,
+      {
+        headers: this.headers
+      }
+    );
   }
 }

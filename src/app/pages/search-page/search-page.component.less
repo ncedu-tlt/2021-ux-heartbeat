@@ -4,13 +4,8 @@
   padding-bottom: 100px;
   display: grid;
   grid-template-columns: 3fr 2fr;
-  @media (max-width: 767px) {
+  @media (max-width: 980px) {
     grid-template-columns: none;
-  }
-  .notFound {
-    width: 100%;
-    position: absolute;
-    margin-top: 80px;
   }
   .title {
     margin-top: 30px;
@@ -18,6 +13,10 @@
     font-size: 25px;
     line-height: 21px;
     text-align: center;
+  }
+  .track-list {
+    display: flex;
+    justify-content: center;
   }
   .card {
     display: flex;

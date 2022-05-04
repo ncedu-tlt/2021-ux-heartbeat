@@ -13,6 +13,7 @@ import { ApiService } from "src/app/services/api.service";
 import { AuthService } from "src/app/services/auth.service";
 import { PlayerService } from "src/app/services/player.service";
 import { ThemeStateService } from "src/app/services/theme-state.service";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 @Component({
   selector: "hb-favorite-tracks-page",
@@ -37,29 +38,42 @@ export class FavoriteTracksPageComponent {
     private playerService: PlayerService,
     public authService: AuthService,
     public themeStateService: ThemeStateService,
+    public error: ErrorHandlingService,
     private notificationService: NzNotificationService
   ) {}
 
   ngOnInit(): void {
     this.favorite$ = this.apiService
       .getUsersSavedTracks()
+      .pipe(
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
       .subscribe(favoriteTrack => {
         this.favorites = favoriteTrack;
         this.isLoading = false;
-        if (favoriteTrack.items.length < 27) {
+        if (favoriteTrack.items.length < 24) {
           this.isDisabled = true;
         }
       });
   }
 
   showMore(): void {
-    this.offset += 27;
+    this.offset += 24;
     this.apiService
       .getUsersSavedTracks(this.offset)
+      .pipe(
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
       .subscribe(favoriteTrack => {
         this.favorites.items.push(...favoriteTrack.items);
         this.isLoading = false;
-        if (favoriteTrack.items.length < 27) {
+        if (favoriteTrack.items.length < 24) {
           this.isDisabled = true;
         }
       });
@@ -72,19 +86,17 @@ export class FavoriteTracksPageComponent {
   removeTrackFromFavoriteList(id: string): void {
     this.apiService
       .deleteTracksForCurrentUser(id)
-      .pipe(takeUntil(this.die$))
-      .subscribe(
-        () => {
-          this.isFavorite = false;
-          this.notificationService.blank(
-            "Удаление трека",
-            "Трек успешно удален"
-          );
-        },
-        (e: ErrorFromSpotifyModel) => {
-          this.notificationService.blank("Ошибка", e.error.error.message);
-        }
-      );
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(() => {
+        this.isFavorite = false;
+        this.notificationService.blank("Удаление трека", "Трек успешно удален");
+      });
   }
 
   getUserPlaylists(id: string): void {
@@ -95,7 +107,7 @@ export class FavoriteTracksPageComponent {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -115,18 +127,19 @@ export class FavoriteTracksPageComponent {
   addTrackIntoPlaylist(playlistId: string, trackId: string): void {
     this.apiService
       .addItemsToPlaylist(playlistId, trackId)
-      .pipe(takeUntil(this.die$))
-      .subscribe(
-        () => {
-          this.notificationService.blank(
-            "Добавление трека",
-            "Трек успешно добавлен"
-          );
-        },
-        (e: ErrorFromSpotifyModel) => {
-          this.notificationService.blank("Ошибка", e.error.error.message);
-        }
-      );
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(() => {
+        this.notificationService.blank(
+          "Добавление трека",
+          "Трек успешно добавлен"
+        );
+      });
   }
 
   ngOnDestroy(): void {

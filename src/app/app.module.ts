@@ -43,7 +43,6 @@ import { FollowedArtistPageComponent } from "./pages/followed-artist-page/follow
 import { GenrePageComponent } from "./pages/genre-page/genre-page.component";
 import { HomePageComponent } from "./pages/home-page/home-page.component";
 import { GenresCollectionPageComponent } from "./pages/genres-collection-page/genres-collection-page.component";
-import { AlbumPageComponent } from "./pages/album-page/album-page.component";
 import { FavoriteTracksPageComponent } from "./pages/favorite-tracks-page/favorite-tracks-page.component";
 import { NotFoundPageComponent } from "./pages/not-found-page/not-found-page.component";
 import { ArtistCardComponent } from "./components/artist-card/artist-card.component";
@@ -51,12 +50,16 @@ import { RoundArtistCardComponent } from "./components/round-artist-card/round-a
 import { GenreCardComponent } from "./components/genre-card/genre-card.component";
 import { PlaylistCardComponent } from "./components/playlist-card/playlist-card.component";
 import { NzEmptyModule } from "ng-zorro-antd/empty";
-import { RecomendationCardComponent } from "src/app/components/recomendation-card/recomendation-card.component";
+import { PulselineComponent } from "./components/pulseline/pulseline.component";
+import { RecommendationCardComponent } from "src/app/components/recomendation-card/recommendation-card.component";
 import { NzResultModule } from "ng-zorro-antd/result";
 import { NzMessageModule } from "ng-zorro-antd/message";
 import { AlbumCardComponent } from "./components/album-card/album-card.component";
 import { TrackExtendedComponent } from "./components/track-extended/track-extended.component";
 import { TrackListExtendedComponent } from "./components/track-list-extended/track-list-extended.component";
+import { NzUploadModule } from "ng-zorro-antd/upload";
+import { NzInputModule } from "ng-zorro-antd/input";
+import { NzBackTopModule } from "ng-zorro-antd/back-top";
 
 registerLocaleData(ru);
 
@@ -84,7 +87,6 @@ registerLocaleData(ru);
     GenrePageComponent,
     HomePageComponent,
     GenresCollectionPageComponent,
-    AlbumPageComponent,
     FavoriteTracksPageComponent,
     NotFoundPageComponent,
     ArtistCardComponent,
@@ -92,7 +94,10 @@ registerLocaleData(ru);
     ArtistCardComponent,
     GenreCardComponent,
     PlaylistCardComponent,
-    RecomendationCardComponent,
+    PulselineComponent,
+    RecommendationCardComponent,
+    AlbumCardComponent,
+    RecommendationCardComponent,
     AlbumCardComponent,
     TrackExtendedComponent,
     TrackListExtendedComponent
@@ -114,7 +119,10 @@ registerLocaleData(ru);
     NzButtonModule,
     NzDropDownModule,
     NzEmptyModule,
-    NzResultModule
+    NzResultModule,
+    NzUploadModule,
+    NzInputModule,
+    NzBackTopModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: ru_RU },

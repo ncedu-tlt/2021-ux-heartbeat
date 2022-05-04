@@ -11,6 +11,8 @@ export class SearchStateService {
     return this.searchState$.asObservable();
   }
   public setSearchState(searchValue: string): void {
-    this.searchState$.next(searchValue);
+    if (searchValue) {
+      this.searchState$.next(searchValue);
+    }
   }
 }

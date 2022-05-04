@@ -1,9 +1,11 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Subscription } from "rxjs";
+import { catchError, Subscription, throwError } from "rxjs";
 import { ItemUserPlaylistModel } from "src/app/models/new-api-models/current-users-playlist.model";
 import { ApiService } from "src/app/services/api.service";
 import { ThemeStateService } from "src/app/services/theme-state.service";
+import { ErrorFromSpotifyModel } from "../../models/error.model";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 @Component({
   selector: "hb-genre-page",
@@ -21,7 +23,8 @@ export class GenrePageComponent {
   constructor(
     public apiService: ApiService,
     public activatedRoute: ActivatedRoute,
-    public themeStateService: ThemeStateService
+    public themeStateService: ThemeStateService,
+    public error: ErrorHandlingService
   ) {
     this.genre = String(this.activatedRoute.snapshot.paramMap.get("genre"));
   }
@@ -29,6 +32,19 @@ export class GenrePageComponent {
   ngOnInit(): void {
     this.playlistsCollection$ = this.apiService
       .getCategoriesPlaylists(this.genre)
+      .pipe(
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          if (
+            error.status === 404 &&
+            error.error.error.message === "Specified id doesn't exist"
+          ) {
+            this.isLoading = false;
+            this.isDisabled = true;
+          }
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
       .subscribe(playlistsCollection => {
         this.playlists = playlistsCollection.playlists.items;
         this.isLoading = false;
@@ -39,6 +55,12 @@ export class GenrePageComponent {
     this.offset += 10;
     this.apiService
       .getCategoriesPlaylists(this.genre, this.offset)
+      .pipe(
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
       .subscribe(playlistsCollection => {
         this.playlists.push(...playlistsCollection.playlists.items);
         this.isLoading = false;

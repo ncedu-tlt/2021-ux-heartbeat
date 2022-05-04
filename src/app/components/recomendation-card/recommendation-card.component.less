@@ -1,0 +1,218 @@
+@import '../../../assets/styles/colors.less';
+
+.recommendation, .recommendation-dark {
+  margin-top: 15px;
+  width: 350px;
+  min-height: 480px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid @recomendation-border;
+  box-sizing: border-box;
+  border-radius: 20px;
+  margin-right: 20px;
+  margin-bottom: 32px;
+  padding: 15px 30px;
+  @media screen and ( max-width: 420px ) {
+    width: 319px;
+    margin-right: 0;
+    padding: 15px 0;
+  }
+  .title {
+    text-align: center;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 28px;
+  }
+  .img {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-top: 20px;
+    width: 225px;
+    height: 220px;
+    border: 1px solid @black;
+    box-sizing: border-box;
+    border-radius: 10px;
+  }
+  .tracks {
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    &__track-container {
+      .track {
+        &-contain {
+          width: 250px;
+          &-info{
+            &__artist {
+              width: 150px;
+            }
+            &__name {
+              width: 150px;
+            }
+          }
+        }
+        &-time {
+          margin-right: 20px;
+        }
+      }
+    }
+  }
+  .btn {
+    margin-top: 15px;
+    width: 120px;
+    height: 28px;
+    color: @black;
+    background-color: @white;
+    border: 1px solid @black;
+    box-sizing: border-box;
+    border-radius: 20px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    cursor: pointer;
+    &:hover {
+      background-color: @active-button;
+    }
+  }
+  .modal {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+    padding-top: 50px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+
+    &__content {
+      z-index: 2;
+      overflow: auto;
+      padding: 20px 5px 20px 20px;
+      max-width: 600px;
+      height: 85%;
+      width: 80%;
+      border-radius: 7px;
+      position: relative;
+
+      .info-close {
+        display: none;
+        z-index: 1;
+
+        @media (max-width: 500px) {
+          display: block;
+          position: absolute;
+          top: 0;
+          right: 5px;
+          padding: 10px 5px 10px 10px;
+          font-size: 20px;
+        }
+      }
+
+      @media (max-width: 560px) {
+        width: 90%;
+      }
+
+      @media (max-width: 500px) {
+        width: 100%;
+        padding: 15px 0;
+      }
+
+      .info {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        margin-bottom: 15px;
+
+        .playlist-info {
+          display: flex;
+          position: relative;
+          justify-content: center;
+          margin: 10px;
+
+          @media (max-width: 400px) {
+            margin: 0;
+          }
+          &__img {
+            width: 150px;
+            height: 150px;
+            border-radius: 5px;
+            background-size: cover;
+            margin-left: -75px;
+
+            @media (max-width: 400px) {
+              width: 125px;
+              height: 125px;
+            }
+          }
+          &__vinyl {
+            position: absolute;
+            left: 36%;
+            z-index: -1;
+            height: 150px;
+            @media (max-width: 400px) {
+              height: 125px;
+            }
+          }
+          &__name {
+            text-align: center;
+            font-size: 24px;
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    &__content::-webkit-scrollbar {
+      width: 7px;
+    }
+    &__content::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background-color: rgb(182 107 107 / 0.45);
+    }
+    &__content::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      background-color: #f9f9fd;
+    }
+  }
+}
+
+.addItem {
+  display: block;
+  margin: 15px auto 0;
+  width: 90px;
+  padding: 7px;
+  background: @white;
+  border: 1px solid @black;
+  border-radius: 15px;
+  font-size: 15px;
+  line-height: 10px;
+
+  &:hover {
+    background-color: @background-color-hover;
+  }
+}
+
+.recommendation-dark {
+  border: 1px solid @recomendation-border-dark;
+  * {
+    color: @white;
+  }
+  .btn {
+    color: @white;
+    background: none;
+    border: 1px solid @white;
+    &:hover {
+      background-color: @active-button;
+      color: @black;
+    }
+  }
+}

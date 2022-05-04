@@ -4,7 +4,7 @@
 <div [ngClass]="{'container' : !this.themeStateService.getIsDarkTheme() , 'container-dark' : this.themeStateService.getIsDarkTheme()}">
   <div class="artist" *ngIf="artistInfo">
     <div class="artist__info">
-      <div class="artist__img" [ngStyle]="{'background-image' : 'url('+ artistInfo.images[0].url + ')'}"></div>
+      <div class="artist__img" [ngStyle]="{'background-image': artistInfo.images[0]?.url ? 'url(' + artistInfo.images[0].url + ')' : 'url(../../../assets/image/default-artist-image.png)'}"></div>
       <h1 class="artist__name">{{artistInfo.name}}</h1>
       <button class="artist__follow" *ngIf="isFollow" (click)="toUnfollowArtist()"></button>
       <button class="artist__unfollow" *ngIf="!isFollow" (click)="toFollowArtist()"></button>
@@ -12,13 +12,15 @@
     <div class="artist__top-tracks">
       <div class="top-tracks">
         <h2 class="top-tracks__title">Популярные треки</h2>
-        <div class="top-tracks__list">
-          <div class="top-tracks__item" *ngFor="let track of artistTopTracks.tracks">
-            <hb-track (playTrack)="setListTrackIntoPlayer()" [isCard]="false" [track]="track"
-                      [trackContext]="trackContext">
+        <div class="top-tracks__list" *ngIf="artistTopTracks.items.length">
+          <div class="top-tracks__item" *ngFor="let track of artistTopTracks.items">
+            <hb-track [isCard]="false" [track]="track.track"
+                      [trackContext]="trackContext"
+                      (playTrack)="setListTrackIntoPlayer()">
             </hb-track>
           </div>
         </div>
+        <span *ngIf="!artistTopTracks.items.length">Исполнитель не выпустил ни одного трека</span>
       </div>
     </div>
     <div class="artist__albums" *ngIf="artistAlbums.length">
@@ -26,7 +28,7 @@
         <h2 class="album__title">Альбомы</h2>
         <div class="album__list">
           <div class="album__item" *ngFor="let album of artistAlbums">
-            <hb-album-card [routerLink]="['/album', album.id]" [album]="album"></hb-album-card>
+            <hb-album-card [album]="album"></hb-album-card>
           </div>
         </div>
         <button class="album__more" *ngIf="showMoreDisabled" (click)="showMoreAlbums()">Еще</button>

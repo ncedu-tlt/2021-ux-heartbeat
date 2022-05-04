@@ -1,0 +1,33 @@
+<div [ngClass]="{ 'recommendation' : !this.themeStateService.getIsDarkTheme() , 'recommendation-dark' : this.themeStateService.getIsDarkTheme() }">
+  <h2 class="title">{{recommendation.name}}</h2>
+  <div class="img" [ngStyle]="
+    {'background-image' : 'url(' + recommendation.images[0].url + ')'}"></div>
+  <hb-loader class="loader" *ngIf="isLoading || isLoadingAllPlaylist"></hb-loader>
+  <div class="tracks" *ngIf="!isLoading">
+    <div *ngFor="let track of trackInfo.items; let i = index">
+      <hb-track *ngIf="i < 4" class="tracks__track-container"
+                (playTrack)="setListTrackIntoPlayer()"
+                [trackContext]="recommendation.id"
+                [track]="track.track"
+                [isCard]="!isCard">
+      </hb-track>
+    </div>
+  </div>
+  <button class="btn" (click)="openAllPlaylist()">Весь плейлист</button>
+  <ng-container *ngIf="isVisible">
+    <div class="modal" (click)="handleCancel()">
+      <div class="modal__content" (click)="$event.stopPropagation()" [ngStyle]="{'background' : switchMode()}">
+        <p class="info-close" (click)="handleCancel()">x</p>
+        <div class="info">
+          <div class="playlist-info">
+            <div class="playlist-info__img" [ngStyle]="{'background-image': 'url(' + recommendation.images[0].url + ')'}"></div>
+            <img class="playlist-info__vinyl" src="assets/image/vinyl-record.png" alt="vinyl icon"/>
+          </div>
+          <p class="playlist-info__name">{{recommendation.name}}</p>
+        </div>
+        <hb-track-list [trackContext]="recommendation.id" [trackList]="trackInfo"></hb-track-list>
+        <button class="addItem" *ngIf="isDisabled" (click)="showMore(recommendation.id)">ЕЩЕ</button>
+      </div>
+    </div>
+  </ng-container>
+</div>

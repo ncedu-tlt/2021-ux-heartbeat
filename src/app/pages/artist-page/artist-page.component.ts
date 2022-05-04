@@ -8,12 +8,17 @@ import {
 } from "../../models/new-api-models/artist-by-id.model";
 import { catchError, Subject, takeUntil, throwError } from "rxjs";
 import { combineLatest } from "rxjs";
-import { TopTracksArtistByIdModel } from "../../models/new-api-models/top-tracks-artist-by-id.model";
+import {
+  NewTopArtistTracks,
+  TopTracksArtistByIdModel
+} from "../../models/new-api-models/top-tracks-artist-by-id.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 import { PlayerService } from "../../services/player.service";
 import { ThemeStateService } from "../../services/theme-state.service";
+import { ConverterService } from "../../services/converter.service";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 @Component({
   selector: "hb-artist-page",
@@ -25,7 +30,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
   public artistInfo!: ArtistByIdModel;
   public isFollow!: boolean;
   public artistAlbums!: ItemsArtistModel[];
-  public artistTopTracks!: TopTracksArtistByIdModel;
+  public artistTopTracks!: NewTopArtistTracks;
   public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
   private die$ = new Subject<void>();
   public isLoading = true;
@@ -37,7 +42,9 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private notificationService: NzNotificationService,
     private playerService: PlayerService,
-    public themeStateService: ThemeStateService
+    public error: ErrorHandlingService,
+    public themeStateService: ThemeStateService,
+    public convert: ConverterService
   ) {}
 
   ngOnInit(): void {
@@ -51,7 +58,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -65,7 +72,10 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
           this.artistInfo = artist;
           this.isFollow = isFollow[0];
           this.artistAlbums = artistAlbums.items;
-          this.artistTopTracks = artistTopTracks;
+          this.artistTopTracks =
+            this.convert.convertTopArtistTracksToNewTopArtistTracks(
+              artistTopTracks.tracks
+            );
           this.offset += 10;
           this.showMoreDisabled = this.offset < artistAlbums.total;
           this.isLoading = false;
@@ -79,7 +89,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -98,7 +108,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -112,7 +122,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
   }
 
   setListTrackIntoPlayer(): void {
-    this.playerService.trackList$.next(null);
+    this.playerService.trackList$.next(this.artistTopTracks);
   }
 
   showMoreAlbums(): void {
@@ -122,7 +132,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )

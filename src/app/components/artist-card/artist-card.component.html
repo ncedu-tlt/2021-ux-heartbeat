@@ -11,10 +11,10 @@
   </div>
   <p class="artist-card__name">{{artistInfo.name}}</p>
   <p class="artist-card__followers">{{artistInfo.followers.total}} подписчиков</p>
-  <p class="artist-card__genres">{{artistInfo.genres.length >= 1 ? artistInfo.genres : "Улыбнись :)"}}</p>
+  <p [ngStyle]="{'padding-bottom': changeTopTracks !== undefined && !changeTopTracks.items.length ? '70px' : '0px'}"  class="artist-card__genres">{{artistInfo.genres.length >= 1 ? artistInfo.genres : "Улыбнись :)"}}</p>
   <div *ngIf="changeTopTracks" class="artist-card__top-tracks">
-    <div *ngFor="let track of changeTopTracks.items">
-      <hb-track (playTrack)="setListTrackIntoPlayer()" [trackContext]="trackContext" [track]="track.track" [isCard]="isCard"></hb-track>
+    <div *ngFor="let track of changeTopTracks.items; let i = index">
+      <hb-track *ngIf="i < 4" (playTrack)="setListTrackIntoPlayer()" [trackContext]="trackContext" [track]="track.track" [isCard]="isCard"></hb-track>
     </div>
   </div>
   <button nz-button nzType="default"
