@@ -64,8 +64,7 @@ export class TrackComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     public themeStateService: ThemeStateService,
     public lastTracksService: LastTracksService,
-    public error: ErrorHandlingService,
-    public themeStateService: ThemeStateService
+    public error: ErrorHandlingService
   ) {}
 
   ngOnInit(): void {
