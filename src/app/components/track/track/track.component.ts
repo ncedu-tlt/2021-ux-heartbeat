@@ -28,6 +28,7 @@ import {
   ItemUserPlaylistModel
 } from "src/app/models/new-api-models/current-users-playlist.model";
 import { ErrorFromSpotifyModel } from "src/app/models/error.model";
+import { LastTracksService } from "src/app/services/last-tracks.service";
 
 @Component({
   selector: "hb-track",
@@ -60,7 +61,8 @@ export class TrackComponent implements OnInit, OnDestroy {
     public apiService: ApiService,
     public notification: NzNotificationService,
     public authService: AuthService,
-    public themeStateService: ThemeStateService
+    public themeStateService: ThemeStateService,
+    public lastTracksService: LastTracksService
   ) {}
 
   ngOnInit(): void {
@@ -94,6 +96,7 @@ export class TrackComponent implements OnInit, OnDestroy {
     this.playerService.currentTrackInfo$.next(this._track);
     this.playerService.trackContext$.next(this.trackContext);
     this.playTrack.emit();
+    this.lastTracksService.updateLastTracksForCurrentUser(this._track.id);
   }
 
   controlPlayerCurrentTrack(): void {
@@ -170,4 +173,8 @@ export class TrackComponent implements OnInit, OnDestroy {
         }
       );
   }
+
+  // addTrackInSupabase(): void {
+  //   this.lastTracksService.dataRequest(this.track.id);
+  // }
 }
