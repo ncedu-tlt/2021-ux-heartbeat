@@ -18,7 +18,14 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { ThemeStateService } from "src/app/services/theme-state.service";
 import { DomSanitizer } from "@angular/platform-browser";
-import { interval, Observable, Subject, takeUntil } from "rxjs";
+import {
+  catchError,
+  interval,
+  Observable,
+  Subject,
+  takeUntil,
+  throwError
+} from "rxjs";
 import { RepeatStateEnum } from "../../models/repeat-state.enum";
 import {
   ItemsTrackModel,
@@ -26,6 +33,7 @@ import {
 } from "../../models/new-api-models/top-tracks-artist-by-id.model";
 import { AlbumTracksModel } from "../../models/new-api-models/album-by-id.model";
 import { NewSearchModel } from "../../models/new-api-models/search.model";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 type TrackList =
   | ItemsTrackModel
@@ -67,6 +75,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     public playerService: PlayerService,
     public authService: AuthService,
     public apiService: ApiService,
+    public error: ErrorHandlingService,
     private notificationService: NzNotificationService,
     public themeStateService: ThemeStateService,
     public domSanitizer: DomSanitizer
@@ -128,7 +137,13 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.checkTrackIntoUserFavoriteList(id);
     this.apiService
       .getCurrentUsersPlaylists()
-      .pipe(takeUntil(this.die$))
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
       .subscribe((playlists: CurrentUsersPlaylistModel) => {
         this.userPlaylists = playlists.items.filter(playlist => {
           return this.authService.getUserData()?.[0].id === playlist.owner.id;
@@ -139,60 +154,66 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   addTrackIntoPlaylist(playlistId: string, trackId: string): void {
     this.apiService
       .addItemsToPlaylist(playlistId, trackId)
-      .pipe(takeUntil(this.die$))
-      .subscribe(
-        () => {
-          this.notificationService.blank(
-            "Добавление трека",
-            "Трек успешно добавлен"
-          );
-        },
-        (e: ErrorFromSpotifyModel) => {
-          this.notificationService.blank("Ошибка", e.error.error.message);
-        }
-      );
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(() => {
+        this.notificationService.blank(
+          "Добавление трека",
+          "Трек успешно добавлен"
+        );
+      });
   }
 
   removeTrackFromFavoriteList(id: string): void {
     this.apiService
       .deleteTracksForCurrentUser(id)
-      .pipe(takeUntil(this.die$))
-      .subscribe(
-        () => {
-          this.isFavorite = false;
-          this.notificationService.blank(
-            "Удаление трека",
-            "Трек успешно удален"
-          );
-        },
-        (e: ErrorFromSpotifyModel) => {
-          this.notificationService.blank("Ошибка", e.error.error.message);
-        }
-      );
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(() => {
+        this.isFavorite = false;
+        this.notificationService.blank("Удаление трека", "Трек успешно удален");
+      });
   }
 
   addTrackIntoFavoriteList(id: string): void {
     this.apiService
       .putSaveTracksForCurrentUser(id)
-      .pipe(takeUntil(this.die$))
-      .subscribe(
-        () => {
-          this.isFavorite = true;
-          this.notificationService.blank(
-            "Добавление трека",
-            "Трек успешно добавлен"
-          );
-        },
-        (e: ErrorFromSpotifyModel) => {
-          this.notificationService.blank("Ошибка", e.error.error.message);
-        }
-      );
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(() => {
+        this.isFavorite = true;
+        this.notificationService.blank(
+          "Добавление трека",
+          "Трек успешно добавлен"
+        );
+      });
   }
 
   checkTrackIntoUserFavoriteList(id: string): void {
     this.apiService
       .checkUsersSavedTracks(id)
-      .pipe(takeUntil(this.die$))
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
       .subscribe(existence => {
         this.isFavorite = existence[0];
       });

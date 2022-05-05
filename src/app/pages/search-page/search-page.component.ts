@@ -21,6 +21,7 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ThemeStateService } from "src/app/services/theme-state.service";
 import { FollowedArtistModel } from "../../models/new-api-models/followed-artist.model";
 import { PlayerService } from "../../services/player.service";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 @Component({
   selector: "hb-search-page",
@@ -45,7 +46,8 @@ export class SearchPageComponent {
     public playerService: PlayerService,
     private convert: ConverterService,
     private notificationService: NzNotificationService,
-    public themeStateService: ThemeStateService
+    public themeStateService: ThemeStateService,
+    public error: ErrorHandlingService
   ) {
     this.searchStateService
       .getSearchState()
@@ -86,17 +88,11 @@ export class SearchPageComponent {
     this.api
       .searchForItem(this.key, 2, this.offset)
       .pipe(
+        takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          if (error.status === 401) {
-            this.notificationService.error(
-              "Ошибка авторизации",
-              "Вам необходимо пройти авторизацию заново",
-              { nzDuration: 0 }
-            );
-          }
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
-        }),
-        takeUntil(this.die$)
+        })
       )
       .subscribe(itemsToArtists => {
         this.artists.push(...itemsToArtists.artists.items);
@@ -113,17 +109,11 @@ export class SearchPageComponent {
     this.api
       .searchForItem(this.key, 6, this.offset)
       .pipe(
+        takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          if (error.status === 401) {
-            this.notificationService.error(
-              "Ошибка авторизации",
-              "Вам необходимо пройти авторизацию заново",
-              { nzDuration: 0 }
-            );
-          }
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
-        }),
-        takeUntil(this.die$)
+        })
       )
       .subscribe(itemsToTracks => {
         const itemsForConvert =
@@ -146,13 +136,7 @@ export class SearchPageComponent {
     ])
       .pipe(
         catchError((error: ErrorFromSpotifyModel) => {
-          if (error.status === 401) {
-            this.notificationService.error(
-              "Ошибка авторизации",
-              "Вам необходимо пройти авторизацию заново",
-              { nzDuration: 0 }
-            );
-          }
+          this.error.showErrorNotification(error);
           if (
             error.status === 400 &&
             error.error.error.message === "No search query"

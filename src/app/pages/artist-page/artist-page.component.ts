@@ -18,6 +18,7 @@ import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 import { PlayerService } from "../../services/player.service";
 import { ThemeStateService } from "../../services/theme-state.service";
 import { ConverterService } from "../../services/converter.service";
+import { ErrorHandlingService } from "../../services/error-handling.service";
 
 @Component({
   selector: "hb-artist-page",
@@ -41,6 +42,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private notificationService: NzNotificationService,
     private playerService: PlayerService,
+    public error: ErrorHandlingService,
     public themeStateService: ThemeStateService,
     public convert: ConverterService
   ) {}
@@ -56,7 +58,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -87,7 +89,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -106,7 +108,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
@@ -130,7 +132,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
-          this.notificationService.error("Ошибка", error.error.error.message);
+          this.error.showErrorNotification(error);
           return throwError(() => new Error(error.error.error.message));
         })
       )
