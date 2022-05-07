@@ -1,0 +1,26 @@
+<div [ngClass]="{ 'track' : !this.themeStateService.getIsDarkTheme() , 'track-dark' : this.themeStateService.getIsDarkTheme()  }">
+  <div class="track-contain">
+    <div [ngStyle]="{'background-image': 'url(' + (_track?.preview_url ? _track?.album!.images[0].url : '../../../assets/image/default-artist-image.png')}"
+         class="track-contain__img"
+         (click)="_track?.preview_url ? controlPlayerCurrentTrack() : notificationCall()">
+      <img src="{{isPlay ? 'assets/svg/pause-track.svg' : 'assets/svg/play-track.svg'}}" alt="album">
+    </div>
+    <div class="track-contain-info">
+      <p *ngIf="hasAlbumName(this._track)" class="track-contain-info__album" nz-tooltip="" [nzTooltipMouseEnterDelay]="0.7"
+         nzTooltipTitle="{{_track.name}}" nzTooltipPlacement="topLeft">
+        {{this._track.album?.name}}
+      </p>
+      <div class="track-contain-info__artist">
+        <div class="track-contain-info__name" nz-tooltip="" [nzTooltipMouseEnterDelay]="0.7"
+             nzTooltipTitle="{{_track.name}}" nzTooltipPlacement="topLeft">
+          {{_track.name}}</div>
+        <p
+          *ngIf="artistNameList" class="track-contain-info__artists" nz-tooltip="" [nzTooltipMouseEnterDelay]="0.7"
+          nzTooltipTitle="{{artistNameList}}" nzTooltipPlacement="topLeft">
+          {{artistNameList}}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="track-time">{{trackTime | timeFormat}}</div>
+</div>

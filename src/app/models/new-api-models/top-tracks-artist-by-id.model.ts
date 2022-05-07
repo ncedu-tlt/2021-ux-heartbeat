@@ -24,6 +24,18 @@ export interface PlaylistTrackModel {
   track: TopTracksModel;
 }
 
+export interface NewUserTopTracksModel {
+  items: TopTracksModel[];
+}
+
+export interface NewUserTopTracksItemsModel {
+  items: NewUserTopTrackItemsModel[];
+}
+
+export interface NewUserTopTrackItemsModel {
+  track: TopTracksModel;
+}
+
 export interface TopTracksModel extends CommonTrackInfo {
   album: AlbumTopTracksModel;
   artists: CommonInfoAboutArtist[];

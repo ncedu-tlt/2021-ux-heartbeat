@@ -55,6 +55,8 @@ import { RecommendationCardComponent } from "src/app/components/recomendation-ca
 import { NzResultModule } from "ng-zorro-antd/result";
 import { NzMessageModule } from "ng-zorro-antd/message";
 import { AlbumCardComponent } from "./components/album-card/album-card.component";
+import { TrackExtendedComponent } from "./components/track-extended/track-extended.component";
+import { TrackListExtendedComponent } from "./components/track-list-extended/track-list-extended.component";
 import { NzUploadModule } from "ng-zorro-antd/upload";
 import { NzInputModule } from "ng-zorro-antd/input";
 import { NzBackTopModule } from "ng-zorro-antd/back-top";
@@ -94,7 +96,11 @@ registerLocaleData(ru);
     PlaylistCardComponent,
     PulselineComponent,
     RecommendationCardComponent,
-    AlbumCardComponent
+    AlbumCardComponent,
+    RecommendationCardComponent,
+    AlbumCardComponent,
+    TrackExtendedComponent,
+    TrackListExtendedComponent
   ],
   imports: [
     BrowserModule,

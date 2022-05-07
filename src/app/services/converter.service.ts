@@ -6,6 +6,8 @@ import {
 } from "../models/new-api-models/album-by-id.model";
 import {
   NewTopArtistTracks,
+  NewUserTopTracksItemsModel,
+  NewUserTopTracksModel,
   TopTracksModel
 } from "../models/new-api-models/top-tracks-artist-by-id.model";
 import { TrackById } from "../models/new-api-models/track-by-id.model";
@@ -35,6 +37,20 @@ export class ConverterService {
       });
     });
 
+    return result;
+  }
+
+  convertTopUserTracksToNewTopUserTracks(userTopTracks: NewUserTopTracksModel) {
+    const result: NewUserTopTracksItemsModel = {
+      items: []
+    };
+    userTopTracks.items.forEach(track => {
+      result.items.push({
+        track: {
+          ...track
+        }
+      });
+    });
     return result;
   }
 

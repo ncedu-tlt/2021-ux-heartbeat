@@ -1,0 +1,58 @@
+@import "../../../assets/styles/colors";
+
+.track, .track-dark {
+  display: flex;
+  align-items: center;
+  width: 300px;
+  height: 140px;
+  margin: 0 50px 50px 0;
+
+  &-contain {
+    display: flex;
+    justify-content: space-between;
+
+    &__img {
+      min-height: 140px;
+      min-width: 140px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      border-radius: 5px;
+
+      img {
+        margin: 48px 0 0 110px;
+        position: absolute;
+      }
+    }
+
+    &-info {
+      align-self: center;
+      margin-left: 15px;
+      max-height: 67px;
+
+      &__album {
+        font-size: 13px;
+        font-weight: 100;
+        margin: 0;
+      }
+
+      &__artist {
+        div {
+          font-size: 18px;
+        }
+        p {
+          font-size: 18px;
+          font-weight: 100;
+        }
+      }
+    }
+  }
+  &-time {
+    margin: 95px 0 0 15px;
+    color: @white;
+    position: absolute;
+  }
+}
+

@@ -1,2 +1,41 @@
-<h1 routerLink="/">USER PROFILE</h1>
-<hb-track-list></hb-track-list>
+<div *ngIf="!isLoading" [ngClass]="{ 'user-profile__wrapper' : !this.themeStateService.getIsDarkTheme() , 'user-profile__wrapper-dark' : this.themeStateService.getIsDarkTheme() }">
+  <div class="user-info">
+    <div *ngIf="this.userImage" class="user-info__img" [style.background-image]="'url(' + this.userImage + ')'"></div>
+    <i *ngIf="!this.userImage" [ngClass]="{ 'user-info__profile-null-image' : !this.themeStateService.getIsDarkTheme() , 'user-info__profile-null-image-dark' : this.themeStateService.getIsDarkTheme() }" nz-icon nzType="user" nzTheme="outline"></i>
+    <div class="user-info__profile">
+      <p class="user-info__profile-text">Профиль</p>
+      <p class="user-info__profile-name">{{user.display_name}}</p>
+    </div>
+    <div class="user-info__subscriptions">
+      <p class="user-info__subscriptions-count">{{this.followings}}</p>
+      <p class="user-info__subscriptions-text">подписок</p>
+    </div>
+    <div class="user-info__status">
+      <p class="user-info__status-text">подписка</p>
+      <p *ngIf="user.product == 'premium'" class="user-info__status-state">Премиум</p>
+      <p *ngIf="user.product != 'premium'" class="user-info__status-state">Бесплатная</p>
+    </div>
+  </div>
+  <div class="top-artists">
+    <div class="top-artists__title">
+      <p class="top-artists__title-text">Топ исполнителей этого месяца</p>
+      <div class="title__line"></div>
+    </div>
+    <div class="top-artists__list">
+      <div *ngFor="let artist of artists" class="top-artists__item">
+        <div class="top-artists__img" [routerLink]="['/artist', artist.id]" [style.background-image]="this.artist.images[0]
+                                                               ? 'url(' + artist.images[0].url + ')'
+                                                               : 'url(./assets/image/undefined_album_image.jpg)'"></div>
+        <p class="top-artists__name">{{artist.name}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="top-tracks">
+    <div class="top-tracks__title">
+      <p class="top-tracks__title-text">Топ треков этого месяца</p>
+      <div class="title__line"></div>
+    </div>
+    <hb-track-list-extended *ngIf="tracks" [trackList]="tracks" [trackContext]="trackContext"></hb-track-list-extended>
+  </div>
+</div>
+<hb-loader *ngIf="isLoading"></hb-loader>
