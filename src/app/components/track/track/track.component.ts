@@ -177,8 +177,4 @@ export class TrackComponent implements OnInit, OnDestroy {
         this.notification.blank("Удаление трека", "Трек успешно удален");
       });
   }
-
-  // addTrackInSupabase(): void {
-  //   this.lastTracksService.dataRequest(this.track.id);
-  // }
 }
