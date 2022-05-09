@@ -28,6 +28,7 @@ import {
   ItemUserPlaylistModel
 } from "src/app/models/new-api-models/current-users-playlist.model";
 import { ErrorFromSpotifyModel } from "src/app/models/error.model";
+import { LastTracksService } from "src/app/services/last-tracks.service";
 import { ErrorHandlingService } from "../../../services/error-handling.service";
 
 @Component({
@@ -61,8 +62,9 @@ export class TrackComponent implements OnInit, OnDestroy {
     public apiService: ApiService,
     public notification: NzNotificationService,
     public authService: AuthService,
-    public error: ErrorHandlingService,
-    public themeStateService: ThemeStateService
+    public themeStateService: ThemeStateService,
+    public lastTracksService: LastTracksService,
+    public error: ErrorHandlingService
   ) {}
 
   ngOnInit(): void {
@@ -96,6 +98,7 @@ export class TrackComponent implements OnInit, OnDestroy {
     this.playerService.currentTrackInfo$.next(this._track);
     this.playerService.trackContext$.next(this.trackContext);
     this.playTrack.emit();
+    this.lastTracksService.updateLastTracksForCurrentUser(this._track.id);
   }
 
   controlPlayerCurrentTrack(): void {
