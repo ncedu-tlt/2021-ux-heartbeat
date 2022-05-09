@@ -17,7 +17,6 @@ import {
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { ThemeStateService } from "src/app/services/theme-state.service";
-import { DomSanitizer } from "@angular/platform-browser";
 import {
   catchError,
   interval,
@@ -60,7 +59,6 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   public trackList!: TrackList;
   public isFavorite = false;
   public modalVisible = false;
-  public artistsNames: string | undefined = "";
   public repeatState = RepeatStateEnum;
 
   public movingLineCurrentPosition = 0;
@@ -77,8 +75,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     public apiService: ApiService,
     public error: ErrorHandlingService,
     private notificationService: NzNotificationService,
-    public themeStateService: ThemeStateService,
-    public domSanitizer: DomSanitizer
+    public themeStateService: ThemeStateService
   ) {}
 
   ngOnInit(): void {
