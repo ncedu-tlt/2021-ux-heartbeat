@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { PostgrestResponse, SupabaseClient } from "@supabase/supabase-js";
+import { LastTrackModel } from "../models/last-track.model";
 
 @Injectable({
   providedIn: "root"
@@ -12,8 +13,8 @@ export class LastTrackService {
     this.userId = this.supabase.auth.user()?.id;
   }
 
-  async checkLastTrack(): Promise<(number | string)[] | null> {
-    const { data }: PostgrestResponse<number | string> = await this.supabase
+  async checkLastTrack(): Promise<LastTrackModel[] | null> {
+    const { data }: PostgrestResponse<LastTrackModel> = await this.supabase
       .from("last_track")
       .select("*")
       .eq("user_id", this.userId);
@@ -27,8 +28,8 @@ export class LastTrackService {
 
   async saveInfoAboutLastTrack(
     trackId: string,
-    trackPosition: number,
-    playlistId: string
+    playlistId: string,
+    context: string
   ): Promise<void> {
     const lastTrack = await this.checkLastTrack();
     if (!lastTrack) {
@@ -36,19 +37,19 @@ export class LastTrackService {
         {
           user_id: this.userId,
           track_id: trackId,
-          track_position: trackPosition,
-          playlist_id: playlistId
+          playlist_id: playlistId,
+          context: context
         }
       ]);
       return;
     }
 
     await this.supabase
-      .from("last-track")
+      .from("last_track")
       .update({
         track_id: trackId,
-        track_position: trackPosition,
-        playlist_id: playlistId
+        playlist_id: playlistId,
+        context: context
       })
       .eq("user_id", this.userId);
   }

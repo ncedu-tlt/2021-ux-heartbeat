@@ -4,7 +4,10 @@ import {
   interval,
   Observable,
   Subject,
-  takeUntil
+  takeUntil,
+  combineLatest,
+  catchError,
+  throwError
 } from "rxjs";
 import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
 import {
@@ -23,6 +26,11 @@ import { TrackLaunchContextEnum } from "../models/track-launch-context.enum";
 import { NewSearchModel } from "../models/new-api-models/search.model";
 import { repeatStatesGeneratorUtils } from "../utils/repeat-states-generator.utils";
 import { RepeatStateEnum } from "../models/repeat-state.enum";
+import { LastTrackService } from "./last-track.service";
+import { ApiService } from "./api.service";
+import { ErrorFromSpotifyModel } from "../models/error.model";
+import { ErrorHandlingService } from "./error-handling.service";
+import { LastTrackModel } from "../models/last-track.model";
 
 type TrackList =
   | ItemsTrackModel
@@ -49,6 +57,7 @@ export class PlayerService {
   private stop$: Subject<void> = new Subject();
   private die$: Subject<void> = new Subject();
 
+  private lastTrack!: LastTrackModel[] | null;
   public currentTrackInfo$ = new BehaviorSubject<Track | null>(null);
   private currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<TrackList | null>(null);
@@ -65,7 +74,11 @@ export class PlayerService {
 
   public repeatGen: Generator<RepeatStateEnum> = repeatStatesGeneratorUtils()();
 
-  constructor() {
+  constructor(
+    private lastTrackService: LastTrackService,
+    private apiService: ApiService,
+    private error: ErrorHandlingService
+  ) {
     document.addEventListener("click", this.resumeContext);
   }
 
@@ -74,11 +87,18 @@ export class PlayerService {
     document.removeEventListener("click", this.resumeContext);
   };
 
-  createAudioElement(): void {
+  async createAudioElement(): Promise<void> {
     if (!this.player) {
       this.player = new Audio();
       this.context = new AudioContext();
       const analyser = this.context.createAnalyser();
+      this.lastTrack = await this.lastTrackService.checkLastTrack();
+      if (this.lastTrack && this.lastTrack[0].track_id) {
+        this.getLastTrackInfo(
+          this.lastTrack[0].track_id,
+          this.lastTrack[0].playlist_id
+        );
+      }
       this.currentTrackInfo$.pipe(takeUntil(this.die$)).subscribe(track => {
         if (track !== null) {
           this.player.src = track.preview_url;
@@ -124,9 +144,39 @@ export class PlayerService {
     }
   }
 
+  getLastTrackInfo(trackId: string, playlistId: string) {
+    combineLatest([
+      this.apiService.getTrackById(trackId),
+      this.apiService.getPlaylistTracks(playlistId)
+    ])
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(
+        ([lastSavedTrack, lastSavedPlaylist]: [
+          lastSavedTrack: TrackById,
+          lastSavedPlaylist: ItemsTrackModel
+        ]) => {
+          this.currentTrackInfo$.next(lastSavedTrack);
+          this.trackList$.next(lastSavedPlaylist);
+        }
+      );
+  }
+
   switchPlayerAction(): void {
     if (!this.currentTrackInfo$.getValue()) {
       return;
+    }
+    if (this.currentTrackInfo$.getValue()) {
+      this.lastTrackService.saveInfoAboutLastTrack(
+        this.currentTrackInfo$.getValue()?.id as string,
+        this.trackContext$.getValue() as string,
+        this.trackContext$.getValue() as string
+      );
     }
     if (this.player.paused) {
       const musicTimer: Observable<number> = interval(1000);
@@ -217,6 +267,13 @@ export class PlayerService {
   }
 
   closeAudioContext(): void {
+    if (this.currentTrackInfo$.getValue()) {
+      this.lastTrackService.saveInfoAboutLastTrack(
+        this.currentTrackInfo$.getValue()?.id as string,
+        this.trackContext$.getValue() as string,
+        this.trackContext$.getValue() as string
+      );
+    }
     this.context.close();
     this.stop$.next();
     this.die$.next();
