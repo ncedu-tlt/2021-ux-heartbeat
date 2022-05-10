@@ -14,12 +14,12 @@ import {
 } from "../../models/new-api-models/current-users-playlist.model";
 import {
   catchError,
+  combineLatest,
   Observable,
   of,
   Subject,
-  throwError,
-  combineLatest,
-  switchMap
+  switchMap,
+  throwError
 } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ApiService } from "../../services/api.service";
@@ -29,6 +29,10 @@ import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { PlaylistModalStateEnum } from "../../models/playlist-modal-state.enum";
 import { ErrorHandlingService } from "../../services/error-handling.service";
+import {
+  TrackLaunchContext,
+  TrackLaunchContextEnum
+} from "../../models/track-launch-context.enum";
 
 @Component({
   selector: "hb-playlists-page",
@@ -39,6 +43,10 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   public playlists: ItemUserPlaylistModel[] = [];
   public playlist!: ItemUserPlaylistModel;
   public tracks!: ItemsTrackModel;
+  public trackListContext: TrackLaunchContext = {
+    id: null,
+    contextType: TrackLaunchContextEnum.PLAYLIST
+  };
   public isLoading = true;
   public isOpen = false;
   private die$ = new Subject<void>();
@@ -111,6 +119,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     this.playlist = playlist;
     this.isOpen = true;
     this.selectPlaylist(playlist.id);
+    this.trackListContext.id = playlist.id;
     setTimeout(
       () => this.openedPlaylist.nativeElement.scrollIntoView(true),
       150

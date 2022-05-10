@@ -22,7 +22,7 @@ import {
   NewAlbumTracksModel
 } from "../models/new-api-models/album-by-id.model";
 import { TrackById } from "../models/new-api-models/track-by-id.model";
-import { TrackLaunchContextEnum } from "../models/track-launch-context.enum";
+import { TrackLaunchContext } from "../models/track-launch-context.enum";
 import { NewSearchModel } from "../models/new-api-models/search.model";
 import { repeatStatesGeneratorUtils } from "../utils/repeat-states-generator.utils";
 import { RepeatStateEnum } from "../models/repeat-state.enum";
@@ -63,7 +63,7 @@ export class PlayerService {
   public trackList$ = new BehaviorSubject<TrackList | null>(null);
   public shuffleTrackList!: TrackList;
   public trackContext$ = new BehaviorSubject<
-    string | TrackLaunchContextEnum | null | undefined
+    TrackLaunchContext | null | undefined
   >(null);
 
   public isPlay$ = new BehaviorSubject<boolean>(false);
@@ -174,8 +174,8 @@ export class PlayerService {
     if (this.currentTrackInfo$.getValue()) {
       this.lastTrackService.saveInfoAboutLastTrack(
         this.currentTrackInfo$.getValue()?.id as string,
-        this.trackContext$.getValue() as string,
-        this.trackContext$.getValue() as string
+        this.trackContext$.getValue()?.id as string,
+        this.trackContext$.getValue()?.contextType as string
       );
     }
     if (this.player.paused) {
@@ -270,8 +270,8 @@ export class PlayerService {
     if (this.currentTrackInfo$.getValue()) {
       this.lastTrackService.saveInfoAboutLastTrack(
         this.currentTrackInfo$.getValue()?.id as string,
-        this.trackContext$.getValue() as string,
-        this.trackContext$.getValue() as string
+        this.trackContext$.getValue()?.id as string,
+        this.trackContext$.getValue()?.contextType as string
       );
     }
     this.context.close();

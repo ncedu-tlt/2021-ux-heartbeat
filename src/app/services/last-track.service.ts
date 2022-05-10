@@ -28,7 +28,7 @@ export class LastTrackService {
 
   async saveInfoAboutLastTrack(
     trackId: string,
-    playlistId: string,
+    trackListId: string,
     context: string
   ): Promise<void> {
     const lastTrack = await this.checkLastTrack();
@@ -37,7 +37,7 @@ export class LastTrackService {
         {
           user_id: this.userId,
           track_id: trackId,
-          playlist_id: playlistId,
+          trackList_id: trackListId,
           context: context
         }
       ]);
@@ -48,7 +48,7 @@ export class LastTrackService {
       .from("last_track")
       .update({
         track_id: trackId,
-        playlist_id: playlistId,
+        trackList_id: trackListId,
         context: context
       })
       .eq("user_id", this.userId);

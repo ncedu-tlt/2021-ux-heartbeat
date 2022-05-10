@@ -33,6 +33,7 @@ import {
 import { AlbumTracksModel } from "../../models/new-api-models/album-by-id.model";
 import { NewSearchModel } from "../../models/new-api-models/search.model";
 import { ErrorHandlingService } from "../../services/error-handling.service";
+import { TrackLaunchContext } from "../../models/track-launch-context.enum";
 
 type TrackList =
   | ItemsTrackModel
@@ -55,7 +56,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   public drawerVisible = false;
   public actions = SwitchPlayerActionEnum;
   public userPlaylists: ItemUserPlaylistModel[] = [];
-  public trackContext!: string;
+  public trackContext!: TrackLaunchContext;
   public trackList!: TrackList;
   public isFavorite = false;
   public modalVisible = false;
@@ -260,7 +261,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.playerService.trackList$.getValue()
       ) {
         this.trackContext =
-          this.playerService.trackContext$.getValue() as string;
+          this.playerService.trackContext$.getValue() as TrackLaunchContext;
         this.trackList = bool
           ? this.playerService.shuffleTrackList
           : (this.playerService.trackList$.getValue() as TrackList);

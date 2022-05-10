@@ -8,7 +8,10 @@ import {
   ItemUserPlaylistModel
 } from "src/app/models/new-api-models/current-users-playlist.model";
 import { ItemsTrackModel } from "src/app/models/new-api-models/top-tracks-artist-by-id.model";
-import { TrackLaunchContextEnum } from "src/app/models/track-launch-context.enum";
+import {
+  TrackLaunchContext,
+  TrackLaunchContextEnum
+} from "src/app/models/track-launch-context.enum";
 import { ApiService } from "src/app/services/api.service";
 import { AuthService } from "src/app/services/auth.service";
 import { PlayerService } from "src/app/services/player.service";
@@ -23,7 +26,10 @@ import { ErrorHandlingService } from "../../services/error-handling.service";
 })
 export class FavoriteTracksPageComponent {
   public favorites!: ItemsTrackModel;
-  public trackContext = TrackLaunchContextEnum.SAVED_TRACKS;
+  public trackListContext: TrackLaunchContext = {
+    id: null,
+    contextType: TrackLaunchContextEnum.SAVED_TRACKS
+  };
   public userPlaylists: ItemUserPlaylistModel[] = [];
   public offset = 0;
   public isLoading = true;

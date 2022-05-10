@@ -38,7 +38,7 @@
           <p class="playlist-tracks__author">{{this.playlist.owner.display_name}}</p>
         </div>
       </div>
-      <hb-track-list *ngIf="this.playlist.images[0]" [trackContext]="this.playlist.id" [trackList]="tracks"
+      <hb-track-list *ngIf="this.playlist.images[0]" [trackContext]="this.trackListContext" [trackList]="tracks"
                      class="tracklist"></hb-track-list>
       <div *ngIf="!this.playlist.images[0]">
         <p>Выбранный вами плейлист пуст.</p>

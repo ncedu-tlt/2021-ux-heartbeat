@@ -1,5 +1,13 @@
 export enum TrackLaunchContextEnum {
   SEARCH_TRACKS = "search",
-  TOP_TRACKS = "artist top tracks",
-  SAVED_TRACKS = "favorite tracks"
+  ARTIST_TOP_TRACKS = "artist top tracks",
+  USER_TOP_TRACKS = "user top tracks",
+  SAVED_TRACKS = "favorite tracks",
+  PLAYLIST = "playlist",
+  ALBUM = "album"
+}
+
+export interface TrackLaunchContext {
+  id: string | null;
+  contextType: TrackLaunchContextEnum;
 }
