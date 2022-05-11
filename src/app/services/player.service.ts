@@ -5,9 +5,9 @@ import {
   Observable,
   Subject,
   takeUntil,
-  combineLatest,
   catchError,
-  throwError
+  throwError,
+  switchMap
 } from "rxjs";
 import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
 import {
@@ -18,11 +18,15 @@ import {
 } from "../models/new-api-models/top-tracks-artist-by-id.model";
 import { SwitchPlayerActionEnum } from "../models/switch-player-action.enum";
 import {
+  AlbumByIdModel,
   AlbumTracksModel,
   NewAlbumTracksModel
 } from "../models/new-api-models/album-by-id.model";
 import { TrackById } from "../models/new-api-models/track-by-id.model";
-import { TrackLaunchContext } from "../models/track-launch-context.enum";
+import {
+  TrackLaunchContext,
+  TrackLaunchContextEnum
+} from "../models/track-launch-context.enum";
 import { NewSearchModel } from "../models/new-api-models/search.model";
 import { repeatStatesGeneratorUtils } from "../utils/repeat-states-generator.utils";
 import { RepeatStateEnum } from "../models/repeat-state.enum";
@@ -31,6 +35,7 @@ import { ApiService } from "./api.service";
 import { ErrorFromSpotifyModel } from "../models/error.model";
 import { ErrorHandlingService } from "./error-handling.service";
 import { LastTrackModel } from "../models/last-track.model";
+import { ConverterService } from "./converter.service";
 
 type TrackList =
   | ItemsTrackModel
@@ -71,13 +76,15 @@ export class PlayerService {
   public isShuffle$ = new BehaviorSubject<boolean>(false);
   private isVolume = true;
   private savedVolume = 100;
+  private savedAlbum!: AlbumByIdModel;
 
   public repeatGen: Generator<RepeatStateEnum> = repeatStatesGeneratorUtils()();
 
   constructor(
     private lastTrackService: LastTrackService,
     private apiService: ApiService,
-    private error: ErrorHandlingService
+    private error: ErrorHandlingService,
+    private convertService: ConverterService
   ) {
     document.addEventListener("click", this.resumeContext);
   }
@@ -94,10 +101,7 @@ export class PlayerService {
       const analyser = this.context.createAnalyser();
       this.lastTrack = await this.lastTrackService.checkLastTrack();
       if (this.lastTrack && this.lastTrack[0].track_id) {
-        this.getLastTrackInfo(
-          this.lastTrack[0].track_id,
-          this.lastTrack[0].playlist_id
-        );
+        this.getLastTrackInfo(this.lastTrack[0]);
       }
       this.currentTrackInfo$.pipe(takeUntil(this.die$)).subscribe(track => {
         if (track !== null) {
@@ -120,6 +124,11 @@ export class PlayerService {
               this.mixCurrentTrackList();
             }
           }
+          this.lastTrackService.saveInfoAboutLastTrack(
+            this.currentTrackInfo$.getValue()?.id as string,
+            this.trackContext$.getValue()?.id as string,
+            this.trackContext$.getValue()?.contextType as string
+          );
         });
       this.isShuffle$.pipe(takeUntil(this.die$)).subscribe(isShuffle => {
         if (isShuffle && this.trackList$.getValue()) {
@@ -144,11 +153,9 @@ export class PlayerService {
     }
   }
 
-  getLastTrackInfo(trackId: string, playlistId: string) {
-    combineLatest([
-      this.apiService.getTrackById(trackId),
-      this.apiService.getPlaylistTracks(playlistId)
-    ])
+  getLastTrackInfo(lastTrack: LastTrackModel): void {
+    this.apiService
+      .getTrackById(lastTrack.track_id)
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
@@ -156,27 +163,113 @@ export class PlayerService {
           return throwError(() => new Error(error.error.error.message));
         })
       )
-      .subscribe(
-        ([lastSavedTrack, lastSavedPlaylist]: [
-          lastSavedTrack: TrackById,
-          lastSavedPlaylist: ItemsTrackModel
-        ]) => {
-          this.currentTrackInfo$.next(lastSavedTrack);
-          this.trackList$.next(lastSavedPlaylist);
-        }
-      );
+      .subscribe(lastSavedTrack => {
+        this.currentTrackInfo$.next(lastSavedTrack);
+      });
+
+    switch (lastTrack.context) {
+      case TrackLaunchContextEnum.PLAYLIST:
+        this.apiService
+          .getPlaylistTracks(lastTrack.trackList_id)
+          .pipe(
+            takeUntil(this.die$),
+            catchError((error: ErrorFromSpotifyModel) => {
+              this.error.showErrorNotification(error);
+              return throwError(() => new Error(error.error.error.message));
+            })
+          )
+          .subscribe(lastSavedPlaylist => {
+            this.trackList$.next(lastSavedPlaylist);
+          });
+        break;
+
+      case TrackLaunchContextEnum.SEARCH_TRACKS:
+        this.trackList$.next(null);
+        break;
+
+      case TrackLaunchContextEnum.SAVED_TRACKS:
+        this.apiService
+          .getUsersSavedTracks(0, 100)
+          .pipe(
+            takeUntil(this.die$),
+            catchError((error: ErrorFromSpotifyModel) => {
+              this.error.showErrorNotification(error);
+              return throwError(() => new Error(error.error.error.message));
+            })
+          )
+          .subscribe(userSavedTracks => {
+            this.trackList$.next(userSavedTracks);
+          });
+        break;
+
+      case TrackLaunchContextEnum.ALBUM:
+        this.apiService
+          .getAlbumByID(lastTrack.trackList_id)
+          .pipe(
+            switchMap(album => {
+              this.savedAlbum = album;
+              return this.apiService.getAlbumsTracksById(
+                lastTrack.trackList_id
+              );
+            })
+          )
+          .subscribe(albumTracks => {
+            this.trackList$.next(
+              this.convertService.convertAlbumModelsToNewTracksModels(
+                albumTracks,
+                lastTrack.trackList_id,
+                this.savedAlbum.images
+              )
+            );
+          });
+        this.apiService
+          .getAlbumsTracksById(lastTrack.trackList_id)
+          .pipe(
+            takeUntil(this.die$),
+            catchError((error: ErrorFromSpotifyModel) => {
+              this.error.showErrorNotification(error);
+              return throwError(() => new Error(error.error.error.message));
+            })
+          )
+          .subscribe(albumTracks => {
+            this.trackList$.next(
+              this.convertService.convertAlbumModelsToNewTracksModels(
+                albumTracks,
+                lastTrack.trackList_id,
+                []
+              )
+            );
+          });
+        break;
+
+      case TrackLaunchContextEnum.ARTIST_TOP_TRACKS:
+        this.apiService
+          .getArtistsTopTracks(lastTrack.trackList_id)
+          .pipe(
+            takeUntil(this.die$),
+            catchError((error: ErrorFromSpotifyModel) => {
+              this.error.showErrorNotification(error);
+              return throwError(() => new Error(error.error.error.message));
+            })
+          )
+          .subscribe(artistTopTracks => {
+            this.trackList$.next(
+              this.convertService.convertTopArtistTracksToNewTopArtistTracks(
+                artistTopTracks.tracks
+              )
+            );
+          });
+        break;
+
+      default:
+        this.trackList$.next(null);
+        break;
+    }
   }
 
   switchPlayerAction(): void {
     if (!this.currentTrackInfo$.getValue()) {
       return;
-    }
-    if (this.currentTrackInfo$.getValue()) {
-      this.lastTrackService.saveInfoAboutLastTrack(
-        this.currentTrackInfo$.getValue()?.id as string,
-        this.trackContext$.getValue()?.id as string,
-        this.trackContext$.getValue()?.contextType as string
-      );
     }
     if (this.player.paused) {
       const musicTimer: Observable<number> = interval(1000);
@@ -267,13 +360,13 @@ export class PlayerService {
   }
 
   closeAudioContext(): void {
-    if (this.currentTrackInfo$.getValue()) {
-      this.lastTrackService.saveInfoAboutLastTrack(
-        this.currentTrackInfo$.getValue()?.id as string,
-        this.trackContext$.getValue()?.id as string,
-        this.trackContext$.getValue()?.contextType as string
-      );
-    }
+    // if (this.currentTrackInfo$.getValue()) {
+    //   this.lastTrackService.saveInfoAboutLastTrack(
+    //     this.currentTrackInfo$.getValue()?.id as string,
+    //     this.trackContext$.getValue()?.id as string,
+    //     this.trackContext$.getValue()?.contextType as string
+    //   );
+    // }
     this.context.close();
     this.stop$.next();
     this.die$.next();
