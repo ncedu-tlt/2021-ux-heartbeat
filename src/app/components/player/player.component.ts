@@ -33,7 +33,10 @@ import {
 import { AlbumTracksModel } from "../../models/new-api-models/album-by-id.model";
 import { NewSearchModel } from "../../models/new-api-models/search.model";
 import { ErrorHandlingService } from "../../services/error-handling.service";
-import { TrackLaunchContext } from "../../models/track-launch-context.enum";
+import {
+  TrackLaunchContext,
+  TrackLaunchContextEnum
+} from "../../models/track-launch-context.enum";
 
 type TrackList =
   | ItemsTrackModel
@@ -257,7 +260,8 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   handleOpen(): void {
     this.playerService.isShuffle$.subscribe(bool => {
       if (
-        this.playerService.trackContext$.getValue() &&
+        this.playerService.trackContext$.getValue()?.contextType !==
+          TrackLaunchContextEnum.SEARCH_TRACKS &&
         this.playerService.trackList$.getValue()
       ) {
         this.trackContext =
@@ -270,7 +274,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.modalVisible = false;
       }
     });
-    if (this.playerService.currentTrackInfo$.value !== null) {
+    if (this.playerService.currentTrackInfo$.getValue()) {
       document.body.style.overflow = "hidden";
     }
   }
