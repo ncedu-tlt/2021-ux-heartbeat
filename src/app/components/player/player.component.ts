@@ -270,13 +270,11 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
           ? this.playerService.shuffleTrackList
           : (this.playerService.trackList$.getValue() as TrackList);
         this.modalVisible = true;
+        document.body.style.overflow = "hidden";
       } else {
         this.modalVisible = false;
       }
     });
-    if (this.playerService.currentTrackInfo$.getValue()) {
-      document.body.style.overflow = "hidden";
-    }
   }
 
   handleCancel(): void {

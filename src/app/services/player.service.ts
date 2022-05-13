@@ -189,7 +189,7 @@ export class PlayerService {
 
       case TrackLaunchContextEnum.SAVED_TRACKS:
         this.apiService
-          .getUsersSavedTracks(0, 100)
+          .getUsersSavedTracks(0, 50)
           .pipe(
             takeUntil(this.die$),
             catchError((error: ErrorFromSpotifyModel) => {
@@ -256,6 +256,25 @@ export class PlayerService {
             this.trackList$.next(
               this.convertService.convertTopArtistTracksToNewTopArtistTracks(
                 artistTopTracks.tracks
+              )
+            );
+          });
+        break;
+
+      case TrackLaunchContextEnum.USER_TOP_TRACKS:
+        this.apiService
+          .getUserTopTracks()
+          .pipe(
+            takeUntil(this.die$),
+            catchError((error: ErrorFromSpotifyModel) => {
+              this.error.showErrorNotification(error);
+              return throwError(() => new Error(error.error.error.message));
+            })
+          )
+          .subscribe(userTopTracks => {
+            this.trackList$.next(
+              this.convertService.convertTopUserTracksToNewTopUserTracks(
+                userTopTracks
               )
             );
           });
