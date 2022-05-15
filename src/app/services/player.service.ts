@@ -379,13 +379,6 @@ export class PlayerService {
   }
 
   closeAudioContext(): void {
-    // if (this.currentTrackInfo$.getValue()) {
-    //   this.lastTrackService.saveInfoAboutLastTrack(
-    //     this.currentTrackInfo$.getValue()?.id as string,
-    //     this.trackContext$.getValue()?.id as string,
-    //     this.trackContext$.getValue()?.contextType as string
-    //   );
-    // }
     this.context.close();
     this.stop$.next();
     this.die$.next();
