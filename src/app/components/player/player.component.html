@@ -7,8 +7,7 @@
   <div class="player" *ngIf="!drawerVisible">
     <div class="player__current-track" *ngIf="player.track"
          (click)="openPlayerControlOnMobile(player.track.id)">
-      <img [routerLink]="['/album', player.track.album!.id]"
-           src="{{player.track.album!.images[0].url}}" alt="#">
+      <img style="cursor: default" src="{{player.track.album!.images[0].url}}" alt="#">
       <div class="player__info-about-track">
         <div class="player__artists"
              [ngStyle]="{'transform': 'translateX(' + movingLineCurrentPosition + 'px )', 'width': ARTIST_NAMES_BLOCK_WIDTH + 'px'}"
