@@ -14,6 +14,11 @@
     justify-content: space-between;
     align-items: center;
 
+    @media screen and (max-width: 760px) {
+      flex-direction: column;
+      height: auto;
+    }
+
     .user-info__img {
       width: 120px;
       height: 120px;
@@ -47,13 +52,17 @@
 
     .user-info__profile {
       max-width: 185px;
-      height: 56px;
 
       .user-info__profile-text {
         line-height: 1.15em;
         margin: 0;
         font-weight: 100;
         font-size: 12px;
+
+        @media screen and (max-width: 760px) {
+          margin: 15px 0 15px 0;
+          text-align: center;
+        }
       }
 
       .user-info__profile-name {
@@ -65,12 +74,19 @@
 
     .user-info__subscriptions {
       width: 62px;
-      height: 46px;
+
+      @media screen and ( max-width: 760px ) {
+        margin: 15px 0 15px 0;
+      }
 
       .user-info__subscriptions-count {
         margin: 0;
         font-size: 24px;
         line-height: 1.15em;
+
+        @media screen and (max-width: 760px) {
+          text-align: center;
+        }
       }
 
       .user-info__subscriptions-text {
@@ -78,6 +94,10 @@
         margin: 0;
         font-weight: 100;
         font-size: 13px;
+
+        @media screen and ( max-width: 760px ) {
+          text-align: center;
+        }
       }
     }
 
@@ -90,6 +110,10 @@
         margin: 0;
         font-weight: 100;
         font-size: 13px;
+
+        @media screen and (max-width: 760px) {
+          text-align: center;
+        }
       }
 
       .user-info__status-state {

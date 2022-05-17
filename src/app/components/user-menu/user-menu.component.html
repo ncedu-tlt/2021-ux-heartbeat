@@ -1,5 +1,5 @@
 <p [ngClass]="{ 'user-menu__profile-name' : !this.themeStateService.getIsDarkTheme() , 'user-menu__profile-name-dark' : this.themeStateService.getIsDarkTheme()  }" > {{userName}}</p>
-<div *ngIf="imageUrl" [ngStyle]="{'background-image': 'url(' + imageUrl + ')','background-position': 'center', 'background-size': 'cover'}" class="user-menu__profile-image"></div>
+<div *ngIf="imageUrl" [ngStyle]="{'background-image': 'url(' + imageUrl + ')','background-position': 'center', 'background-size': 'cover'}" class="user-menu__profile-image" nzTrigger="click" nz-dropdown [nzDropdownMenu]="menu"></div>
 <i *ngIf="!imageUrl" [ngClass]="{ 'user-menu__profile-null-image' : !this.themeStateService.getIsDarkTheme() , 'user-menu__profile-null-image-dark' : this.themeStateService.getIsDarkTheme() }" nz-icon nzType="user" nzTheme="outline" nzTrigger="click" nz-dropdown [nzDropdownMenu]="menu"></i>
 <nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu>

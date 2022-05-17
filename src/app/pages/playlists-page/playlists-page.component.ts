@@ -117,6 +117,12 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     );
   }
 
+  removeTrackFromPlaylist(id: string): void {
+    this.tracks.items = this.tracks.items.filter(
+      element => element.track.id != id
+    );
+  }
+
   public selectPlaylist(id: string): void {
     if (!this.selectedId) {
       this.selectedId = id;
