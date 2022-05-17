@@ -17,7 +17,7 @@ import {
 } from "rxjs";
 import { TrackById } from "../../../models/new-api-models/track-by-id.model";
 import { NewAlbumTracksModel } from "../../../models/new-api-models/album-by-id.model";
-import { TrackLaunchContextEnum } from "../../../models/track-launch-context.enum";
+import { TrackLaunchContext } from "../../../models/track-launch-context.enum";
 import { TopTracksModel } from "../../../models/new-api-models/top-tracks-artist-by-id.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ThemeStateService } from "src/app/services/theme-state.service";
@@ -53,7 +53,7 @@ export class TrackComponent implements OnInit, OnDestroy {
     }, "");
   }
   @Input() public isCard = false;
-  @Input() public trackContext!: string | TrackLaunchContextEnum;
+  @Input() public trackContext!: TrackLaunchContext;
 
   @Output() playTrack = new EventEmitter<void>();
 
@@ -76,11 +76,12 @@ export class TrackComponent implements OnInit, OnDestroy {
       ([currentTrack, isPlay, trackContext]: [
         currentTrack: TrackById | NewAlbumTracksModel | null,
         isPlay: boolean,
-        trackContext: string | TrackLaunchContextEnum | null | undefined
+        trackContext: TrackLaunchContext | null | undefined
       ]) => {
         if (
           currentTrack?.id === this._track?.id &&
-          this.trackContext === trackContext
+          this.trackContext.id === trackContext?.id &&
+          this.trackContext.contextType === trackContext.contextType
         ) {
           this.isPlay = isPlay;
         } else {

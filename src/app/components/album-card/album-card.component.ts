@@ -2,8 +2,8 @@ import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { ItemsArtistModel } from "../../models/new-api-models/artist-by-id.model";
 import { ApiService } from "../../services/api.service";
 import {
-  NzDropdownMenuComponent,
-  NzContextMenuService
+  NzContextMenuService,
+  NzDropdownMenuComponent
 } from "ng-zorro-antd/dropdown";
 import { catchError, Subject, takeUntil, throwError } from "rxjs";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
@@ -15,6 +15,10 @@ import {
 } from "../../models/new-api-models/album-by-id.model";
 import { ConverterService } from "../../services/converter.service";
 import { ErrorHandlingService } from "../../services/error-handling.service";
+import {
+  TrackLaunchContext,
+  TrackLaunchContextEnum
+} from "../../models/track-launch-context.enum";
 
 @Component({
   selector: "hb-album-card",
@@ -24,6 +28,10 @@ import { ErrorHandlingService } from "../../services/error-handling.service";
 export class AlbumCardComponent implements OnInit, OnDestroy {
   @Input() album!: ItemsArtistModel;
   public trackList!: AlbumTracksModel;
+  public trackListContext: TrackLaunchContext = {
+    id: this.album.id,
+    contextType: TrackLaunchContextEnum.ALBUM
+  };
   public isFollow!: boolean;
   public isVisible = false;
   private die$ = new Subject<void>();

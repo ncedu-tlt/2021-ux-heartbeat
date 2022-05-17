@@ -17,7 +17,6 @@ import {
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { ThemeStateService } from "src/app/services/theme-state.service";
-import { DomSanitizer } from "@angular/platform-browser";
 import {
   catchError,
   interval,
@@ -34,6 +33,10 @@ import {
 import { AlbumTracksModel } from "../../models/new-api-models/album-by-id.model";
 import { NewSearchModel } from "../../models/new-api-models/search.model";
 import { ErrorHandlingService } from "../../services/error-handling.service";
+import {
+  TrackLaunchContext,
+  TrackLaunchContextEnum
+} from "../../models/track-launch-context.enum";
 
 type TrackList =
   | ItemsTrackModel
@@ -56,11 +59,10 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   public drawerVisible = false;
   public actions = SwitchPlayerActionEnum;
   public userPlaylists: ItemUserPlaylistModel[] = [];
-  public trackContext!: string;
+  public trackContext!: TrackLaunchContext;
   public trackList!: TrackList;
   public isFavorite = false;
   public modalVisible = false;
-  public artistsNames: string | undefined = "";
   public repeatState = RepeatStateEnum;
 
   public movingLineCurrentPosition = 0;
@@ -77,8 +79,7 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     public apiService: ApiService,
     public error: ErrorHandlingService,
     private notificationService: NzNotificationService,
-    public themeStateService: ThemeStateService,
-    public domSanitizer: DomSanitizer
+    public themeStateService: ThemeStateService
   ) {}
 
   ngOnInit(): void {
@@ -259,22 +260,21 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   handleOpen(): void {
     this.playerService.isShuffle$.subscribe(bool => {
       if (
-        this.playerService.trackContext$.getValue() &&
+        this.playerService.trackContext$.getValue()?.contextType !==
+          TrackLaunchContextEnum.SEARCH_TRACKS &&
         this.playerService.trackList$.getValue()
       ) {
         this.trackContext =
-          this.playerService.trackContext$.getValue() as string;
+          this.playerService.trackContext$.getValue() as TrackLaunchContext;
         this.trackList = bool
           ? this.playerService.shuffleTrackList
           : (this.playerService.trackList$.getValue() as TrackList);
         this.modalVisible = true;
+        document.body.style.overflow = "hidden";
       } else {
         this.modalVisible = false;
       }
     });
-    if (this.playerService.currentTrackInfo$.value !== null) {
-      document.body.style.overflow = "hidden";
-    }
   }
 
   handleCancel(): void {

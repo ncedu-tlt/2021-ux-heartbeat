@@ -5,7 +5,10 @@ import { ApiService } from "../../services/api.service";
 import { UserProfileModel } from "../../models/new-api-models/user-profile.model";
 import { ThemeStateService } from "src/app/services/theme-state.service";
 import { NewUserTopTracksItemsModel } from "../../models/new-api-models/top-tracks-artist-by-id.model";
-import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
+import {
+  TrackLaunchContext,
+  TrackLaunchContextEnum
+} from "../../models/track-launch-context.enum";
 import { ConverterService } from "../../services/converter.service";
 import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model";
 import { LastTracksService } from "src/app/services/last-tracks.service";
@@ -23,7 +26,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   public artists!: ArtistByIdModel[];
   public lastPlayedTracks: TrackById[] = [];
   public followings = 0;
-  public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
+  public trackListContext: TrackLaunchContext = {
+    id: null,
+    contextType: TrackLaunchContextEnum.USER_TOP_TRACKS
+  };
   public isLoading = true;
   private die$ = new Subject<void>();
 

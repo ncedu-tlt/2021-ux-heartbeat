@@ -4,7 +4,10 @@ import {
   interval,
   Observable,
   Subject,
-  takeUntil
+  takeUntil,
+  catchError,
+  throwError,
+  switchMap
 } from "rxjs";
 import { NgStyleInterface } from "ng-zorro-antd/core/types/ng-class";
 import {
@@ -15,14 +18,24 @@ import {
 } from "../models/new-api-models/top-tracks-artist-by-id.model";
 import { SwitchPlayerActionEnum } from "../models/switch-player-action.enum";
 import {
+  AlbumByIdModel,
   AlbumTracksModel,
   NewAlbumTracksModel
 } from "../models/new-api-models/album-by-id.model";
 import { TrackById } from "../models/new-api-models/track-by-id.model";
-import { TrackLaunchContextEnum } from "../models/track-launch-context.enum";
+import {
+  TrackLaunchContext,
+  TrackLaunchContextEnum
+} from "../models/track-launch-context.enum";
 import { NewSearchModel } from "../models/new-api-models/search.model";
 import { repeatStatesGeneratorUtils } from "../utils/repeat-states-generator.utils";
 import { RepeatStateEnum } from "../models/repeat-state.enum";
+import { LastTrackService } from "./last-track.service";
+import { ApiService } from "./api.service";
+import { ErrorFromSpotifyModel } from "../models/error.model";
+import { ErrorHandlingService } from "./error-handling.service";
+import { LastTrackModel } from "../models/last-track.model";
+import { ConverterService } from "./converter.service";
 
 type TrackList =
   | ItemsTrackModel
@@ -49,12 +62,13 @@ export class PlayerService {
   private stop$: Subject<void> = new Subject();
   private die$: Subject<void> = new Subject();
 
+  private lastTrack!: LastTrackModel[] | null;
   public currentTrackInfo$ = new BehaviorSubject<Track | null>(null);
   private currentTrackNumber!: number;
   public trackList$ = new BehaviorSubject<TrackList | null>(null);
   public shuffleTrackList!: TrackList;
   public trackContext$ = new BehaviorSubject<
-    string | TrackLaunchContextEnum | null | undefined
+    TrackLaunchContext | null | undefined
   >(null);
 
   public isPlay$ = new BehaviorSubject<boolean>(false);
@@ -62,10 +76,16 @@ export class PlayerService {
   public isShuffle$ = new BehaviorSubject<boolean>(false);
   private isVolume = true;
   private savedVolume = 100;
+  private savedAlbum!: AlbumByIdModel;
 
   public repeatGen: Generator<RepeatStateEnum> = repeatStatesGeneratorUtils()();
 
-  constructor() {
+  constructor(
+    private lastTrackService: LastTrackService,
+    private apiService: ApiService,
+    private error: ErrorHandlingService,
+    private convertService: ConverterService
+  ) {
     document.addEventListener("click", this.resumeContext);
   }
 
@@ -74,11 +94,15 @@ export class PlayerService {
     document.removeEventListener("click", this.resumeContext);
   };
 
-  createAudioElement(): void {
+  async createAudioElement(): Promise<void> {
     if (!this.player) {
       this.player = new Audio();
       this.context = new AudioContext();
       const analyser = this.context.createAnalyser();
+      this.lastTrack = await this.lastTrackService.checkLastTrack();
+      if (this.lastTrack && this.lastTrack[0].track_id) {
+        this.getLastTrackInfo(this.lastTrack[0]);
+      }
       this.currentTrackInfo$.pipe(takeUntil(this.die$)).subscribe(track => {
         if (track !== null) {
           this.player.src = track.preview_url;
@@ -100,6 +124,11 @@ export class PlayerService {
               this.mixCurrentTrackList();
             }
           }
+          this.lastTrackService.saveInfoAboutLastTrack(
+            this.currentTrackInfo$.getValue()?.id as string,
+            this.trackContext$.getValue()?.id as string,
+            this.trackContext$.getValue()?.contextType as string
+          );
         });
       this.isShuffle$.pipe(takeUntil(this.die$)).subscribe(isShuffle => {
         if (isShuffle && this.trackList$.getValue()) {
@@ -121,6 +150,139 @@ export class PlayerService {
       analyser.connect(this.context.destination);
       this.player.autoplay = false;
       this.player.loop = false;
+    }
+  }
+
+  getLastTrackInfo(lastTrack: LastTrackModel): void {
+    this.apiService
+      .getTrackById(lastTrack.track_id)
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(lastSavedTrack => {
+        this.currentTrackInfo$.next(lastSavedTrack);
+      });
+
+    switch (lastTrack.context) {
+      case TrackLaunchContextEnum.PLAYLIST:
+        this.apiService
+          .getPlaylistTracks(lastTrack.trackList_id)
+          .pipe(
+            takeUntil(this.die$),
+            catchError((error: ErrorFromSpotifyModel) => {
+              this.error.showErrorNotification(error);
+              return throwError(() => new Error(error.error.error.message));
+            })
+          )
+          .subscribe(lastSavedPlaylist => {
+            this.trackList$.next(lastSavedPlaylist);
+          });
+        break;
+
+      case TrackLaunchContextEnum.SEARCH_TRACKS:
+        this.trackList$.next(null);
+        break;
+
+      case TrackLaunchContextEnum.SAVED_TRACKS:
+        this.apiService
+          .getUsersSavedTracks(0, 50)
+          .pipe(
+            takeUntil(this.die$),
+            catchError((error: ErrorFromSpotifyModel) => {
+              this.error.showErrorNotification(error);
+              return throwError(() => new Error(error.error.error.message));
+            })
+          )
+          .subscribe(userSavedTracks => {
+            this.trackList$.next(userSavedTracks);
+          });
+        break;
+
+      case TrackLaunchContextEnum.ALBUM:
+        this.apiService
+          .getAlbumByID(lastTrack.trackList_id)
+          .pipe(
+            switchMap(album => {
+              this.savedAlbum = album;
+              return this.apiService.getAlbumsTracksById(
+                lastTrack.trackList_id
+              );
+            })
+          )
+          .subscribe(albumTracks => {
+            this.trackList$.next(
+              this.convertService.convertAlbumModelsToNewTracksModels(
+                albumTracks,
+                lastTrack.trackList_id,
+                this.savedAlbum.images
+              )
+            );
+          });
+        this.apiService
+          .getAlbumsTracksById(lastTrack.trackList_id)
+          .pipe(
+            takeUntil(this.die$),
+            catchError((error: ErrorFromSpotifyModel) => {
+              this.error.showErrorNotification(error);
+              return throwError(() => new Error(error.error.error.message));
+            })
+          )
+          .subscribe(albumTracks => {
+            this.trackList$.next(
+              this.convertService.convertAlbumModelsToNewTracksModels(
+                albumTracks,
+                lastTrack.trackList_id,
+                []
+              )
+            );
+          });
+        break;
+
+      case TrackLaunchContextEnum.ARTIST_TOP_TRACKS:
+        this.apiService
+          .getArtistsTopTracks(lastTrack.trackList_id)
+          .pipe(
+            takeUntil(this.die$),
+            catchError((error: ErrorFromSpotifyModel) => {
+              this.error.showErrorNotification(error);
+              return throwError(() => new Error(error.error.error.message));
+            })
+          )
+          .subscribe(artistTopTracks => {
+            this.trackList$.next(
+              this.convertService.convertTopArtistTracksToNewTopArtistTracks(
+                artistTopTracks.tracks
+              )
+            );
+          });
+        break;
+
+      case TrackLaunchContextEnum.USER_TOP_TRACKS:
+        this.apiService
+          .getUserTopTracks()
+          .pipe(
+            takeUntil(this.die$),
+            catchError((error: ErrorFromSpotifyModel) => {
+              this.error.showErrorNotification(error);
+              return throwError(() => new Error(error.error.error.message));
+            })
+          )
+          .subscribe(userTopTracks => {
+            this.trackList$.next(
+              this.convertService.convertTopUserTracksToNewTopUserTracks(
+                userTopTracks
+              )
+            );
+          });
+        break;
+
+      default:
+        this.trackList$.next(null);
+        break;
     }
   }
 
