@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { combineLatest, Subject } from "rxjs";
+import { combineLatest, forkJoin, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { ApiService } from "../../services/api.service";
 import { UserProfileModel } from "../../models/new-api-models/user-profile.model";
@@ -8,6 +8,8 @@ import { NewUserTopTracksItemsModel } from "../../models/new-api-models/top-trac
 import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 import { ConverterService } from "../../services/converter.service";
 import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model";
+import { LastTracksService } from "src/app/services/last-tracks.service";
+import { TrackById } from "src/app/models/new-api-models/track-by-id.model";
 
 @Component({
   selector: "hb-user-profile",
@@ -19,6 +21,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   public userImage = "";
   public tracks!: NewUserTopTracksItemsModel;
   public artists!: ArtistByIdModel[];
+  public lastPlayedTracks: TrackById[] = [];
   public followings = 0;
   public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
   public isLoading = true;
@@ -27,7 +30,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   constructor(
     private apiService: ApiService,
     private convertService: ConverterService,
-    public themeStateService: ThemeStateService
+    public themeStateService: ThemeStateService,
+    public lastTracksService: LastTracksService
   ) {}
 
   loadData(): void {
@@ -53,6 +57,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadData();
+    this.lastTracksService.getLastTracks().then((trackIds: string[]) => {
+      forkJoin(trackIds.map(id => this.apiService.getTrackById(id))).subscribe(
+        tracks => (this.lastPlayedTracks = tracks)
+      );
+    });
   }
 
   ngOnDestroy() {

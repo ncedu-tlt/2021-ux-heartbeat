@@ -37,5 +37,14 @@
     </div>
     <hb-track-list-extended *ngIf="tracks" [trackList]="tracks" [trackContext]="trackContext"></hb-track-list-extended>
   </div>
+  <div class="last-tracks">
+    <div class="last-tracks__title">
+      <p class="last-tracks__title-text">Недавно прослушанные</p>
+      <div class="last-tracks__title-line"></div>
+    </div>
+    <div class="last-tracks__list" *ngIf="this.lastPlayedTracks.length !== 0">
+      <hb-track *ngFor="let track of lastPlayedTracks" [track]="track" [trackContext]="trackContext"></hb-track>
+    </div>
+  </div>
 </div>
 <hb-loader *ngIf="isLoading"></hb-loader>
