@@ -20,13 +20,16 @@
     </div>
   </div>
   <div *ngIf="!isCard" class="track-time">{{trackTime | timeFormat}}</div>
-  <button nz-dropdown [nzDropdownMenu]="menu"
-          (click)="getUserPlaylists(_track!.id)"
-          *ngIf="!isCard"
-          nzTrigger="click"
-          nzPlacement="topCenter"
-          class="track__add">
-  </button>
+  <div>
+    <button nz-dropdown [nzDropdownMenu]="menu"
+            (click)="getUserPlaylists(_track!.id)"
+            *ngIf="!isCard"
+            nzTrigger="click"
+            nzPlacement="topCenter"
+            class="track__add">
+    </button>
+    <button *ngIf="isUserPlaylist" (click)="deleteTrackFromPlaylist()" class="track__playlist-delete"></button>
+  </div>
   <nz-dropdown-menu #menu="nzDropdownMenu">
     <ul nz-menu>
       <li nz-menu-item *ngIf="!isFavorite"

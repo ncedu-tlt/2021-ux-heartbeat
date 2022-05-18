@@ -53,9 +53,11 @@ export class TrackComponent implements OnInit, OnDestroy {
     }, "");
   }
   @Input() public isCard = false;
+  @Input() public isUserPlaylist = false;
   @Input() public trackContext!: TrackLaunchContext;
 
   @Output() playTrack = new EventEmitter<void>();
+  @Output() removeFromPlaylist = new EventEmitter<string>();
 
   constructor(
     public playerService: PlayerService,
@@ -100,6 +102,25 @@ export class TrackComponent implements OnInit, OnDestroy {
     this.playerService.trackContext$.next(this.trackContext);
     this.playTrack.emit();
     this.lastTracksService.updateLastTracksForCurrentUser(this._track.id);
+  }
+
+  deleteTrackFromPlaylist(): void {
+    this.removeFromPlaylist.emit(this._track.id);
+    this.apiService
+      .deleteItemsFromPlaylist(String(this.trackContext.id), this._track.id)
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(() => {
+        this.notification.blank(
+          "Удаление трека",
+          "Трек успешно удален из плейлиста"
+        );
+      });
   }
 
   controlPlayerCurrentTrack(): void {

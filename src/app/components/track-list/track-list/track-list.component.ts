@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import {
   ItemsTrackModel,
   NewTopArtistTracks
@@ -23,6 +23,9 @@ export class TrackListComponent {
     | NewSearchModel
     | NewTopArtistTracks;
   @Input() public trackContext!: TrackLaunchContext;
+  @Input() public isUserPlaylist = false;
+
+  @Output() removeFromPlaylist = new EventEmitter<string>();
 
   constructor(private playerService: PlayerService) {}
 
@@ -34,5 +37,9 @@ export class TrackListComponent {
     } else {
       this.playerService.trackList$.next(this.trackList);
     }
+  }
+
+  upRemoveFromPlaylist(data: string) {
+    this.removeFromPlaylist.emit(data);
   }
 }
