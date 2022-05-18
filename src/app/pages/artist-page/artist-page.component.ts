@@ -6,15 +6,23 @@ import {
   ArtistsModel,
   ItemsArtistModel
 } from "../../models/new-api-models/artist-by-id.model";
-import { catchError, Subject, takeUntil, throwError } from "rxjs";
-import { combineLatest } from "rxjs";
+import {
+  catchError,
+  combineLatest,
+  Subject,
+  takeUntil,
+  throwError
+} from "rxjs";
 import {
   NewTopArtistTracks,
   TopTracksArtistByIdModel
 } from "../../models/new-api-models/top-tracks-artist-by-id.model";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
-import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
+import {
+  TrackLaunchContext,
+  TrackLaunchContextEnum
+} from "../../models/track-launch-context.enum";
 import { PlayerService } from "../../services/player.service";
 import { ThemeStateService } from "../../services/theme-state.service";
 import { ConverterService } from "../../services/converter.service";
@@ -31,12 +39,15 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
   public isFollow!: boolean;
   public artistAlbums!: ItemsArtistModel[];
   public artistTopTracks!: NewTopArtistTracks;
-  public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
+  public trackContext = TrackLaunchContextEnum.ARTIST_TOP_TRACKS;
   private die$ = new Subject<void>();
   public isLoading = true;
   public showMoreDisabled = false;
   public offset = 0;
-
+  public trackListContext: TrackLaunchContext = {
+    id: null,
+    contextType: TrackLaunchContextEnum.ARTIST_TOP_TRACKS
+  };
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -70,6 +81,7 @@ export class ArtistPageComponent implements OnInit, OnDestroy {
           artistTopTracks: TopTracksArtistByIdModel
         ]) => {
           this.artistInfo = artist;
+          this.trackListContext.id = artist.id;
           this.isFollow = isFollow[0];
           this.artistAlbums = artistAlbums.items;
           this.artistTopTracks =

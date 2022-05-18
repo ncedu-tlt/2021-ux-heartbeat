@@ -15,7 +15,7 @@
         <div class="top-tracks__list" *ngIf="artistTopTracks.items.length">
           <div class="top-tracks__item" *ngFor="let track of artistTopTracks.items">
             <hb-track [isCard]="false" [track]="track.track"
-                      [trackContext]="trackContext"
+                      [trackContext]="trackListContext"
                       (playTrack)="setListTrackIntoPlayer()">
             </hb-track>
           </div>

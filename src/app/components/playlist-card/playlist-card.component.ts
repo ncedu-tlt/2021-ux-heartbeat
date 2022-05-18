@@ -6,6 +6,7 @@ import { catchError, Subscription, throwError } from "rxjs";
 import { PlayerService } from "../../services/player.service";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { ErrorHandlingService } from "../../services/error-handling.service";
+import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 
 @Component({
   selector: "hb-playlist-card",
@@ -26,7 +27,7 @@ export class PlaylistCardComponent {
 
   ngOnInit(): void {
     this.playerService.trackContext$.subscribe(value => {
-      this.isActive = this.playlist.id === value;
+      this.isActive = this.playlist.id === value?.id;
     });
   }
 
@@ -43,14 +44,17 @@ export class PlaylistCardComponent {
         const idx = allPlaylist.items.findIndex(
           el => el.track.preview_url !== null
         );
-        if (this.playerService.trackContext$.getValue() === id) {
+        if (this.playerService.trackContext$.getValue()?.id === id) {
           this.playerService.switchPlayerAction();
         } else {
           this.playerService.currentTrackInfo$.next(
             allPlaylist.items[idx].track
           );
           this.playerService.trackList$.next(allPlaylist);
-          this.playerService.trackContext$.next(id);
+          this.playerService.trackContext$.next({
+            id,
+            contextType: TrackLaunchContextEnum.PLAYLIST
+          });
           this.playerService.switchPlayerAction();
         }
       });

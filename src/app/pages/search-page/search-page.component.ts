@@ -22,6 +22,7 @@ import { ThemeStateService } from "src/app/services/theme-state.service";
 import { FollowedArtistModel } from "../../models/new-api-models/followed-artist.model";
 import { PlayerService } from "../../services/player.service";
 import { ErrorHandlingService } from "../../services/error-handling.service";
+import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 
 @Component({
   selector: "hb-search-page",
@@ -38,7 +39,10 @@ export class SearchPageComponent {
   public offset = 0;
   public die$ = new Subject<void>();
   public followedArtistsId: string[] = [];
-
+  public trackListContext = {
+    id: null,
+    contextType: TrackLaunchContextEnum.SEARCH_TRACKS
+  };
   constructor(
     private activatedRoute: ActivatedRoute,
     private api: ApiService,

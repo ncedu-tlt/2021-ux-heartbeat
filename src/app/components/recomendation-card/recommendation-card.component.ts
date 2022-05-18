@@ -8,6 +8,7 @@ import { ThemeStateService } from "src/app/services/theme-state.service";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
 import { ConverterService } from "../../services/converter.service";
 import { ErrorHandlingService } from "../../services/error-handling.service";
+import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
 
 @Component({
   selector: "hb-recommendation-card",
@@ -26,6 +27,7 @@ export class RecommendationCardComponent {
   public isDisabled = true;
   public die$ = new Subject<void>();
   @Input() public recommendation!: ItemUserPlaylistModel;
+  public trackListContext = TrackLaunchContextEnum.PLAYLIST;
 
   constructor(
     public apiService: ApiService,

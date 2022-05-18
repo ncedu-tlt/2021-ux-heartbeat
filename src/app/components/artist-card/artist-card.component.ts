@@ -3,7 +3,10 @@ import { ArtistByIdModel } from "../../models/new-api-models/artist-by-id.model"
 import { NewTopArtistTracks } from "../../models/new-api-models/top-tracks-artist-by-id.model";
 import { ApiService } from "../../services/api.service";
 import { catchError, Subject, takeUntil, throwError } from "rxjs";
-import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
+import {
+  TrackLaunchContext,
+  TrackLaunchContextEnum
+} from "../../models/track-launch-context.enum";
 import { PlayerService } from "../../services/player.service";
 import { ConverterService } from "../../services/converter.service";
 import { ThemeStateService } from "src/app/services/theme-state.service";
@@ -22,7 +25,10 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
   public artistInfo!: ArtistByIdModel;
   @Input()
   public followedArtistsId: string[] = [];
-  public trackContext = TrackLaunchContextEnum.TOP_TRACKS;
+  public trackListContext: TrackLaunchContext = {
+    id: this.artistInfo.id,
+    contextType: TrackLaunchContextEnum.ARTIST_TOP_TRACKS
+  };
   public changeTopTracks!: NewTopArtistTracks;
   public isCard = true;
   public subscription = false;

@@ -1,10 +1,10 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
-  Output,
-  EventEmitter
+  Output
 } from "@angular/core";
 
 import {
@@ -29,7 +29,7 @@ import { ErrorFromSpotifyModel } from "src/app/models/error.model";
 import { TrackById } from "../../models/new-api-models/track-by-id.model";
 import { TopTracksModel } from "../../models/new-api-models/top-tracks-artist-by-id.model";
 import { NewAlbumTracksModel } from "src/app/models/new-api-models/album-by-id.model";
-import { TrackLaunchContextEnum } from "../../models/track-launch-context.enum";
+import { TrackLaunchContext } from "../../models/track-launch-context.enum";
 
 @Component({
   selector: "hb-track-extended",
@@ -52,7 +52,7 @@ export class TrackExtendedComponent implements OnDestroy, OnInit {
       return `${prev}${!index ? "" : ","} ${cur.name}`;
     }, "");
   }
-  @Input() public trackContext!: string | TrackLaunchContextEnum;
+  @Input() public trackContext!: TrackLaunchContext;
 
   @Output() playTrack = new EventEmitter<void>();
 
@@ -73,11 +73,12 @@ export class TrackExtendedComponent implements OnDestroy, OnInit {
       ([currentTrack, isPlay, trackContext]: [
         currentTrack: TrackById | NewAlbumTracksModel | null,
         isPlay: boolean,
-        trackContext: string | TrackLaunchContextEnum | null | undefined
+        trackContext: TrackLaunchContext | null | undefined
       ]) => {
         if (
           currentTrack?.id === this._track?.id &&
-          this.trackContext === trackContext
+          this.trackContext.id === trackContext?.id &&
+          this.trackContext.contextType === trackContext.contextType
         ) {
           this.isPlay = isPlay;
         } else {
