@@ -107,7 +107,7 @@ export class TrackComponent implements OnInit, OnDestroy {
   deleteTrackFromPlaylist(): void {
     this.removeFromPlaylist.emit(this._track.id);
     this.apiService
-      .deleteItemsFromPlaylist(this.trackContext, this._track.id)
+      .deleteItemsFromPlaylist(String(this.trackContext.id), this._track.id)
       .pipe(
         takeUntil(this.die$),
         catchError((error: ErrorFromSpotifyModel) => {
