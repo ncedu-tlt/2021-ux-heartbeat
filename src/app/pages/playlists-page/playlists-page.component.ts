@@ -117,6 +117,7 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
         this.tracks = playlistTracks;
       });
     this.playlist = playlist;
+    this.trackListContext.id = this.playlist.id;
     this.isOpen = true;
     this.selectPlaylist(playlist.id);
     this.trackListContext.id = playlist.id;
