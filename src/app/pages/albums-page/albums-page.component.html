@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <hb-track-list [trackContext]="album.album.id" [trackList]="tracks"></hb-track-list>
+      <hb-track-list [trackContext]="trackListContext" [trackList]="tracks"></hb-track-list>
     </div>
     <div *ngIf="!isOpen" class="albums-waiting">
       <img class="albums-waiting__img" src="assets/image/vinyl-record.png" alt="vinyl icon"/>

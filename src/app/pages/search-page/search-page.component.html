@@ -12,7 +12,7 @@
     <h2 class="title">Треки</h2>
     <div class="track-list" *ngFor="let track of changeTrackList?.items">
       <hb-track [isCard]="false" [track]="track.track"
-                [trackContext]="track.track.id"
+                [trackContext]="trackListContext"
                 (playTrack)="setListTrackIntoPlayer()">
       </hb-track>
     </div>

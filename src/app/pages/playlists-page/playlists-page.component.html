@@ -1,6 +1,6 @@
 <div [ngClass]="{ 'playlists-wrapper' : !this.themeStateService.getIsDarkTheme() , 'playlists-wrapper-dark' : this.themeStateService.getIsDarkTheme() }">
   <hb-loader *ngIf="isLoading"></hb-loader>
-  <div *ngIf="playlists.length && !isLoading" class="playlists">
+  <div *ngIf="!isLoading" class="playlists">
     <div class="playlist__list">
       <div class="playlist__add" (click)="changeVisible($event, modalStates.CREATE)">
         <div class="playlist__image" [style.background-image]="'url(./assets/image/new-playlist-image.png)'"
@@ -38,7 +38,9 @@
           <p class="playlist-tracks__author">{{this.playlist.owner.display_name}}</p>
         </div>
       </div>
-      <hb-track-list *ngIf="this.playlist.images[0]" [trackContext]="this.playlist.id" [trackList]="tracks"
+      <hb-track-list *ngIf="this.playlist.images[0] && this.userId != this.playlist.owner.id" (removeFromPlaylist)="removeTrackFromPlaylist($event)" [trackContext]="trackListContext" [trackList]="tracks"
+                     class="tracklist"></hb-track-list>
+      <hb-track-list *ngIf="this.playlist.images[0] && this.userId == this.playlist.owner.id" (removeFromPlaylist)="removeTrackFromPlaylist($event)" [isUserPlaylist]="true" [trackList]="tracks" [trackContext]="trackListContext"
                      class="tracklist"></hb-track-list>
       <div *ngIf="!this.playlist.images[0]">
         <p>Выбранный вами плейлист пуст.</p>
@@ -78,7 +80,7 @@
         </div>
         <div class="modal__control" [ngStyle]="{'justifyContent' : modalCurrentState === modalStates.CREATE ? 'center' : 'flex-end'}">
           <button class="modal__cancel" nz-button nzType="default" (click)="handleCancel()">Отмена</button>
-          <button class="modal__accept" [disabled]="inputWarning || !!fileWarning" nz-button nzType="primary" (click)="modalCurrentState === modalStates.CREATE ? createNewPlaylist() : changePlaylistInformation(modalPlaylistId)">Сохранить</button>
+          <button class="modal__accept" nz-button nzType="primary" (click)="modalCurrentState === modalStates.CREATE ? createNewPlaylist() : changePlaylistInformation(modalPlaylistId)">Сохранить</button>
         </div>
       </div>
     </div>

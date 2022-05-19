@@ -296,6 +296,19 @@ export class ApiService {
     );
   }
 
+  deleteItemsFromPlaylist(
+    playlistId: string,
+    trackId: string
+  ): Observable<void> {
+    return this.http.delete<void>(
+      `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+      {
+        headers: this.headers,
+        body: { tracks: [{ uri: "spotify:track:" + trackId }] }
+      }
+    );
+  }
+
   getAvailableGenreSeeds(): Observable<GenresModel> {
     return this.http.get<GenresModel>(
       "https://api.spotify.com/v1/recommendations/available-genre-seeds",

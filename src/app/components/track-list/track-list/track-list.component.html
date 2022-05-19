@@ -3,5 +3,7 @@
     (playTrack)="setListTrackIntoPlayer()"
     [track]="track.track"
     [trackContext]="trackContext"
+    [isUserPlaylist]="isUserPlaylist"
+    (removeFromPlaylist)="upRemoveFromPlaylist($event)"
   ></hb-track>
 </div>

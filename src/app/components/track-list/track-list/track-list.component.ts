@@ -1,11 +1,14 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import {
   ItemsTrackModel,
   NewTopArtistTracks
 } from "../../../models/new-api-models/top-tracks-artist-by-id.model";
 import { PlayerService } from "../../../services/player.service";
 import { AlbumTracksModel } from "../../../models/new-api-models/album-by-id.model";
-import { TrackLaunchContextEnum } from "../../../models/track-launch-context.enum";
+import {
+  TrackLaunchContext,
+  TrackLaunchContextEnum
+} from "../../../models/track-launch-context.enum";
 import { NewSearchModel } from "../../../models/new-api-models/search.model";
 
 @Component({
@@ -19,15 +22,24 @@ export class TrackListComponent {
     | AlbumTracksModel
     | NewSearchModel
     | NewTopArtistTracks;
-  @Input() public trackContext!: string | TrackLaunchContextEnum;
+  @Input() public trackContext!: TrackLaunchContext;
+  @Input() public isUserPlaylist = false;
+
+  @Output() removeFromPlaylist = new EventEmitter<string>();
 
   constructor(private playerService: PlayerService) {}
 
   setListTrackIntoPlayer(): void {
-    if (this.trackContext === TrackLaunchContextEnum.SEARCH_TRACKS) {
+    if (
+      this.trackContext.contextType === TrackLaunchContextEnum.SEARCH_TRACKS
+    ) {
       this.playerService.trackList$.next(null);
     } else {
       this.playerService.trackList$.next(this.trackList);
     }
+  }
+
+  upRemoveFromPlaylist(data: string) {
+    this.removeFromPlaylist.emit(data);
   }
 }

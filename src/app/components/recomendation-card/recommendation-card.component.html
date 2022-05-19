@@ -7,7 +7,7 @@
     <div *ngFor="let track of trackInfo.items; let i = index">
       <hb-track *ngIf="i < 4" class="tracks__track-container"
                 (playTrack)="setListTrackIntoPlayer()"
-                [trackContext]="recommendation.id"
+                [trackContext]="{id: recommendation.id, contextType: trackListContext}"
                 [track]="track.track"
                 [isCard]="!isCard">
       </hb-track>
@@ -25,7 +25,7 @@
           </div>
           <p class="playlist-info__name">{{recommendation.name}}</p>
         </div>
-        <hb-track-list [trackContext]="recommendation.id" [trackList]="trackInfo"></hb-track-list>
+        <hb-track-list [trackContext]="{id: recommendation.id, contextType: trackListContext}" [trackList]="trackInfo"></hb-track-list>
         <button class="addItem" *ngIf="isDisabled" (click)="showMore(recommendation.id)">ЕЩЕ</button>
       </div>
     </div>

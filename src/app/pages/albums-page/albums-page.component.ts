@@ -20,6 +20,10 @@ import { ConverterService } from "../../services/converter.service";
 import { ThemeStateService } from "src/app/services/theme-state.service";
 import { ErrorHandlingService } from "../../services/error-handling.service";
 import { ErrorFromSpotifyModel } from "../../models/error.model";
+import {
+  TrackLaunchContext,
+  TrackLaunchContextEnum
+} from "../../models/track-launch-context.enum";
 
 @Component({
   selector: "hb-albums-page",
@@ -30,6 +34,10 @@ export class AlbumsPageComponent implements OnInit, OnDestroy {
   public albums: AlbumItemModel[] = [];
   public tracks!: AlbumTracksModel;
   public album!: AlbumItemModel;
+  public trackListContext: TrackLaunchContext = {
+    id: null,
+    contextType: TrackLaunchContextEnum.ALBUM
+  };
   public isOpen = false;
   public isLoading = true;
   private die$ = new Subject<void>();
@@ -85,6 +93,7 @@ export class AlbumsPageComponent implements OnInit, OnDestroy {
       });
     this.album = album;
     this.selectAlbum(album.album.id);
+    this.trackListContext.id = album.album.id;
     this.isOpen = true;
     setTimeout(() => this.openedAlbum.nativeElement.scrollIntoView(true), 0);
   }

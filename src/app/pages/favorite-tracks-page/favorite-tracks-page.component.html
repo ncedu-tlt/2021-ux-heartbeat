@@ -5,7 +5,7 @@
     <div class="favorites__list" *ngFor="let track of favorites.items">
       <hb-track class="favorites__track-container"
                 (playTrack)="setListTrackIntoPlayer()"
-                [trackContext]="trackContext"
+                [trackContext]="trackListContext"
                 [track]="track.track">
       </hb-track>
       <div class="favorites__list-delete" (click)="removeTrackFromFavoriteList(track.track!.id)"></div>
