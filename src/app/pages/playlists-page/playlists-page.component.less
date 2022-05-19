@@ -112,7 +112,14 @@
 
             .playlist__name {
               margin: 0;
+              width: 350px;
+              text-overflow: ellipsis;
+              overflow: hidden;
               font-size: 24px;
+
+              @media screen and ( max-width: 1550px ) {
+                width: 150px;
+              }
 
               @media screen and (min-width: 920px) and (max-width: 1279.99px) {
                 font-size: 17px;
@@ -182,6 +189,13 @@
             .playlist-tracks__name{
               margin: 0;
               font-size: 24px;
+              width: 350px;
+              text-overflow: ellipsis;
+              overflow: hidden;
+
+              @media screen and (max-width: 919px ) {
+                width: 150px;
+              }
             }
 
             .playlist-tracks__author {
@@ -201,8 +215,20 @@
         align-items: center;
         align-content: center;
 
-        @media screen and (min-width:920px) and (max-width: 1279.99px) {
-          right: 7%;
+        @media screen and (min-width:1156px) and (max-width: 1279.99px) {
+          right: 16%;
+        }
+
+        @media screen and (min-width: 1060px) and (max-width: 1155px) {
+          right: 12%;
+        }
+
+        @media screen and (min-width: 982px) and (max-width:1059px) {
+          right: 8%;
+        }
+
+        @media screen and (min-width: 920px) and (max-width: 981px) {
+          right: 3%;
         }
 
         @media screen and (max-width: 920px) {
