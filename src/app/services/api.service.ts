@@ -230,7 +230,7 @@ export class ApiService {
 
   getPlaylistTracks(
     playlistId: string,
-    limit = 10,
+    limit = 50,
     offset = 0
   ): Observable<ItemsTrackModel> {
     return this.http.get<ItemsTrackModel>(
