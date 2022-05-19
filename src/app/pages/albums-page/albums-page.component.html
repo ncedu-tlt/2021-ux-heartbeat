@@ -7,6 +7,7 @@
         <div class="album-info">
           <div class="album__name">{{album.album.name}}</div>
           <div class="album__artists">{{album.album.artists[0].name}}</div>
+          <div class="album__delete" (click)="deleteAlbum($event, album.album.id, album.album.name)">Удалить</div>
         </div>
       </div>
     </div>
