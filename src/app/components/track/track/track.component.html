@@ -41,6 +41,15 @@
           (click)="removeTrackFromFavoriteList(_track!.id)">
         Убрать из избранного
       </li>
+      <li nz-submenu nzTitle="Добавить в плейлист">
+        <ul>
+          <li nz-menu-item
+              *ngFor="let playlist of userPlaylists"
+              (click)="addTrackIntoPlaylist(playlist.id, _track!.id)">
+            {{playlist.name}}
+          </li>
+        </ul>
+      </li>
     </ul>
   </nz-dropdown-menu>
 </div>
