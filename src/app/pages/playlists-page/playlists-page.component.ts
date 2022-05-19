@@ -340,7 +340,8 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     this.fileWarning = "";
   }
 
-  deletePlaylist(id: string, name: string): void {
+  deletePlaylist(event: MouseEvent, id: string, name: string): void {
+    event.stopPropagation();
     this.apiService
       .unfollowPlaylist(id)
       .pipe(
