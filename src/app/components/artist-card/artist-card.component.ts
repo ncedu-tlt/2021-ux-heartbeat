@@ -26,7 +26,7 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
   @Input()
   public followedArtistsId: string[] = [];
   public trackListContext: TrackLaunchContext = {
-    id: this.artistInfo.id,
+    id: null,
     contextType: TrackLaunchContextEnum.ARTIST_TOP_TRACKS
   };
   public changeTopTracks!: NewTopArtistTracks;
@@ -49,6 +49,7 @@ export class ArtistCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.trackListContext.id = this.artistInfo.id;
     this.api
       .getArtistsTopTracks(this.artistInfo.id)
       .pipe(
