@@ -13,18 +13,17 @@
 
   .artist-list {
     margin-top: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px,250px));
-    justify-content: center;
-    align-items: stretch;
-    column-gap: 5px;
-    row-gap: 15px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
     padding-bottom: 100px;
-    @media screen and ( max-width: 420px ) {
+    @media screen and ( max-width: 460px ) {
       grid-template-columns: none;
+      justify-content: center;
     }
 
     .artist-item {
+      margin: 5px;
       display: flex;
       flex-direction: row;
       justify-content: center;
