@@ -119,6 +119,7 @@
     <nz-drawer
       nzWrapClassName="mobile-player-drawer"
       [nzClosable]="false"
+      [nzBodyStyle]="{'background-color': this.themeStateService.getIsDarkTheme() ? '#37405f' : '#F7F9FE'}"
       nzPlacement="bottom"
       nzHeight="615px"
       [nzVisible]="drawerVisible"
