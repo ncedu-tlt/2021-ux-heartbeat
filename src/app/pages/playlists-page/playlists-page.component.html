@@ -16,9 +16,9 @@
         <div class="playlist__info">
           <p class="playlist__name">{{playlist.name}}</p>
           <p class="playlist__owner">{{playlist.owner.display_name}}</p>
-          <div class="playlist__control" *ngIf="playlist.owner.display_name === this.userName">
+          <div class="playlist__control">
             <p class="playlist__edit" (click)="changeVisible($event, modalStates.EDIT, playlist)">Редактировать</p>
-            <p class="playlist__delete" (click)="deletePlaylist(playlist.id, playlist.name)">Удалить</p>
+            <p class="playlist__delete" (click)="deletePlaylist($event, playlist.id, playlist.name)">Удалить</p>
           </div>
         </div>
       </div>

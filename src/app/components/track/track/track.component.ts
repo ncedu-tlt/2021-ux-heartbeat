@@ -123,6 +123,21 @@ export class TrackComponent implements OnInit, OnDestroy {
       });
   }
 
+  addTrackIntoPlaylist(playlistId: string, trackId: string): void {
+    this.apiService
+      .addItemsToPlaylist(playlistId, trackId)
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(() => {
+        this.notification.blank("Добавление трека", "Трек успешно добавлен");
+      });
+  }
+
   controlPlayerCurrentTrack(): void {
     if (
       this.playerService.currentTrackInfo$.getValue()?.id !== this._track?.id

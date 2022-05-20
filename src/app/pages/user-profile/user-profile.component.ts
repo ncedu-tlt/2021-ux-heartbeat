@@ -30,6 +30,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     id: null,
     contextType: TrackLaunchContextEnum.USER_TOP_TRACKS
   };
+  public lastTracksContext: TrackLaunchContext = {
+    id: null,
+    contextType: TrackLaunchContextEnum.USER_LAST_TRACKS
+  };
   public isLoading = true;
   private die$ = new Subject<void>();
 

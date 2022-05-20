@@ -100,16 +100,40 @@
 
             .album__name {
               margin: 0;
+              width: 250px;
+              text-overflow: ellipsis;
+              overflow: hidden;
               font-size: 24px;
 
+              @media screen and ( max-width: 1400px) {
+                width: 200px;
+              }
+
               @media screen and (min-width: 920px) and (max-width: 1279.99px) {
+                width: 120px;
                 font-size: 17px;
+              }
+
+              @media screen and (max-width: 920px) {
+                width: 150px;
               }
             }
 
             .album__artists {
               font-size: 14px;
               font-weight: 100;
+            }
+
+            .album__delete {
+              margin-top: 10px;
+              @media screen and (min-width: 920px) and (max-width: 1279.99px) {
+                font-size: 14px;
+              }
+
+              &:hover {
+                cursor: pointer;
+                color: @active-link;
+              }
             }
           }
         }
@@ -126,6 +150,7 @@
       }
 
       .selected-album {
+        padding-top: 23px;
 
         .selected-album__album {
           display: flex;
@@ -164,11 +189,18 @@
               align-items: center;
               margin-left: 0;
             }
-            
+
 
             .selected-album__name {
               margin: 0;
+              width: 350px;
+              text-overflow: ellipsis;
+              overflow: hidden;
               font-size: 24px;
+
+              @media screen and (max-width: 920px) {
+                width: 150px;
+              }
             }
 
             .selected-album__artists{
@@ -226,7 +258,7 @@
       }
     }
   }
-  
+
   .albums-wrapper-dark {
     * {
       color: @white

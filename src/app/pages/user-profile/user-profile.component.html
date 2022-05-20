@@ -43,7 +43,7 @@
       <div class="last-tracks__title-line"></div>
     </div>
     <div class="last-tracks__list" *ngIf="this.lastPlayedTracks.length !== 0">
-      <hb-track *ngFor="let track of lastPlayedTracks" [track]="track"></hb-track>
+      <hb-track *ngFor="let track of lastPlayedTracks" [track]="track" [trackContext]="lastTracksContext"></hb-track>
     </div>
   </div>
 </div>

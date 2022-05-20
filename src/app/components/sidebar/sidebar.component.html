@@ -8,9 +8,9 @@
               <div class="logo__img"></div>
             </a>
         </div>
-    
+
         <nav class="menu">
-            <ul class="menu__list">
+            <ul class="menu__list" (click)="handleCancel()">
                 <li>
                     <a routerLink="/home" [routerLinkActive]="['active']">
                       <div class="menu__list-icon-homepage"></div>
@@ -43,14 +43,14 @@
                 </li>
             </ul>
         </nav>
-    
+
         <div class="dark-theme" (click)="changeTheme()"></div>
     </div>
 </div>
 
-<div [ngClass]="{ 'hamburger' : !this.themeStateService.getIsDarkTheme() , 'hamburger-dark' : this.themeStateService.getIsDarkTheme()}" 
-        *ngIf="!this.isSidebarOpen"     
+<div [ngClass]="{ 'hamburger' : !this.themeStateService.getIsDarkTheme() , 'hamburger-dark' : this.themeStateService.getIsDarkTheme()}"
+        *ngIf="!this.isSidebarOpen"
         (click)="toggleSidebar()"></div>
-<div [ngClass]="{'hamburger-close' : !this.themeStateService.getIsDarkTheme() , 'hamburger-close-dark' : this.themeStateService.getIsDarkTheme() }" 
+<div [ngClass]="{'hamburger-close' : !this.themeStateService.getIsDarkTheme() , 'hamburger-close-dark' : this.themeStateService.getIsDarkTheme() }"
         *ngIf="this.isSidebarOpen"
         (click)="toggleSidebar()"></div>

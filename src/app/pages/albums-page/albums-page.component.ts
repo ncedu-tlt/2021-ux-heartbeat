@@ -24,6 +24,7 @@ import {
   TrackLaunchContext,
   TrackLaunchContextEnum
 } from "../../models/track-launch-context.enum";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 
 @Component({
   selector: "hb-albums-page",
@@ -55,7 +56,8 @@ export class AlbumsPageComponent implements OnInit, OnDestroy {
     private apiService: ApiService,
     private convertService: ConverterService,
     public themeStateService: ThemeStateService,
-    public error: ErrorHandlingService
+    public error: ErrorHandlingService,
+    private notificationService: NzNotificationService
   ) {}
 
   public loadAlbums(): void {
@@ -124,11 +126,36 @@ export class AlbumsPageComponent implements OnInit, OnDestroy {
     oldAlbum.nativeElement.classList.toggle("active");
   }
 
-  ngOnInit() {
+  deleteAlbum(event: MouseEvent, id: string, name: string): void {
+    event.stopPropagation();
+    this.apiService
+      .deleteAlbums(id)
+      .pipe(
+        takeUntil(this.die$),
+        catchError((error: ErrorFromSpotifyModel) => {
+          this.error.showErrorNotification(error);
+          return throwError(() => new Error(error.error.error.message));
+        })
+      )
+      .subscribe(() => {
+        this.albums.splice(
+          this.albums.findIndex(album => {
+            return album.album.id === id;
+          }),
+          1
+        );
+        this.notificationService.blank(
+          "Удаление альбома",
+          `Вы успешно удалили альбом ${name}`
+        );
+      });
+  }
+
+  ngOnInit(): void {
     this.loadAlbums();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.die$.next();
   }
 }

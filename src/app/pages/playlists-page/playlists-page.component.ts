@@ -212,13 +212,13 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
   }
 
   checkUploadImage(file: File): boolean {
-    if (file.type !== "image/jpeg" && file.type !== "image/png") {
-      this.fileWarning = "Файл должен иметь формат jpeg | png";
+    if (file.type !== "image/jpeg") {
+      this.fileWarning = "Файл должен иметь формат jpeg";
       this.imgURL = "assets/image/undefined_album_image.jpg";
       return false;
     }
-    if (file.size / 1000 > 150) {
-      this.fileWarning = "Размер файла не должен превышать 150КБ";
+    if (file.size / 1000 > 140) {
+      this.fileWarning = "Размер файла не должен превышать 140КБ";
       this.imgURL = URL.createObjectURL(file);
       return false;
     }
@@ -340,7 +340,8 @@ export class PlaylistsPageComponent implements OnInit, OnDestroy {
     this.fileWarning = "";
   }
 
-  deletePlaylist(id: string, name: string): void {
+  deletePlaylist(event: MouseEvent, id: string, name: string): void {
+    event.stopPropagation();
     this.apiService
       .unfollowPlaylist(id)
       .pipe(

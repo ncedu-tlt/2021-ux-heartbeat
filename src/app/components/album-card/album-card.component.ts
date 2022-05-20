@@ -29,7 +29,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   @Input() album!: ItemsArtistModel;
   public trackList!: AlbumTracksModel;
   public trackListContext: TrackLaunchContext = {
-    id: this.album.id,
+    id: null,
     contextType: TrackLaunchContextEnum.ALBUM
   };
   public isFollow!: boolean;
@@ -46,6 +46,7 @@ export class AlbumCardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.trackListContext.id = this.album.id;
     this.checkFollowAlbum();
   }
 
