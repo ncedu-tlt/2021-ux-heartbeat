@@ -125,7 +125,7 @@
   }
 
   .top-artists {
-    margin: 59px 0 59px 0;
+    margin: 59px 0 19px 0;
     .top-artists__title {
       display: flex;
       width: 365px;
@@ -146,9 +146,10 @@
     }
 
     .top-artists__list {
-      margin-top: 20px;
+      margin-top: 12px;
       max-width: 1300px;
       display: flex;
+      flex-wrap: wrap;
 
       @media screen and ( min-width: 920px ) and ( max-width: 1279.99px ) {
         max-width: 900px;
@@ -157,8 +158,9 @@
       .top-artists__item {
         cursor: pointer;
         width: 85px;
-        height: 111px;
         margin-right: 50px;
+        margin-top: 5px;
+        margin-bottom: 5px;
 
         .top-artists__img {
           border-radius: 5px;
@@ -170,7 +172,7 @@
 
         .top-artists__name {
           text-align: center;
-          font-size: 18px;
+          font-size: 16px;
         }
       }
     }
