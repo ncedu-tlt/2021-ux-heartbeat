@@ -126,7 +126,7 @@ export class AlbumsPageComponent implements OnInit, OnDestroy {
     oldAlbum.nativeElement.classList.toggle("active");
   }
 
-  deleteAlbum(event: MouseEvent, id: string, name: string) {
+  deleteAlbum(event: MouseEvent, id: string, name: string): void {
     event.stopPropagation();
     this.apiService
       .deleteAlbums(id)
@@ -151,11 +151,11 @@ export class AlbumsPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAlbums();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.die$.next();
   }
 }

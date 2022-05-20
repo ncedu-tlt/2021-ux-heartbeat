@@ -31,9 +31,9 @@
     <div class="player__control">
       <div class="player__control-items">
         <div class="player__previous-track" (click)="this.playerService.switchTrack(actions.SWITCH_PREVIOUS)"></div>
-        <div *ngIf="!(player.isPLay)" class="player__play"
+        <div *ngIf="!player.isPLay" class="player__play"
              (click)="playerService.switchPlayerAction()"></div>
-        <div class="player__pause" *ngIf="playerService.isPlay$ | async"
+        <div class="player__pause" *ngIf="player.isPLay"
              (click)="playerService.switchPlayerAction()"></div>
         <div class="player__next-track" (click)="playerService.switchTrack(actions.SWITCH_NEXT)"></div>
       </div>
