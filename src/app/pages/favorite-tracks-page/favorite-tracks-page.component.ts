@@ -101,6 +101,12 @@ export class FavoriteTracksPageComponent {
       )
       .subscribe(() => {
         this.isFavorite = false;
+        this.favorites.items.splice(
+          this.favorites.items.findIndex(track => {
+            return track.track.id === id;
+          }),
+          1
+        );
         this.notificationService.blank("Удаление трека", "Трек успешно удален");
       });
   }
