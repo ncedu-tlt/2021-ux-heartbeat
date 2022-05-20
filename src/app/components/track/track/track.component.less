@@ -11,12 +11,9 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    @media screen and ( max-width: 420px ) {
-      margin-left: -15px;
-    }
 
     &__img {
-      margin: 10px 20px;
+      margin: 10px 10px;
       min-height: 50px;
       min-width: 50px;
       background-size: cover;
@@ -25,6 +22,10 @@
       display: flex;
       align-items: center;
       border-radius: 10px;
+
+      @media screen and ( max-width: 420px ) {
+        margin: 5px 5px;
+      }
 
       img {
         display: none;
@@ -54,7 +55,7 @@
           white-space: nowrap;
 
           @media (max-width: 420px) {
-            width: 150px;
+            width: 120px;
             margin: 0;
           }
         }
@@ -80,7 +81,7 @@
   }
 
   &-time {
-    margin-right: 15px;
+    margin-right: 10px;
     color: @black;
   }
 
